@@ -11,13 +11,20 @@ class DayLogRepository {
 
   static const String basicSelectQuery = '''
 select 
-	id, day_date, 
+	d.id, day_date, 
 	TO_CHAR(sleep_start,'yyyy-MM-dd HH24:MI') sleep_start, 
 	TO_CHAR(sleep_end,'yyyy-MM-dd HH24:MI') sleep_end, 
 	TO_CHAR(sleep_time,'HH24:MI') sleep_time, 
 	TO_CHAR(deep_sleep,'HH24:MI') deep_sleep, 
-	notes 
-from day_log''';
+	notes,
+    array_agg(t.tag_name) AS day_log_tag_ids
+from day_log d left join day_log_tag t
+	on d.id = t.day_log_id
+''';
+  static const String basicSelectQueryEnding = '''
+group by d.id
+order by day_date desc
+limit 5''';
 
   /// Returns limited amount of days from DB orderd by date. If maxDateFilter is set then returns only days earlier then given date.
   Future<List<DayLog>> GetAllDayLogs({DateTime? maxDateFilter}) async {
@@ -25,14 +32,14 @@ from day_log''';
     await Future.delayed(Duration(milliseconds: 1500));
     if (maxDateFilter != null) {
       results = await dayLogDataProvider.connectionPool.query(
-        "$basicSelectQuery where day_date < '@maxDate' order by day_date desc limit 5",
+        "$basicSelectQuery where day_date < '@maxDate' $basicSelectQueryEnding",
         substitutionValues: {
           'maxDate': stringifyDateTime(maxDateFilter, format: "yyyy-MM-dd"),
         },
       );
     } else {
       results = await dayLogDataProvider.connectionPool
-          .query("$basicSelectQuery order by day_date limit 5");
+          .query("$basicSelectQuery $basicSelectQueryEnding");
     }
 
     return results.map((e) => ParseDayLogFromRequest(e)).toList();
@@ -58,6 +65,6 @@ from day_log''';
         sleepDuration: parseDuration(sqlRow[4]),
         deepSleepDuration: parseDuration(sqlRow[5]),
         notes: sqlRow[6],
-        tags: []);
+        tags: sqlRow[7] as List<String>);
   }
 }
