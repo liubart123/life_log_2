@@ -43,6 +43,7 @@ dependencies:
   flex_color_scheme: ^7.3.1
   google_fonts: ^6.0.0
   word_generator: ^0.4.3
+  structures: ^1.4.0
 
 dev_dependencies:
   flutter_test:

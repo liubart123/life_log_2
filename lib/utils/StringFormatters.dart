@@ -11,6 +11,10 @@ String formatDuration(Duration duration) {
   return formattedDuration;
 }
 
+String formatTimestamp(DateTime date) {
+  return DateFormat('yyyy-MM-dd HH:mm').format(date);
+}
+
 String formatDate(DateTime date) {
   return DateFormat('yyyy-MM-dd').format(date);
 }

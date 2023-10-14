@@ -203,6 +203,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  logger:
+    dependency: transitive
+    description:
+      name: logger
+      sha256: "6bbb9d6f7056729537a4309bda2e74e18e5d9f14302489cc1e93f33b3fe32cac"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2+1"
   matcher:
     dependency: transitive
     description:
@@ -408,6 +416,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  structures:
+    dependency: "direct main"
+    description:
+      name: structures
+      sha256: "2a7a68e8e7abdb30dbbf0e375485955d9e3676cc172455bf79eaa346c9137f3d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.0"
   term_glyph:
     dependency: transitive
     description:

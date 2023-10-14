@@ -1,4 +1,5 @@
 import 'package:life_log_2/utils/DateTimeUtils.dart';
+import 'package:life_log_2/utils/StringFormatters.dart';
 import 'package:postgres_pool/postgres_pool.dart';
 
 import 'DayLogDataProvider.dart';
@@ -25,11 +26,19 @@ from day_log d left join day_log_tag t
 group by d.id
 order by day_date desc
 limit 5''';
+  static const String udpateDayLog = '''
+  update day_log set 
+    day_date = @day_date::date,
+    sleep_start = TO_TIMESTAMP(@sleep_start, 'yyyy-MM-dd HH24:MI'),
+    sleep_end = TO_TIMESTAMP(@sleep_end, 'yyyy-MM-dd HH24:MI'),
+    deep_sleep = @deep_sleep::interval,
+    notes = @notes
+  where id = @id;''';
 
   /// Returns limited amount of days from DB orderd by date. If maxDateFilter is set then returns only days earlier then given date.
   Future<List<DayLog>> GetAllDayLogs({DateTime? maxDateFilter}) async {
     PostgreSQLResult results;
-    await Future.delayed(Duration(milliseconds: 1500));
+    await Future.delayed(Duration(milliseconds: 500));
     if (maxDateFilter != null) {
       results = await dayLogDataProvider.connectionPool.query(
         "$basicSelectQuery where day_date < '@maxDate' $basicSelectQueryEnding",
@@ -46,8 +55,9 @@ limit 5''';
   }
 
   Future<DayLog?> GetDayLog(int id) async {
+    await Future.delayed(Duration(milliseconds: 500));
     var result = await dayLogDataProvider.connectionPool.query(
-      "$basicSelectQuery where id = @id",
+      "$basicSelectQuery where d.id = @id $basicSelectQueryEnding",
       substitutionValues: {
         'id': id,
       },
@@ -66,5 +76,20 @@ limit 5''';
         deepSleepDuration: parseDuration(sqlRow[5]),
         notes: sqlRow[6],
         tags: sqlRow[7] as List<String>);
+  }
+
+  Future<void> UpdateDayLog(DayLog dayLogToUpload) async {
+    await Future.delayed(Duration(milliseconds: 500));
+    var result = await dayLogDataProvider.connectionPool.execute(
+      udpateDayLog,
+      substitutionValues: {
+        'day_date': formatDate(dayLogToUpload.date),
+        'sleep_start': formatTimestamp(dayLogToUpload.sleepStartTime),
+        'sleep_end': formatTimestamp(dayLogToUpload.sleepEndTime),
+        'deep_sleep': formatDuration(dayLogToUpload.deepSleepDuration),
+        'notes': dayLogToUpload.notes,
+        'id': dayLogToUpload.id,
+      },
+    );
   }
 }

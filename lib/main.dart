@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:life_log_2/app_logical_parts/day_log/DayLogDataProvider.dart';
 import 'package:life_log_2/app_logical_parts/day_log/DayLogRepository.dart';
-import 'package:life_log_2/app_logical_parts/day_log/bloc/day_log_bloc.dart';
+import 'package:life_log_2/app_logical_parts/day_log/list_view/bloc/day_log_bloc.dart';
+import 'package:life_log_2/my_widgets/my_widgets.dart';
 
-import 'app_logical_parts/day_log/widgets/day_log_list_view.dart';
-import 'test_of_flutter_possibilities/flutter_theme_test.dart';
+import 'app_logical_parts/day_log/list_view/day_log_list_view.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 
 void main() {
@@ -18,7 +17,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const FlexScheme usedScheme = FlexScheme.sanJuanBlue;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
@@ -68,50 +66,38 @@ class MyApp extends StatelessWidget {
       //   //brightness: Brightness.dark,
       //   useMaterial3: true,
       // ),
-      home: MultiRepositoryProvider(
-        providers: [
-          RepositoryProvider<DayLogDataProvider>(
-            create: (context) => DayLogDataProvider(),
-          ),
-          RepositoryProvider<DayLogRepository>(
-            create: (context) =>
-                DayLogRepository(context.read<DayLogDataProvider>()),
-          ),
-        ],
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: ((context) => DayLogBloc(
-                    context.read<DayLogRepository>(),
-                  )..add(
-                      LoadInitialPageOfDayLogs(),
-                    )),
+      home: Builder(
+        builder: (context) {
+          return MyRepositoryProviders(
+            child: Scaffold(
+              appBar: CreateMyAppBar(
+                'Home page',
+                context,
+              ),
+              body: const DayLogViewList(),
             ),
-          ],
-          child: AppScreen(),
-        ),
+          );
+        },
       ),
     );
   }
 }
 
-class AppScreen extends StatelessWidget {
-  const AppScreen({
+class MyAppWithThemeContext extends StatelessWidget {
+  const MyAppWithThemeContext({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        scrolledUnderElevation: 5,
-        shadowColor: Theme.of(context).colorScheme.surface,
-        // bottomOpacity: 0.0,
-        title: const Text('M3 Color Scheme Example'),
-        // backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+    return MyRepositoryProviders(
+      child: Scaffold(
+        appBar: CreateMyAppBar(
+          'Home page',
+          context,
+        ),
+        body: const DayLogViewList(),
       ),
-      body: const DayLogListView(),
     );
   }
 }

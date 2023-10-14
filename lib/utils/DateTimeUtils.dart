@@ -6,6 +6,11 @@ DateTime parseDateTime(String inputString,
   return formatter.parse(inputString);
 }
 
+DateTime parseDate(String inputString, {String format = "yyyy-MM-dd"}) {
+  final formatter = DateFormat(format);
+  return formatter.parse(inputString);
+}
+
 Duration parseDuration(String inputString) {
   List<String> timeParts = inputString.split(':');
 

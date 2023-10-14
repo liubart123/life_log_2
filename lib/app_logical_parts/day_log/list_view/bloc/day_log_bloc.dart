@@ -1,20 +1,20 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:life_log_2/app_logical_parts/day_log/DayLogModel.dart';
 
 import 'package:life_log_2/app_logical_parts/day_log/DayLogRepository.dart';
-
-import '../DayLogModel.dart';
 
 part 'day_log_bloc_event.dart';
 part 'day_log_bloc_state.dart';
 
-class DayLogBloc extends Bloc<DayLogBlocEvent, DayLogBlocState> {
+class DayLogViewListBloc
+    extends Bloc<DayLogViewListBlocEvent, DayLogViewListBlocState> {
   final DayLogRepository dayLogRepository;
 
-  DayLogBloc(
+  DayLogViewListBloc(
     this.dayLogRepository,
-  ) : super(DayLogBlocState()) {
+  ) : super(DayLogViewListBlocState()) {
     on<LoadInitialPageOfDayLogs>((event, emit) async {
       state.dayLogList.clear();
       emit(LoadingPageOfDayLogs());
