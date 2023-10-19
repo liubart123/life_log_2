@@ -77,75 +77,11 @@ class TextWithChip extends StatelessWidget {
   }
 }
 
-class ColumnWithStrippedRows extends StatelessWidget {
-  final List<List<String>> rows;
-  final Color? lightColor;
-  final Color? darkColor;
-  final bool? darkerEven;
-
-  const ColumnWithStrippedRows(
-      {super.key,
-      required this.rows,
-      this.lightColor,
-      this.darkColor,
-      this.darkerEven});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ...rows.map((stringsInRow) {
-          bool isDarker = rows.indexOf(stringsInRow) % 2 == 0;
-          isDarker = darkerEven ?? true ? isDarker : !isDarker;
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 1),
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: 4,
-              ),
-              decoration: BoxDecoration(
-                color: isDarker
-                    ? lightColor ?? Colors.transparent
-                    : darkColor ??
-                        Theme.of(context)
-                            .colorScheme
-                            .surfaceVariant
-                            .withOpacity(0.9),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ...stringsInRow.map(
-                    (stringForColumn) => Expanded(
-                      child: Text(
-                        overflow: TextOverflow.fade,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                        softWrap: false,
-                        stringForColumn,
-                        textAlign: stringsInRow.indexOf(stringForColumn) ==
-                                stringsInRow.length - 1
-                            ? TextAlign.end
-                            : TextAlign.start,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }),
-      ],
-    );
-  }
-}
-
 class MyElevatedContainer extends StatelessWidget {
   final Widget child;
   final int elevation, shadowElevation;
   final Color? tintColor, backgroundColor;
+  final EdgeInsets padding;
   final double borderRadius;
   final bool enableClipping;
 
@@ -158,11 +94,13 @@ class MyElevatedContainer extends StatelessWidget {
     this.tintColor,
     this.backgroundColor,
     this.enableClipping = false,
+    this.padding = const EdgeInsets.all(0),
   });
 
   @override
   Widget build(BuildContext context) {
     return Ink(
+      padding: padding,
       decoration: BoxDecoration(
         color: GetTintColor(
           elevation,
@@ -186,71 +124,115 @@ class LabelValuePairsColumnRenderer extends StatelessWidget {
   final List<Pair<String, String>> labelValuePairs;
   final Color? colorForDarkerRow;
   final int columnCount;
+  final bool chessOrderForDarkerRows;
 
   const LabelValuePairsColumnRenderer({
     super.key,
     required this.labelValuePairs,
     this.colorForDarkerRow,
     this.columnCount = 2,
+    this.chessOrderForDarkerRows = true,
   });
 
   @override
   Widget build(BuildContext context) {
+    var columnsWithPairs = GenerateColumnsWithLabelValuePairs();
+    Color usedColorForDarkerRow = colorForDarkerRow ??
+        Theme.of(context).colorScheme.shadow.withOpacity(0.1);
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      mainAxisSize: MainAxisSize.max,
       children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ...labelValuePairs.map2(
-                (kvPair, index) {
-                  final bool isDarkerRow = index % 2 == 0;
+        ...columnsWithPairs.map2(
+          (columnWithPair, columnIndex) => Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ...columnWithPair.pairs.map2(
+                  (kvPair, index) {
+                    final bool isDarkerRow = index % 2 ==
+                        (chessOrderForDarkerRows ? columnIndex % 2 : 0);
 
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: isDarkerRow
-                          ? (colorForDarkerRow ??
-                              Theme.of(context)
-                                  .colorScheme
-                                  .shadow
-                                  .withOpacity(0.1))
-                          : null,
-                      borderRadius: BorderRadius.circular(0),
-                    ),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 4,
-                      vertical: 0,
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            style: Theme.of(context).textTheme.bodyMedium,
-                            textAlign: TextAlign.left,
-                            kvPair.first,
-                          ),
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: isDarkerRow ? usedColorForDarkerRow : null,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(
+                              columnWithPair.hasLeftNeighbour ? 2 : 0),
+                          topLeft: Radius.circular(
+                              columnWithPair.hasLeftNeighbour ? 2 : 0),
+                          bottomRight: Radius.circular(
+                              columnWithPair.hasRightNeighbour ? 2 : 0),
+                          topRight: Radius.circular(
+                              columnWithPair.hasRightNeighbour ? 2 : 0),
                         ),
-                        Expanded(
-                          child: Text(
-                            style: Theme.of(context).textTheme.bodyMedium,
-                            textAlign: TextAlign.right,
-                            kvPair.second,
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 4,
+                        vertical: 0,
+                      ),
+                      margin: EdgeInsets.fromLTRB(
+                          columnWithPair.hasLeftNeighbour ? 2 : 0,
+                          0,
+                          columnWithPair.hasRightNeighbour ? 2 : 0,
+                          0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              style: Theme.of(context).textTheme.bodyMedium,
+                              textAlign: TextAlign.left,
+                              kvPair.first,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ],
+                          Expanded(
+                            child: Text(
+                              style: Theme.of(context).textTheme.bodyMedium,
+                              textAlign: TextAlign.right,
+                              kvPair.second,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ],
     );
+  }
+
+  List<
+      ({
+        bool hasLeftNeighbour,
+        bool hasRightNeighbour,
+        List<Pair<String, String>> pairs,
+      })> GenerateColumnsWithLabelValuePairs() {
+    List<
+        ({
+          bool hasLeftNeighbour,
+          bool hasRightNeighbour,
+          List<Pair<String, String>> pairs,
+        })> pairsForColumns = List.generate(
+      columnCount,
+      (index) => (
+        hasLeftNeighbour: index != 0,
+        hasRightNeighbour: index != columnCount - 1,
+        pairs: List.empty(growable: true),
+      ),
+    );
+
+    int currentColumnIndex = 0;
+    for (var pair in labelValuePairs) {
+      pairsForColumns[currentColumnIndex++ % columnCount].pairs.add(pair);
+    }
+
+    return pairsForColumns;
   }
 }

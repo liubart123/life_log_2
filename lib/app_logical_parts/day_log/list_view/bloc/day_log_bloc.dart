@@ -16,11 +16,11 @@ class DayLogViewListBloc
     this.dayLogRepository,
   ) : super(DayLogViewListBlocState()) {
     on<LoadInitialPageOfDayLogs>((event, emit) async {
-      state.dayLogList.clear();
-      emit(LoadingPageOfDayLogs());
+      // state.dayLogList.clear();
+      emit(LoadingPageOfDayLogs().copyState(state));
       try {
         var pageOfDayLogs = await dayLogRepository.GetAllDayLogs();
-        emit(IdleState().copyList(pageOfDayLogs));
+        emit(IdleState().newList(pageOfDayLogs));
       } catch (ex) {
         emit(ErrorWithLoadingPageOfDayLogs(ex.toString()).copyState(state));
       }
@@ -28,11 +28,27 @@ class DayLogViewListBloc
     on<LoadNextPageOfDayLogs>((event, emit) async {
       emit(LoadingPageOfDayLogs().copyState(state));
       try {
-        var pageOfDayLogs = await dayLogRepository.GetAllDayLogs();
+        var pageOfDayLogs = await dayLogRepository.GetAllDayLogs(
+            maxDateFilter: state.dayLogList.last.date);
         emit(IdleState().copyState(state).copyList(pageOfDayLogs));
       } catch (ex) {
         emit(ErrorWithLoadingPageOfDayLogs(ex.toString()).copyState(state));
       }
     });
+    on<RefreshInitialPageOfDayLogs>((event, emit) async {
+      print('handling refreshin initial page with elements:' +
+          event.dayLogList.length.toString());
+      emit(IdleState().newList(event.dayLogList));
+    });
+  }
+
+  RefreshInitialPage() async {
+    await Future.delayed(Duration(
+      milliseconds: 500,
+    ));
+    var pageOfDayLogs = await dayLogRepository.GetAllDayLogs();
+    print('loaded pages:' + pageOfDayLogs.length.toString());
+    // return pageOfDayLogs;
+    add(RefreshInitialPageOfDayLogs(dayLogList: pageOfDayLogs));
   }
 }

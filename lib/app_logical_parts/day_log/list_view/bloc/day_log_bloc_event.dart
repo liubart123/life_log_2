@@ -8,4 +8,12 @@ sealed class DayLogViewListBlocEvent extends Equatable {
 
 class LoadInitialPageOfDayLogs extends DayLogViewListBlocEvent {}
 
+class RefreshInitialPageOfDayLogs extends DayLogViewListBlocEvent {
+  final List<DayLog> dayLogList;
+  RefreshInitialPageOfDayLogs({
+    required this.dayLogList,
+  });
+  List<Object?> get props => [dayLogList];
+}
+
 class LoadNextPageOfDayLogs extends DayLogViewListBlocEvent {}

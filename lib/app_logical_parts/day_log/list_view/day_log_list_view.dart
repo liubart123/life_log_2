@@ -34,19 +34,19 @@ class DayLogViewList extends StatelessWidget {
         if (state is LoadingPageOfDayLogs && state.dayLogList.isEmpty)
           return InitialLoadingDisplayWidget();
         else
-          // return MyScrollableList.singleChild(
-          //   child: ListView.builder(
-          //     itemCount: state.dayLogList.length + 1,
-          //     itemBuilder: (context, index) {
-          //       if (index < state.dayLogList.length) {
-          //         return DayLogCard(dayLogToBuild: state.dayLogList[index]);
-          //       } else {
-          //         return BottomElementsForDayLogList(state: state);
-          //       }
-          //     },
-          //   ),
-          // );
-          return MyScrollableList.listView(
+          return MyScrollableList(
+            reloadCallback: () async {
+              var bloc = context.read<DayLogViewListBloc>();
+              bloc.stream;
+              // context
+              //     .read<DayLogViewListBloc>()
+              //     .add(LoadInitialPageOfDayLogs());
+              var pageOfDayLogs =
+                  await context.read<DayLogViewListBloc>().RefreshInitialPage();
+              // context
+              //     .read<DayLogViewListBloc>()
+              //     .add(RefreshInitialPageOfDayLogs(dayLogList: pageOfDayLogs));
+            },
             itemCount: state.dayLogList.length + 1,
             itemBuilder: (context, index) {
               if (index < state.dayLogList.length) {
@@ -89,22 +89,6 @@ class DayLogCard extends StatelessWidget {
               titleText: formatDate(dayLogToBuild.date)),
           MyScrollableList_Card_InnerDivider(),
           DayLogFieldsRenderer(dayLog: dayLogToBuild),
-          MyScrollableList_Card_InnerSpacer(),
-          MyScrollableList_Card_InnerContainer(
-            child:
-                MyScrollableList_Card_InnerContainer_LabelValuePairColumnRenderer(
-              labelValuePairs: [
-                Pair("Fall asleep", formatTime(dayLogToBuild.sleepStartTime)),
-                Pair("Wake up", formatTime(dayLogToBuild.sleepEndTime)),
-                Pair("Sleep", formatDuration(dayLogToBuild.deepSleepDuration)),
-                Pair(
-                  "Deep sleep",
-                  formatDuration(dayLogToBuild.deepSleepDuration),
-                ),
-                ...List.generate(5, (index) => Pair("Guvno$index", "cal")),
-              ],
-            ),
-          ),
           MyScrollableList_Card_InnerDivider(),
           DayLogTagsRenderer(dayLogToBuild: dayLogToBuild),
           MyScrollableList_Card_InnerSpacer.half(),
@@ -124,40 +108,16 @@ class DayLogFieldsRenderer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MyScrollableList_Card_InnerContainer(
-      shadowElevation: 1,
-      elevation: 1,
+      useElevation: false,
       child: MyScrollableList_Card_InnerContainer_LabelValuePairColumnRenderer(
         labelValuePairs: [
-          Pair("Fall asleep", formatTime(dayLog.sleepStartTime)),
+          Pair("Fall asleep very long", formatTime(dayLog.sleepStartTime)),
           Pair("Wake up", formatTime(dayLog.sleepEndTime)),
           Pair("Sleep", formatDuration(dayLog.deepSleepDuration)),
           Pair("Deep sleep", formatDuration(dayLog.deepSleepDuration)),
+          ...List.generate(5, (index) => Pair("Guvno$index", "cal")),
         ],
       ),
-      // child: Row(
-      //   mainAxisSize: MainAxisSize.max,
-      //   crossAxisAlignment: CrossAxisAlignment.start,
-      //   children: [
-      //     Expanded(
-      //       child: ColumnWithStrippedRows(
-      //         rows: [
-      //           ["Fall asleep", formatTime(dayLog.sleepStartTime)],
-      //           ["Wake up", formatTime(dayLog.sleepEndTime)],
-      //         ],
-      //       ),
-      //     ),
-      //     SizedBox(width: 10),
-      //     Expanded(
-      //       child: ColumnWithStrippedRows(
-      //         darkerEven: false,
-      //         rows: [
-      //           ["Sleep", formatDuration(dayLog.deepSleepDuration)],
-      //           ["Deep sleep", formatDuration(dayLog.deepSleepDuration)],
-      //         ],
-      //       ),
-      //     ),
-      //   ],
-      // ),
     );
   }
 }
@@ -173,23 +133,23 @@ class DayLogTagsRenderer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MyScrollableList_Card_InnerContainer(
-      useElevation: false,
-      child: Container(
-        // padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
-        child: Wrap(
-          spacing: 4,
-          runSpacing: 4,
-          alignment: WrapAlignment.start,
-          children: dayLogToBuild.tags
-              .map(
-                (e) => TextWithChip(
-                  text: e,
-                  chipColor: Colors
-                      .primaries[Random().nextInt(Colors.primaries.length)],
-                ),
-              )
-              .toList(),
-        ),
+      useElevation: true,
+      elevation: 2,
+      shadowElevation: 1,
+      padding: EdgeInsets.fromLTRB(4, 4, 4, 4),
+      child: Wrap(
+        spacing: 4,
+        runSpacing: 4,
+        alignment: WrapAlignment.start,
+        children: dayLogToBuild.tags
+            .map(
+              (e) => TextWithChip(
+                text: e,
+                chipColor:
+                    Colors.primaries[Random().nextInt(Colors.primaries.length)],
+              ),
+            )
+            .toList(),
       ),
     );
   }

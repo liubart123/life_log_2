@@ -60,7 +60,7 @@ order by day_date desc
 limit 5; 
 
 update day_log set 
-	day_date = @day_date,
+	day_date = TO_TIMESTAMP(, 'yyyy-MM-dd HH24:MI'),
 	sleep_start = @sleep_start,
 	sleep_end = @sleep_end,
 	deep_sleep = @deep_sleep,

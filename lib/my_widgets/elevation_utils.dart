@@ -4,7 +4,7 @@ final tintColorLevels = const [0.0, 0.1, 0.2];
 final tintColorOpacityLevels = const [0.0, 0.1, 0.2];
 final shadowOpacityLevels = const [0.0, 0.2, 0.4];
 
-Color GetTintColorForSurface(
+Color GetTintColorForSurfaceAndSurfaceTintColors(
   BuildContext context,
   int elevation,
 ) {

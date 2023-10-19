@@ -5,39 +5,28 @@ import 'package:structures/structures.dart';
 import 'my_widgets.dart';
 
 class MyScrollableList extends StatelessWidget {
-  final int? itemCount;
-  final NullableIndexedWidgetBuilder? itemBuilder;
-  final Widget? child;
+  final int itemCount;
+  final NullableIndexedWidgetBuilder itemBuilder;
+  final Future Function() reloadCallback;
 
-  const MyScrollableList.listView({
-    required itemCount,
-    required itemBuilder,
-  }) : this._(child: null, itemCount: itemCount, itemBuilder: itemBuilder);
-
-  const MyScrollableList.singleChild({
-    required child,
-  }) : this._(child: child, itemCount: null, itemBuilder: null);
-
-  const MyScrollableList._({
+  const MyScrollableList({
     super.key,
-    this.itemCount,
-    this.itemBuilder,
-    this.child,
+    required this.itemCount,
+    required this.itemBuilder,
+    required this.reloadCallback,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (itemBuilder != null && itemCount != null)
-      return Container(
-        color: Theme.of(context).colorScheme.surface,
+    return Container(
+      color: Theme.of(context).colorScheme.surface,
+      child: RefreshIndicator(
+        triggerMode: RefreshIndicatorTriggerMode.anywhere,
+        onRefresh: reloadCallback,
         child:
             ListView.builder(itemCount: itemCount, itemBuilder: itemBuilder!),
-      );
-    else
-      return Container(
-        color: Theme.of(context).colorScheme.surface,
-        child: child!,
-      );
+      ),
+    );
   }
 }
 
@@ -66,7 +55,8 @@ class MyScrollableList_Card extends StatelessWidget {
       ),
       clipBehavior: Clip.antiAlias,
       child: Material(
-        color: GetTintColorForSurface(context, colorElevationLevel),
+        color: GetTintColorForSurfaceAndSurfaceTintColors(
+            context, colorElevationLevel),
         child: InkWell(
           onTap: onTap ?? () {},
           child: child,
@@ -103,6 +93,7 @@ class MyScrollableList_Card_InnerContainer extends StatelessWidget {
               shadowElevation: shadowElevation,
               borderRadius: 4,
               enableClipping: true,
+              padding: padding,
             )
           : Container(padding: padding, child: child),
     );
@@ -121,12 +112,9 @@ class MyScrollableList_Card_Title extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
-      child: Container(
-        // color: Colors.red,
-        child: Text(
-          titleText,
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
+      child: Text(
+        titleText,
+        style: Theme.of(context).textTheme.titleLarge,
       ),
     );
   }
@@ -171,10 +159,9 @@ class MyScrollableList_Card_InnerContainer_LabelValuePairColumnRenderer
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: LabelValuePairsColumnRenderer(
-        labelValuePairs: labelValuePairs,
-      ),
+    return LabelValuePairsColumnRenderer(
+      labelValuePairs: labelValuePairs,
+      chessOrderForDarkerRows: false,
     );
   }
 }

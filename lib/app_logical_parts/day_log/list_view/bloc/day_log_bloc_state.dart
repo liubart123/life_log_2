@@ -13,6 +13,12 @@ class DayLogViewListBlocState extends Equatable {
     return this;
   }
 
+  DayLogViewListBlocState newList(List<DayLog> newList) {
+    dayLogList.clear();
+    copyList(newList);
+    return this;
+  }
+
   @override
   List<Object?> get props => [dayLogList];
 }

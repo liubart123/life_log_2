@@ -41,7 +41,7 @@ limit 5''';
     await Future.delayed(Duration(milliseconds: 500));
     if (maxDateFilter != null) {
       results = await dayLogDataProvider.connectionPool.query(
-        "$basicSelectQuery where day_date < '@maxDate' $basicSelectQueryEnding",
+        "$basicSelectQuery where day_date < @maxDate $basicSelectQueryEnding",
         substitutionValues: {
           'maxDate': stringifyDateTime(maxDateFilter, format: "yyyy-MM-dd"),
         },
