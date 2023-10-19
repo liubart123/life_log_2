@@ -37,15 +37,8 @@ class DayLogViewList extends StatelessWidget {
           return MyScrollableList(
             reloadCallback: () async {
               var bloc = context.read<DayLogViewListBloc>();
-              bloc.stream;
-              // context
-              //     .read<DayLogViewListBloc>()
-              //     .add(LoadInitialPageOfDayLogs());
-              var pageOfDayLogs =
-                  await context.read<DayLogViewListBloc>().RefreshInitialPage();
-              // context
-              //     .read<DayLogViewListBloc>()
-              //     .add(RefreshInitialPageOfDayLogs(dayLogList: pageOfDayLogs));
+              bloc.add(RefreshInitialPageOfDayLogs());
+              await bloc.stream.firstWhere((state) => state is IdleState);
             },
             itemCount: state.dayLogList.length + 1,
             itemBuilder: (context, index) {

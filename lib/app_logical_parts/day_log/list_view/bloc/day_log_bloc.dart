@@ -36,19 +36,9 @@ class DayLogViewListBloc
       }
     });
     on<RefreshInitialPageOfDayLogs>((event, emit) async {
-      print('handling refreshin initial page with elements:' +
-          event.dayLogList.length.toString());
-      emit(IdleState().newList(event.dayLogList));
+      print('processing refreshin initial page with elements:');
+      var pageOfDayLogs = await dayLogRepository.GetAllDayLogs();
+      emit(IdleState().newList(pageOfDayLogs));
     });
-  }
-
-  RefreshInitialPage() async {
-    await Future.delayed(Duration(
-      milliseconds: 500,
-    ));
-    var pageOfDayLogs = await dayLogRepository.GetAllDayLogs();
-    print('loaded pages:' + pageOfDayLogs.length.toString());
-    // return pageOfDayLogs;
-    add(RefreshInitialPageOfDayLogs(dayLogList: pageOfDayLogs));
   }
 }
