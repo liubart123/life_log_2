@@ -25,9 +25,11 @@ class DayLogViewListBloc
         emit(ErrorWithLoadingPageOfDayLogs(ex.toString()).copyState(state));
       }
     });
+    //todo:handle case if new page is already loading, then we don't need to call for new page and need to wait for old request's response
     on<LoadNextPageOfDayLogs>((event, emit) async {
       emit(LoadingPageOfDayLogs().copyState(state));
       try {
+        await Future.delayed(Duration(milliseconds: 1000));
         var pageOfDayLogs = await dayLogRepository.GetAllDayLogs(
             maxDateFilter: state.dayLogList.last.date);
         emit(IdleState().copyState(state).copyList(pageOfDayLogs));

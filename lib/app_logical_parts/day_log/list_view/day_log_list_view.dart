@@ -40,6 +40,10 @@ class DayLogViewList extends StatelessWidget {
               bloc.add(RefreshInitialPageOfDayLogs());
               await bloc.stream.firstWhere((state) => state is IdleState);
             },
+            bottomScrolledCallback: () {
+              print('botton scrolled' + DateTime.now().millisecond.toString());
+              context.read<DayLogViewListBloc>().add(LoadNextPageOfDayLogs());
+            },
             itemCount: state.dayLogList.length + 1,
             itemBuilder: (context, index) {
               if (index < state.dayLogList.length) {

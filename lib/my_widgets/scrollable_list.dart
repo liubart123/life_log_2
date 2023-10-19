@@ -4,17 +4,44 @@ import 'package:structures/structures.dart';
 
 import 'my_widgets.dart';
 
-class MyScrollableList extends StatelessWidget {
+class MyScrollableList extends StatefulWidget {
   final int itemCount;
   final NullableIndexedWidgetBuilder itemBuilder;
   final Future Function() reloadCallback;
+  final Function() bottomScrolledCallback;
 
-  const MyScrollableList({
+  MyScrollableList({
     super.key,
     required this.itemCount,
     required this.itemBuilder,
     required this.reloadCallback,
+    required this.bottomScrolledCallback,
   });
+
+  @override
+  State<MyScrollableList> createState() => _MyScrollableListState();
+}
+
+class _MyScrollableListState extends State<MyScrollableList> {
+  late final ScrollController _scrollController;
+  late bool bottomWasScrolled;
+
+  @override
+  void initState() {
+    _scrollController = ScrollController();
+    _scrollController.addListener(handleScrolling);
+    bottomWasScrolled = false;
+    super.initState();
+  }
+
+  void handleScrolling() {
+    if (_scrollController.position.extentAfter < 300) {
+      if (!bottomWasScrolled) widget.bottomScrolledCallback();
+      bottomWasScrolled = true;
+    } else {
+      bottomWasScrolled = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +49,12 @@ class MyScrollableList extends StatelessWidget {
       color: Theme.of(context).colorScheme.surface,
       child: RefreshIndicator(
         triggerMode: RefreshIndicatorTriggerMode.anywhere,
-        onRefresh: reloadCallback,
-        child:
-            ListView.builder(itemCount: itemCount, itemBuilder: itemBuilder!),
+        onRefresh: widget.reloadCallback,
+        child: ListView.builder(
+          controller: _scrollController,
+          itemCount: widget.itemCount,
+          itemBuilder: widget.itemBuilder,
+        ),
       ),
     );
   }
