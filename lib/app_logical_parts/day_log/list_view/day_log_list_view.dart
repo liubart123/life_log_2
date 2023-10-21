@@ -3,11 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:life_log_2/my_widgets/my_widgets.dart';
-import 'package:life_log_2/my_widgets/scrollable_list.dart';
+import 'package:life_log_2/my_widgets/scrollable_card_list.dart';
 import 'package:structures/structures.dart';
 
 import '../DayLogRepository.dart';
-import '../SingleDayLogEditScreen/SingleDayLogEditScreen.dart';
 import 'package:life_log_2/utils/StringFormatters.dart';
 
 import '../DayLogModel.dart';
@@ -23,37 +22,31 @@ class DayLogViewList extends StatelessWidget {
     return BlocProvider(
       create: (context) => DayLogViewListBloc(context.read<DayLogRepository>())
         ..add(LoadInitialPageOfDayLogs()),
-      child: DayLogViewListBlockBuilder(),
-    );
-  }
-
-  BlocBuilder<DayLogViewListBloc, DayLogViewListBlocState>
-      DayLogViewListBlockBuilder() {
-    return BlocBuilder<DayLogViewListBloc, DayLogViewListBlocState>(
-      builder: (context, state) {
-        if (state is LoadingPageOfDayLogs && state.dayLogList.isEmpty)
-          return InitialLoadingDisplayWidget();
-        else
-          return MyScrollableList(
-            reloadCallback: () async {
-              var bloc = context.read<DayLogViewListBloc>();
-              bloc.add(RefreshInitialPageOfDayLogs());
-              await bloc.stream.firstWhere((state) => state is IdleState);
-            },
-            bottomScrolledCallback: () {
-              print('botton scrolled' + DateTime.now().millisecond.toString());
-              context.read<DayLogViewListBloc>().add(LoadNextPageOfDayLogs());
-            },
-            itemCount: state.dayLogList.length + 1,
-            itemBuilder: (context, index) {
-              if (index < state.dayLogList.length) {
-                return DayLogCard(dayLogToBuild: state.dayLogList[index]);
-              } else {
-                return BottomElementsForDayLogList(state: state);
-              }
-            },
-          );
-      },
+      child: BlocBuilder<DayLogViewListBloc, DayLogViewListBlocState>(
+        builder: (context, state) {
+          if (state is LoadingPageOfDayLogs && state.dayLogList.isEmpty)
+            return InitialLoadingDisplayWidget();
+          else
+            return MyScrollableCardList(
+              reloadCallback: () async {
+                var bloc = context.read<DayLogViewListBloc>();
+                bloc.add(RefreshInitialPageOfDayLogs());
+                await bloc.stream.firstWhere((state) => state is IdleState);
+              },
+              bottomScrolledCallback: () {
+                context.read<DayLogViewListBloc>().add(LoadNextPageOfDayLogs());
+              },
+              itemCount: state.dayLogList.length + 1,
+              itemBuilder: (context, index) {
+                if (index < state.dayLogList.length) {
+                  return DayLogCard(dayLogToBuild: state.dayLogList[index]);
+                } else {
+                  return BottomElementsForDayLogList(state: state);
+                }
+              },
+            );
+        },
+      ),
     );
   }
 }
@@ -68,7 +61,7 @@ class DayLogCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MyScrollableList_Card(
+    return MyScrollableCardList_Card(
       onTap: () {
         // Navigator.push(
         //   context,
@@ -82,13 +75,13 @@ class DayLogCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          MyScrollableList_Card_Title(
+          MyScrollableCardList_Card_Title(
               titleText: formatDate(dayLogToBuild.date)),
-          MyScrollableList_Card_InnerDivider(),
+          MyScrollableCardList_Card_InnerDivider(),
           DayLogFieldsRenderer(dayLog: dayLogToBuild),
-          MyScrollableList_Card_InnerDivider(),
+          MyScrollableCardList_Card_InnerDivider(),
           DayLogTagsRenderer(dayLogToBuild: dayLogToBuild),
-          MyScrollableList_Card_InnerSpacer.half(),
+          MyScrollableCardList_Card_InnerSpacer.half(),
         ],
       ),
     );
@@ -104,9 +97,10 @@ class DayLogFieldsRenderer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MyScrollableList_Card_InnerContainer(
+    return MyScrollableCardList_Card_InnerContainer(
       useElevation: false,
-      child: MyScrollableList_Card_InnerContainer_LabelValuePairColumnRenderer(
+      child:
+          MyScrollableCardList_Card_InnerContainer_LabelValuePairColumnRenderer(
         labelValuePairs: [
           Pair("Fall asleep very long", formatTime(dayLog.sleepStartTime)),
           Pair("Wake up", formatTime(dayLog.sleepEndTime)),
@@ -129,7 +123,7 @@ class DayLogTagsRenderer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MyScrollableList_Card_InnerContainer(
+    return MyScrollableCardList_Card_InnerContainer(
       useElevation: true,
       elevation: 2,
       shadowElevation: 1,
@@ -164,25 +158,15 @@ class BottomElementsForDayLogList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if (state is LoadingPageOfDayLogs) const Text("Loading..."),
+        // const MyProgressIndicator(),
+        if (state is LoadingPageOfDayLogs)
+          Container(
+              margin: EdgeInsets.fromLTRB(0, 6, 0, 6),
+              child: const MyProgressIndicator()),
         if (state is ErrorWithLoadingPageOfDayLogs)
           Text(
             "Error: ${(state as ErrorWithLoadingPageOfDayLogs).errorMessage ?? "unknown..."}",
           ),
-        ElevatedButton.icon(
-            onPressed: () {
-              context.read<DayLogViewListBloc>().add(LoadNextPageOfDayLogs());
-            },
-            icon: const Icon(Icons.arrow_circle_down),
-            label: const Text("More")),
-        ElevatedButton.icon(
-            onPressed: () {
-              context
-                  .read<DayLogViewListBloc>()
-                  .add(LoadInitialPageOfDayLogs());
-            },
-            icon: const Icon(Icons.replay_outlined),
-            label: const Text("Reload")),
       ],
     );
   }
@@ -195,8 +179,10 @@ class InitialLoadingDisplayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text("Initial loading..."),
+    return Center(
+      child: Container(
+          margin: EdgeInsets.fromLTRB(0, 6, 0, 6),
+          child: const MyProgressIndicator()),
     );
   }
 }

@@ -236,3 +236,28 @@ class LabelValuePairsColumnRenderer extends StatelessWidget {
     return pairsForColumns;
   }
 }
+
+class MyProgressIndicator extends StatelessWidget {
+  const MyProgressIndicator({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CircularProgressIndicator(
+      strokeAlign: BorderSide.strokeAlignInside,
+      strokeWidth: 6,
+      strokeCap: StrokeCap.round,
+      color: Color.lerp(
+        Theme.of(context).colorScheme.surface,
+        Theme.of(context).colorScheme.surfaceTint,
+        0.8,
+      ),
+      backgroundColor: Color.lerp(
+        Theme.of(context).colorScheme.surface,
+        Theme.of(context).colorScheme.surfaceTint,
+        0.1,
+      ),
+    );
+  }
+}

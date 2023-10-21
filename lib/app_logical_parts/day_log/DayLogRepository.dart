@@ -38,7 +38,7 @@ limit 5''';
   /// Returns limited amount of days from DB orderd by date. If maxDateFilter is set then returns only days earlier then given date.
   Future<List<DayLog>> GetAllDayLogs({DateTime? maxDateFilter}) async {
     PostgreSQLResult results;
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(Duration(milliseconds: 2000));
     if (maxDateFilter != null) {
       results = await dayLogDataProvider.connectionPool.query(
         "$basicSelectQuery where day_date < @maxDate $basicSelectQueryEnding",

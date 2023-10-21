@@ -20,10 +20,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      // Theme config for FlexColorScheme version 7.3.x. Make sure you use
-// same or higher package version, but still same major version. If you
-// use a lower package version, some properties may not be supported.
-// In that case remove them after copying this theme to your app.
       theme: FlexThemeData.light(
         colors: const FlexSchemeColor(
           primary: Color(0xff004881),
@@ -54,18 +50,6 @@ class MyApp extends StatelessWidget {
         swapLegacyOnMaterial3: true,
         textTheme: GoogleFonts.openSansTextTheme(),
       ),
-
-      // theme: ThemeData(
-      //   colorScheme: ColorScheme.fromSeed(
-      //     // seedColor: Color.fromARGB(255, 117, 26, 94),
-      //     seedColor: Color.fromARGB(255, 63, 193, 233),
-      //     // tertiary: Colors.amber,
-      //     brightness: Brightness.light,
-      //   ),
-      //   // hintColor: Colors.amber,
-      //   //brightness: Brightness.dark,
-      //   useMaterial3: true,
-      // ),
       home: Builder(
         builder: (context) {
           return MyRepositoryProviders(
@@ -78,25 +62,6 @@ class MyApp extends StatelessWidget {
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class MyAppWithThemeContext extends StatelessWidget {
-  const MyAppWithThemeContext({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return MyRepositoryProviders(
-      child: Scaffold(
-        appBar: CreateMyAppBar(
-          'Home page',
-          context,
-        ),
-        body: const DayLogViewList(),
       ),
     );
   }

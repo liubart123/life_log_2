@@ -4,13 +4,13 @@ import 'package:structures/structures.dart';
 
 import 'my_widgets.dart';
 
-class MyScrollableList extends StatefulWidget {
+class MyScrollableCardList extends StatefulWidget {
   final int itemCount;
   final NullableIndexedWidgetBuilder itemBuilder;
   final Future Function() reloadCallback;
   final Function() bottomScrolledCallback;
 
-  MyScrollableList({
+  MyScrollableCardList({
     super.key,
     required this.itemCount,
     required this.itemBuilder,
@@ -19,10 +19,10 @@ class MyScrollableList extends StatefulWidget {
   });
 
   @override
-  State<MyScrollableList> createState() => _MyScrollableListState();
+  State<MyScrollableCardList> createState() => _MyScrollableCardListState();
 }
 
-class _MyScrollableListState extends State<MyScrollableList> {
+class _MyScrollableCardListState extends State<MyScrollableCardList> {
   late final ScrollController _scrollController;
   late bool bottomWasScrolled;
 
@@ -35,7 +35,7 @@ class _MyScrollableListState extends State<MyScrollableList> {
   }
 
   void handleScrolling() {
-    if (_scrollController.position.extentAfter < 300) {
+    if (_scrollController.position.extentAfter < 50) {
       if (!bottomWasScrolled) widget.bottomScrolledCallback();
       bottomWasScrolled = true;
     } else {
@@ -60,14 +60,14 @@ class _MyScrollableListState extends State<MyScrollableList> {
   }
 }
 
-class MyScrollableList_Card extends StatelessWidget {
+class MyScrollableCardList_Card extends StatelessWidget {
   final Widget child;
   final Function()? onTap;
 
   final int colorElevationLevel;
   final int shadowElevationLevel;
 
-  const MyScrollableList_Card({
+  const MyScrollableCardList_Card({
     super.key,
     required this.child,
     this.onTap,
@@ -85,8 +85,8 @@ class MyScrollableList_Card extends StatelessWidget {
       ),
       clipBehavior: Clip.antiAlias,
       child: Material(
-        color: GetTintColorForSurfaceAndSurfaceTintColors(
-            context, colorElevationLevel),
+        color:
+            GetTintColorForSurfaceTintOnSurface(context, colorElevationLevel),
         child: InkWell(
           onTap: onTap ?? () {},
           child: child,
@@ -96,13 +96,13 @@ class MyScrollableList_Card extends StatelessWidget {
   }
 }
 
-class MyScrollableList_Card_InnerContainer extends StatelessWidget {
+class MyScrollableCardList_Card_InnerContainer extends StatelessWidget {
   final Widget child;
   final EdgeInsets padding, margin;
   final int elevation, shadowElevation;
   final bool useElevation;
 
-  MyScrollableList_Card_InnerContainer({
+  MyScrollableCardList_Card_InnerContainer({
     required this.child,
     super.key,
     this.padding = const EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -130,8 +130,8 @@ class MyScrollableList_Card_InnerContainer extends StatelessWidget {
   }
 }
 
-class MyScrollableList_Card_Title extends StatelessWidget {
-  const MyScrollableList_Card_Title({
+class MyScrollableCardList_Card_Title extends StatelessWidget {
+  const MyScrollableCardList_Card_Title({
     super.key,
     required this.titleText,
   });
@@ -150,8 +150,8 @@ class MyScrollableList_Card_Title extends StatelessWidget {
   }
 }
 
-class MyScrollableList_Card_InnerDivider extends StatelessWidget {
-  const MyScrollableList_Card_InnerDivider({
+class MyScrollableCardList_Card_InnerDivider extends StatelessWidget {
+  const MyScrollableCardList_Card_InnerDivider({
     super.key,
   });
 
@@ -165,10 +165,10 @@ class MyScrollableList_Card_InnerDivider extends StatelessWidget {
   }
 }
 
-class MyScrollableList_Card_InnerSpacer extends StatelessWidget {
+class MyScrollableCardList_Card_InnerSpacer extends StatelessWidget {
   final double height;
-  const MyScrollableList_Card_InnerSpacer({super.key}) : height = 8;
-  const MyScrollableList_Card_InnerSpacer.half({super.key}) : height = 4;
+  const MyScrollableCardList_Card_InnerSpacer({super.key}) : height = 8;
+  const MyScrollableCardList_Card_InnerSpacer.half({super.key}) : height = 4;
 
   @override
   Widget build(BuildContext context) {
@@ -178,11 +178,11 @@ class MyScrollableList_Card_InnerSpacer extends StatelessWidget {
   }
 }
 
-class MyScrollableList_Card_InnerContainer_LabelValuePairColumnRenderer
+class MyScrollableCardList_Card_InnerContainer_LabelValuePairColumnRenderer
     extends StatelessWidget {
   final List<Pair<String, String>> labelValuePairs;
 
-  const MyScrollableList_Card_InnerContainer_LabelValuePairColumnRenderer({
+  const MyScrollableCardList_Card_InnerContainer_LabelValuePairColumnRenderer({
     super.key,
     required this.labelValuePairs,
   });
