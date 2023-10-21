@@ -121,7 +121,7 @@ class MyScrollableCardList_Card_InnerContainer extends StatelessWidget {
               child: child,
               elevation: elevation,
               shadowElevation: shadowElevation,
-              borderRadius: 4,
+              borderRadius: 6,
               enableClipping: true,
               padding: padding,
             )
@@ -141,10 +141,23 @@ class MyScrollableCardList_Card_Title extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
-      child: Text(
-        titleText,
-        style: Theme.of(context).textTheme.titleLarge,
+      padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
+      child: Row(
+        children: [
+          Flexible(
+            child: MyScrollableCardList_Card_InnerContainer(
+              elevation: 2,
+              // shadowElevation: 1,
+              child: Container(
+                margin: EdgeInsets.fromLTRB(6, 0, 6, 1),
+                child: Text(
+                  titleText,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
