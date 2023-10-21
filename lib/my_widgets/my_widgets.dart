@@ -157,18 +157,8 @@ class LabelValuePairsColumnRenderer extends StatelessWidget {
 
                     return Container(
                       decoration: BoxDecoration(
-                        color: isDarkerRow ? usedColorForDarkerRow : null,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(
-                              columnWithPair.hasLeftNeighbour ? 2 : 0),
-                          topLeft: Radius.circular(
-                              columnWithPair.hasLeftNeighbour ? 2 : 0),
-                          bottomRight: Radius.circular(
-                              columnWithPair.hasRightNeighbour ? 2 : 0),
-                          topRight: Radius.circular(
-                              columnWithPair.hasRightNeighbour ? 2 : 0),
-                        ),
-                      ),
+                          color: isDarkerRow ? usedColorForDarkerRow : null,
+                          borderRadius: BorderRadius.circular(2)),
                       padding: EdgeInsets.symmetric(
                         horizontal: 4,
                         vertical: 0,
