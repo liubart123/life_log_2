@@ -12,3 +12,29 @@ Usage of text styles:
     Label - static text for action elements
         Medium - text of buttons, menu items
 
+
+tasks
+    edit Screen
+        card with input fields
+            create widget - elevatedCard on surface
+            create widget for inputs
+                text field
+                    update bloc state on input's update
+                date
+                dateTime
+                time range
+                multiline text
+            split input in columns
+            refactor existing widget for splitting readonly fields into columns
+        card for long descripiton text
+        card with tags
+            create widget - chip with text
+            wrap widget for displaying tags
+            color peaking depending on tag
+            icon button with each chip
+            change border/fill mode for chips
+        FAB
+            save dayLog
+            add tag
+    GENERAL
+        lags on view list screen

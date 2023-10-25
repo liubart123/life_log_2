@@ -7,9 +7,9 @@ import 'package:life_log_2/app_logical_parts/day_log/SingleDayLogEditScreen/bloc
 import 'package:life_log_2/my_widgets/my_widgets.dart';
 import 'package:life_log_2/utils/StringFormatters.dart';
 
-class SingleDayLogEditScreen extends StatelessWidget {
+class DayLogEditScreen extends StatelessWidget {
   final int dayLogId;
-  const SingleDayLogEditScreen({
+  const DayLogEditScreen({
     super.key,
     required this.dayLogId,
   });
@@ -49,10 +49,9 @@ class DayLogEditScaffold extends StatelessWidget {
           BuildContext context,
           DayLogEditState state,
         ) {
-          print(state);
           if (state is InitialLoadingOfDayLog) {
             return const Center(
-              child: Text("Initial loading..."),
+              child: const MyProgressIndicator(),
             );
           } else if (state is IdleState) {
             return Center(
@@ -62,11 +61,13 @@ class DayLogEditScaffold extends StatelessWidget {
             );
           } else if (state is LoadingOfDayLog) {
             return const Center(
-              child: Text("Updating..."),
+              child: const MyProgressIndicator(),
             );
           } else if (state is ErrorReturnedState) {
-            return Center(
-              child: Text("Error: ${state.errorMessage}"),
+            return const Center(
+              child: const CardWithErrorMessage(
+                  erorrMessage:
+                      'My Error message:\nAwesome stacktrace for error'),
             );
           } else
             return Center(child: Text("Unhalded state"));

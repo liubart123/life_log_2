@@ -25,8 +25,9 @@ class DayLogEditBloc extends Bloc<DayLogEditEvent, DayLogEditState> {
         DayLog? loadedDayLog = await dayLogRepository.GetDayLog(dayLogId);
         if (loadedDayLog == null) throw new Exception('Not found');
 
-        emit(IdleState(DateTime.now(),
-            dayLogId: dayLogId, dayLog: loadedDayLog));
+        emit(
+          IdleState(DateTime.now(), dayLogId: dayLogId, dayLog: loadedDayLog),
+        );
       } catch (e) {
         emit(
           ErrorReturnedState(

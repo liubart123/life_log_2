@@ -227,6 +227,37 @@ class LabelValuePairsColumnRenderer extends StatelessWidget {
   }
 }
 
+class CardWithErrorMessage extends StatelessWidget {
+  final String erorrMessage;
+
+  const CardWithErrorMessage({
+    super.key,
+    required this.erorrMessage,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MyElevatedContainer(
+      elevation: 0,
+      shadowElevation: 1,
+      borderRadius: 6,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.errorContainer,
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Text(
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                color: Theme.of(context).colorScheme.onErrorContainer,
+              ),
+          erorrMessage,
+        ),
+      ),
+    );
+  }
+}
+
 class MyProgressIndicator extends StatelessWidget {
   const MyProgressIndicator({
     super.key,
