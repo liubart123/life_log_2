@@ -205,6 +205,7 @@ class MyScrollableCardList_Card_InnerContainer_LabelValuePairColumnRenderer
     return LabelValuePairsColumnRenderer(
       labelValuePairs: labelValuePairs,
       chessOrderForDarkerRows: false,
+      columnCount: 2,
     );
   }
 }

@@ -103,11 +103,10 @@ class DayLogFieldsRenderer extends StatelessWidget {
       child:
           MyScrollableCardList_Card_InnerContainer_LabelValuePairColumnRenderer(
         labelValuePairs: [
-          Pair("Fall asleep very long", formatTime(dayLog.sleepStartTime)),
-          Pair("Wake up", formatTime(dayLog.sleepEndTime)),
-          Pair("Sleep", formatDuration(dayLog.deepSleepDuration)),
+          Pair("Fall asleep", formatTime(dayLog.sleepStartTime)),
+          Pair("Woke up", formatTime(dayLog.sleepEndTime)),
+          Pair("Sleep", formatDuration(dayLog.sleepDuration)),
           Pair("Deep sleep", formatDuration(dayLog.deepSleepDuration)),
-          ...List.generate(5, (index) => Pair("Guvno$index", "cal")),
         ],
       ),
     );
