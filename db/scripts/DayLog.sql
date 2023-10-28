@@ -66,6 +66,8 @@ update day_log set
 	deep_sleep = @deep_sleep,
 	notes = @notes
 where id = @id;
+
+select * from day_log_tag;
 	
 
 

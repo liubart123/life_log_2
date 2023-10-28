@@ -20,15 +20,18 @@ class DayLogEditBloc extends Bloc<DayLogEditEvent, DayLogEditState> {
           ),
         ) {
     on<LoadInitialDayLog>((event, emit) async {
+      print("LoadInitialDayLog - emiting InitialLoadingOfDayLog");
       emit(InitialLoadingOfDayLog(dayLogId: dayLogId));
       try {
         DayLog? loadedDayLog = await dayLogRepository.GetDayLog(dayLogId);
         if (loadedDayLog == null) throw new Exception('Not found');
 
+        print("LoadInitialDayLog - emiting IdleState");
         emit(
           IdleState(DateTime.now(), dayLogId: dayLogId, dayLog: loadedDayLog),
         );
       } catch (e) {
+        print("LoadInitialDayLog - emiting ErrorReturnedState");
         emit(
           ErrorReturnedState(
             dayLogId: dayLogId,
@@ -38,6 +41,7 @@ class DayLogEditBloc extends Bloc<DayLogEditEvent, DayLogEditState> {
       }
     });
     on<FieldUpdate>((event, emit) async {
+      print("FieldUpdate - emiting IdleState");
       if (state is IdleState) {
         emit(
           IdleState(
@@ -49,6 +53,7 @@ class DayLogEditBloc extends Bloc<DayLogEditEvent, DayLogEditState> {
       }
     });
     on<UpdateDayLogAfterEditing>((event, emit) async {
+      print("UpdateDayLogAfterEditing - emiting LoadingOfDayLog");
       emit(LoadingOfDayLog(dayLogId: state.dayLogId, dayLog: state.dayLog));
 
       try {
@@ -60,6 +65,7 @@ class DayLogEditBloc extends Bloc<DayLogEditEvent, DayLogEditState> {
         DayLog? loadedDayLog = await dayLogRepository.GetDayLog(dayLogId);
         if (loadedDayLog == null) throw new Exception('Not found');
 
+        print("UpdateDayLogAfterEditing - emiting IdleState");
         emit(
           IdleState(
             DateTime.now(),
@@ -68,6 +74,7 @@ class DayLogEditBloc extends Bloc<DayLogEditEvent, DayLogEditState> {
           ),
         );
       } catch (e) {
+        print("UpdateDayLogAfterEditing - emiting ErrorReturnedState");
         emit(
           ErrorReturnedState(
             dayLogId: dayLogId,

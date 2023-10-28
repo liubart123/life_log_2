@@ -26,59 +26,51 @@ class DayLogEditScreen extends StatelessWidget {
               LoadInitialDayLog(),
             );
         }),
-        child: DayLogEditScaffold(),
-      ),
-    );
-  }
-}
-
-class DayLogEditScaffold extends StatelessWidget {
-  const DayLogEditScaffold({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CreateMyAppBar(
-        'Day Log Edit',
-        context,
-      ),
-      body: BlocBuilder<DayLogEditBloc, DayLogEditState>(
-        builder: (
+        child: BlocBuilder<DayLogEditBloc, DayLogEditState>(builder: (
           BuildContext context,
           DayLogEditState state,
         ) {
+          Widget childForScaffold;
           if (state is InitialLoadingOfDayLog) {
-            return const Center(
+            childForScaffold = const Center(
               child: const MyProgressIndicator(),
             );
           } else if (state is IdleState) {
-            return Center(
-              child: DayLogEditWidget(
-                dayLog: state.dayLog!,
-              ),
+            childForScaffold = DayLogEditWidget(
+              dayLog: state.dayLog!,
             );
           } else if (state is LoadingOfDayLog) {
-            return const Center(
+            childForScaffold = const Center(
               child: const MyProgressIndicator(),
             );
           } else if (state is ErrorReturnedState) {
-            return const Center(
+            childForScaffold = const Center(
               child: const CardWithErrorMessage(
                   erorrMessage:
                       'My Error message:\nAwesome stacktrace for error'),
             );
           } else
-            return Center(child: Text("Unhalded state"));
-        },
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          context.read<DayLogEditBloc>().add(UpdateDayLogAfterEditing());
-        },
-        label: const Text('Add'),
-        icon: const Icon(Icons.add),
+            childForScaffold = Center(child: Text("Unhalded state"));
+
+          return Scaffold(
+            appBar: CreateMyAppBar(
+              'Day Log Edit',
+              context,
+            ),
+            body: childForScaffold,
+            floatingActionButton: MyColumnOfFloatingWidgets(
+              FABs: [
+                MyFloatingButton(
+                  iconData: Icons.save_as_rounded,
+                  onPressed: () {
+                    print("FAB pressed");
+                    //context.read<DayLogEditBloc>().add(UpdateDayLogAfterEditing());
+                  },
+                ),
+              ],
+            ),
+          );
+        }),
       ),
     );
   }
@@ -107,7 +99,7 @@ class DayLogEditWidget extends StatelessWidget {
                     Expanded(
                       child: MyDatePicker(
                         fieldValueToDisplay: dayLog.sleepStartTime,
-                        fieldNameToDisplay: "Fall asleep",
+                        fieldNameToDisplay: "Fell asleep",
                         actiononDatePick: (newValue) {
                           dayLog.sleepStartTime = newValue;
                           context.read<DayLogEditBloc>().add(FieldUpdate());
@@ -120,7 +112,7 @@ class DayLogEditWidget extends StatelessWidget {
                     Expanded(
                         child: MyDatePicker(
                       fieldValueToDisplay: dayLog.sleepEndTime,
-                      fieldNameToDisplay: "Wake up",
+                      fieldNameToDisplay: "Woke up",
                       actiononDatePick: (newValue) {},
                     )),
                   ],
@@ -130,7 +122,7 @@ class DayLogEditWidget extends StatelessWidget {
                     Expanded(
                       child: MyDatePicker(
                         fieldValueToDisplay: dayLog.sleepStartTime,
-                        fieldNameToDisplay: "Fall asleep",
+                        fieldNameToDisplay: "Fell asleep",
                         actiononDatePick: (newValue) {
                           dayLog.sleepStartTime = newValue;
                           context.read<DayLogEditBloc>().add(FieldUpdate());
@@ -143,7 +135,7 @@ class DayLogEditWidget extends StatelessWidget {
                     Expanded(
                         child: MyDatePicker(
                       fieldValueToDisplay: dayLog.sleepEndTime,
-                      fieldNameToDisplay: "Wake up",
+                      fieldNameToDisplay: "Woke up",
                       actiononDatePick: (newValue) {},
                     )),
                   ],

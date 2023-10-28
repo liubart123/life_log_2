@@ -10,7 +10,8 @@ Usage of text styles:
     Body - dynamic&static text used to display data 
         Medium - values and labels for fields
     Label - static text for action elements
-        Medium - text of buttons, menu items
+        Medium - text for buttons, menu items
+        Large - text for FAB
 
 
 tasks

@@ -282,3 +282,60 @@ class MyProgressIndicator extends StatelessWidget {
     );
   }
 }
+
+class MyFloatingButton extends StatelessWidget {
+  final Function() onPressed;
+  final IconData iconData;
+  const MyFloatingButton({
+    super.key,
+    required this.onPressed,
+    required this.iconData,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      //todo: enable feedback
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      // extendedIconLabelSpacing: 0,
+      // extendedTextStyle: Theme.of(context).textTheme.labelLarge,
+      onPressed: onPressed,
+      elevation: 5,
+      // label: const Text('Save'),
+      // icon: const Icon(Icons.save),
+      child: Icon(
+        iconData,
+        size: 30,
+      ),
+    );
+  }
+}
+
+class MyColumnOfFloatingWidgets extends StatelessWidget {
+  final List<Widget> FABs;
+
+  const MyColumnOfFloatingWidgets({
+    super.key,
+    required this.FABs,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final List<Widget> resultedChildren = new List.empty(growable: true);
+    for (int i = 0; i < FABs.length; i++) {
+      resultedChildren.add(FABs[i]);
+      if (i != FABs.length - 1)
+        resultedChildren.add(
+          const SizedBox.square(
+            dimension: 12,
+          ),
+        );
+    }
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: resultedChildren,
+      ),
+    );
+  }
+}

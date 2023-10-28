@@ -19,7 +19,6 @@ class DayLogViewListBloc
       // state.dayLogList.clear();
       emit(LoadingPageOfDayLogs().copyState(state));
       try {
-        print('Loading initial page...');
         var pageOfDayLogs = await dayLogRepository.GetAllDayLogs();
         emit(IdleState().newList(pageOfDayLogs));
       } catch (ex) {
@@ -30,7 +29,6 @@ class DayLogViewListBloc
     on<LoadNextPageOfDayLogs>((event, emit) async {
       emit(LoadingPageOfDayLogs().copyState(state));
       try {
-        print('Loading new page...');
         var pageOfDayLogs = await dayLogRepository.GetAllDayLogs(
             maxDateFilter: state.dayLogList.last.date);
         emit(IdleState().copyState(state).copyList(pageOfDayLogs));
@@ -39,7 +37,6 @@ class DayLogViewListBloc
       }
     });
     on<RefreshInitialPageOfDayLogs>((event, emit) async {
-      print('Refreshing initial page...');
       var pageOfDayLogs = await dayLogRepository.GetAllDayLogs();
       emit(IdleState().newList(pageOfDayLogs));
     });
