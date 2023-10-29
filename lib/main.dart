@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:life_log_2/app_logical_parts/day_log/DayLogRepository.dart';
@@ -9,6 +10,7 @@ import 'app_logical_parts/day_log/list_view/day_log_list_view.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 
 void main() {
+  // debugRepaintRainbowEnabled = true;
   runApp(const MyApp());
 }
 

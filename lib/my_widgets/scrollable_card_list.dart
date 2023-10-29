@@ -35,7 +35,7 @@ class _MyScrollableCardListState extends State<MyScrollableCardList> {
   }
 
   void handleScrolling() {
-    if (_scrollController.position.extentAfter < 50) {
+    if (_scrollController.position.extentAfter < 10) {
       if (!bottomWasScrolled) widget.bottomScrolledCallback();
       bottomWasScrolled = true;
     } else {
@@ -64,34 +64,23 @@ class MyScrollableCardList_Card extends StatelessWidget {
   final Widget child;
   final Function()? onTap;
 
-  final int colorElevationLevel;
-  final int shadowElevationLevel;
-
   const MyScrollableCardList_Card({
     super.key,
     required this.child,
     this.onTap,
-    this.colorElevationLevel = 1,
-    this.shadowElevationLevel = 1,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return MyCard(
       margin: EdgeInsets.fromLTRB(6, 6, 6, 0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [GetElevatedBoxShadow(context, shadowElevationLevel)],
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Material(
-        color:
-            GetTintColorForSurfaceTintOnSurface(context, colorElevationLevel),
-        child: InkWell(
-          onTap: onTap ?? () {},
-          child: child,
-        ),
-      ),
+      baseColorForElevation: Theme.of(context).colorScheme.surface,
+      tintColorForElevation: Theme.of(context).colorScheme.surfaceTint,
+      colorElevationLevel: 1,
+      shadowElevationLevel: 1,
+      onTap: onTap ?? () {},
+      clickable: true,
+      child: child,
     );
   }
 }
@@ -146,10 +135,11 @@ class MyScrollableCardList_Card_Title extends StatelessWidget {
         children: [
           Flexible(
             child: MyScrollableCardList_Card_InnerContainer(
-              elevation: 2,
+              // elevation: 2,
               // shadowElevation: 1,
+              useElevation: false,
               child: Container(
-                margin: EdgeInsets.fromLTRB(6, 0, 6, 1),
+                margin: EdgeInsets.fromLTRB(6, 4, 6, 1),
                 child: Text(
                   titleText,
                   style: Theme.of(context).textTheme.titleLarge,

@@ -124,10 +124,10 @@ class DayLogTagsRenderer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MyScrollableCardList_Card_InnerContainer(
-      useElevation: true,
+      useElevation: false,
       elevation: 2,
       shadowElevation: 1,
-      padding: EdgeInsets.fromLTRB(4, 4, 4, 4),
+      // padding: EdgeInsets.fromLTRB(4, 4, 4, 4),
       child: Wrap(
         spacing: 4,
         runSpacing: 4,

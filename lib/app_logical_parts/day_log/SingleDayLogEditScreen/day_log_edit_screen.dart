@@ -85,124 +85,123 @@ class DayLogEditWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Card(
-          child: Container(
-            padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: MyDatePicker(
-                        fieldValueToDisplay: dayLog.sleepStartTime,
-                        fieldNameToDisplay: "Fell asleep",
-                        actiononDatePick: (newValue) {
-                          dayLog.sleepStartTime = newValue;
-                          context.read<DayLogEditBloc>().add(FieldUpdate());
-                        },
-                      ),
-                    ),
-                    SizedBox.square(
-                      dimension: 8,
-                    ),
-                    Expanded(
-                        child: MyDatePicker(
-                      fieldValueToDisplay: dayLog.sleepEndTime,
-                      fieldNameToDisplay: "Woke up",
-                      actiononDatePick: (newValue) {},
-                    )),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: MyDatePicker(
-                        fieldValueToDisplay: dayLog.sleepStartTime,
-                        fieldNameToDisplay: "Fell asleep",
-                        actiononDatePick: (newValue) {
-                          dayLog.sleepStartTime = newValue;
-                          context.read<DayLogEditBloc>().add(FieldUpdate());
-                        },
-                      ),
-                    ),
-                    SizedBox.square(
-                      dimension: 8,
-                    ),
-                    Expanded(
-                        child: MyDatePicker(
-                      fieldValueToDisplay: dayLog.sleepEndTime,
-                      fieldNameToDisplay: "Woke up",
-                      actiononDatePick: (newValue) {},
-                    )),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class MyDatePicker extends StatelessWidget {
-  final String fieldNameToDisplay;
-  final DateTime fieldValueToDisplay;
-  final Function(DateTime newValue) actiononDatePick;
-
-  const MyDatePicker({
-    Key? key,
-    required this.fieldNameToDisplay,
-    required this.fieldValueToDisplay,
-    required this.actiononDatePick,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 4,
-      ),
-      decoration: BoxDecoration(
-        // color: Colors.red,
-        borderRadius: BorderRadius.circular(4),
-      ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text(
-            "$fieldNameToDisplay:",
-            style: Theme.of(context).textTheme.labelMedium,
-          ),
-          SizedBox.square(
-            dimension: 4,
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 4),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceVariant,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: GestureDetector(
-              onTap: () async {
-                DateTime? newDate = await showDatePicker(
-                  context: context,
-                  initialDate: fieldValueToDisplay,
-                  firstDate: DateTime(2020),
-                  lastDate: DateTime(2025),
-                );
-                if (newDate != null) actiononDatePick(newDate);
-              },
-              child: Text(
-                formatDate(fieldValueToDisplay),
-                style: Theme.of(context).textTheme.bodyLarge,
+          MyCard(
+            margin: EdgeInsets.fromLTRB(6, 6, 6, 0),
+            child: Center(
+              child: SizedBox.square(
+                dimension: 100,
+                child: Text(
+                  'gavno',
+                ),
               ),
             ),
-          )
+          ),
+          MyCard(
+            margin: EdgeInsets.fromLTRB(6, 6, 6, 0),
+            child: Center(
+              child: SizedBox.square(
+                dimension: 100,
+                child: Text(
+                  'gavno',
+                ),
+              ),
+            ),
+          ),
+          // Card(
+          //   child: Container(
+          //     padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
+          //     child: Column(
+          //       children: [
+          //         Row(
+          //           mainAxisAlignment: MainAxisAlignment.start,
+          //           children: [
+          //             Expanded(
+          //               child: Container(
+          //                 // child: Text("asd"),
+          //                 child: TextField(
+          //                   canRequestFocus: false,
+          //                   // obscureText: true,
+          //                   decoration: InputDecoration(
+          //                     border: OutlineInputBorder(),
+          //                     labelText: 'Password',
+          //                   ),
+          //                 ),
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //         Row(
+          //           mainAxisAlignment: MainAxisAlignment.start,
+          //           children: [
+          //             Expanded(
+          //               child: Container(
+          //                 // child: Text("asd"),
+          //                 child: TextField(
+          //                   // obscureText: true,
+          //                   decoration: InputDecoration(
+          //                     border: OutlineInputBorder(),
+          //                     labelText: 'Password',
+          //                   ),
+          //                 ),
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //         Row(
+          //           children: [
+          //             Expanded(
+          //               child: MyDatePicker(
+          //                 fieldValueToDisplay: dayLog.sleepStartTime,
+          //                 fieldNameToDisplay: "Fell asleep",
+          //                 actiononDatePick: (newValue) {
+          //                   dayLog.sleepStartTime = newValue;
+          //                   context.read<DayLogEditBloc>().add(FieldUpdate());
+          //                 },
+          //               ),
+          //             ),
+          //             SizedBox.square(
+          //               dimension: 8,
+          //             ),
+          //             Expanded(
+          //                 child: MyDatePicker(
+          //               fieldValueToDisplay: dayLog.sleepEndTime,
+          //               fieldNameToDisplay: "Woke up",
+          //               actiononDatePick: (newValue) {},
+          //             )),
+          //           ],
+          //         ),
+          //         Row(
+          //           children: [
+          //             Expanded(
+          //               child: MyDatePicker(
+          //                 fieldValueToDisplay: dayLog.sleepStartTime,
+          //                 fieldNameToDisplay: "Fell asleep",
+          //                 actiononDatePick: (newValue) {
+          //                   dayLog.sleepStartTime = newValue;
+          //                   context.read<DayLogEditBloc>().add(FieldUpdate());
+          //                 },
+          //               ),
+          //             ),
+          //             SizedBox.square(
+          //               dimension: 8,
+          //             ),
+          //             Expanded(
+          //                 child: MyDatePicker(
+          //               fieldValueToDisplay: dayLog.sleepEndTime,
+          //               fieldNameToDisplay: "Woke up",
+          //               actiononDatePick: (newValue) {},
+          //             )),
+          //           ],
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

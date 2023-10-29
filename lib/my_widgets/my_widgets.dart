@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:life_log_2/app_logical_parts/day_log/DayLogDataProvider.dart';
 import 'package:life_log_2/app_logical_parts/day_log/DayLogRepository.dart';
+import 'package:life_log_2/utils/StringFormatters.dart';
 import 'package:structures/structures.dart';
 
 import 'elevation_utils.dart';
@@ -38,6 +39,57 @@ class MyRepositoryProviders extends StatelessWidget {
         ),
       ],
       child: child,
+    );
+  }
+}
+
+class MyCard extends StatelessWidget {
+  final Widget child;
+  final EdgeInsets? margin;
+  final Function()? onTap;
+  final Color? baseColorForElevation, tintColorForElevation;
+
+  final int colorElevationLevel;
+  final int shadowElevationLevel;
+
+  final bool clickable;
+  final double borderRadius;
+
+  const MyCard({
+    super.key,
+    required this.child,
+    this.onTap,
+    this.colorElevationLevel = 1,
+    this.shadowElevationLevel = 1,
+    this.baseColorForElevation,
+    this.tintColorForElevation,
+    this.clickable = false,
+    this.borderRadius = 10,
+    this.margin,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: margin,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(borderRadius),
+        boxShadow: [GetElevatedBoxShadow(context, shadowElevationLevel)],
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Material(
+        color: GetTintColor(
+          colorElevationLevel,
+          baseColorForElevation ?? Theme.of(context).colorScheme.surface,
+          tintColorForElevation ?? Theme.of(context).colorScheme.surfaceTint,
+        ),
+        child: clickable
+            ? InkWell(
+                onTap: onTap ?? () {},
+                child: child,
+              )
+            : child,
+      ),
     );
   }
 }
@@ -335,6 +387,66 @@ class MyColumnOfFloatingWidgets extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: resultedChildren,
+      ),
+    );
+  }
+}
+
+class MyDatePicker extends StatelessWidget {
+  final String fieldNameToDisplay;
+  final DateTime fieldValueToDisplay;
+  final Function(DateTime newValue) actiononDatePick;
+
+  const MyDatePicker({
+    Key? key,
+    required this.fieldNameToDisplay,
+    required this.fieldValueToDisplay,
+    required this.actiononDatePick,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 4,
+      ),
+      decoration: BoxDecoration(
+        // color: Colors.red,
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "$fieldNameToDisplay:",
+            style: Theme.of(context).textTheme.labelMedium,
+          ),
+          SizedBox.square(
+            dimension: 4,
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 4),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surfaceVariant,
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: GestureDetector(
+              onTap: () async {
+                DateTime? newDate = await showDatePicker(
+                  context: context,
+                  initialDate: fieldValueToDisplay,
+                  firstDate: DateTime(2020),
+                  lastDate: DateTime(2025),
+                );
+                if (newDate != null) actiononDatePick(newDate);
+              },
+              child: Text(
+                formatDate(fieldValueToDisplay),
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
