@@ -4,10 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:life_log_2/app_logical_parts/day_log/DayLogRepository.dart';
 import 'package:life_log_2/app_logical_parts/day_log/list_view/bloc/day_log_bloc.dart';
-import 'package:life_log_2/my_widgets/my_widgets.dart';
+import 'package:life_log_2/my_widgets/my_old_widgets.dart';
 
 import 'app_logical_parts/day_log/list_view/day_log_list_view.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
+
+import 'test_of_flutter_possibilities/custom_widgets_test.dart';
 
 void main() {
   // debugRepaintRainbowEnabled = true;
@@ -112,15 +114,16 @@ class MyApp extends StatelessWidget {
 // If you do not have a themeMode switch, uncomment this line
 // to let the device system mode control the theme mode:
 // themeMode: ThemeMode.system,
+
       home: Builder(
         builder: (context) {
           return MyRepositoryProviders(
             child: Scaffold(
               appBar: CreateMyAppBar(
-                'Home page',
+                'Day Logs',
                 context,
               ),
-              body: const DayLogViewList(),
+              body: const CustomWidgetsTest(),
             ),
           );
         },

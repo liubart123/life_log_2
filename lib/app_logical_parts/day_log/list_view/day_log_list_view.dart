@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:life_log_2/app_logical_parts/day_log/SingleDayLogEditScreen/day_log_edit_screen.dart';
-import 'package:life_log_2/my_widgets/my_widgets.dart';
+import 'package:life_log_2/my_widgets/my_old_widgets.dart';
 import 'package:life_log_2/my_widgets/scrollable_card_list.dart';
 import 'package:structures/structures.dart';
 

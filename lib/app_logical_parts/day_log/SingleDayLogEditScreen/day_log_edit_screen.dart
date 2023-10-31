@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:life_log_2/app_logical_parts/day_log/DayLogModel.dart';
 import 'package:life_log_2/app_logical_parts/day_log/DayLogRepository.dart';
 import 'package:life_log_2/app_logical_parts/day_log/SingleDayLogEditScreen/bloc/day_log_edit_bloc.dart';
-import 'package:life_log_2/my_widgets/my_widgets.dart';
+import 'package:life_log_2/my_widgets/my_old_widgets.dart';
 import 'package:life_log_2/utils/StringFormatters.dart';
 
 class DayLogEditScreen extends StatelessWidget {

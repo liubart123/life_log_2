@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-final tintColorLevels = const [0.0, 0.1, 0.2];
+final tintColorLevels = const [0.0, 0.05, 0.2];
 final tintColorOpacityLevels = const [0.0, 0.1, 0.2];
 final shadowOpacityLevels = const [0.0, 0.2, 0.4];
 
@@ -20,6 +20,7 @@ Color GetTintColor(
   Color backgroundColor,
   Color tintColor,
 ) {
+  var tintColorLevels = const [0.0, 0.05, 0.2];
   double colorLerp = tintColorLevels[elevation % tintColorLevels.length];
   return Color.lerp(
     backgroundColor,
@@ -46,6 +47,7 @@ Color GetTransparentTintColor(
 }
 
 BoxShadow GetElevatedBoxShadow(BuildContext context, int elevation) {
+  final shadowOpacityLevels = const [0.0, 0.1, 0.4];
   double shadowOpacity =
       shadowOpacityLevels[elevation % shadowOpacityLevels.length];
   // shadowOpacity = 1;

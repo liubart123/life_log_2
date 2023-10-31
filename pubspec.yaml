@@ -44,6 +44,7 @@ dependencies:
   google_fonts: ^6.0.0
   word_generator: ^0.4.3
   structures: ^1.4.0
+  gap: ^3.0.1
 
 dev_dependencies:
   flutter_test:
