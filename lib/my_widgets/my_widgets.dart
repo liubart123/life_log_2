@@ -1,11 +1,26 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:life_log_2/my_widgets/elevation_utils.dart';
 import 'package:life_log_2/my_widgets/my_constants.dart';
 import 'package:structures/structures.dart';
 
 import 'my_old_widgets.dart';
+
+PreferredSizeWidget CreateMyAppBar(String titleInAppBar, BuildContext context) {
+  return AppBar(
+    elevation: 0,
+    scrolledUnderElevation: 1,
+    shadowColor: Theme.of(context).colorScheme.surface,
+    title: Text(
+      titleInAppBar,
+      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+            fontSize: 19,
+          ),
+    ),
+  );
+}
 
 class MyScrollableList extends StatefulWidget {
   final int itemCount;
@@ -183,6 +198,63 @@ class MyLoadingIndicator extends StatelessWidget {
       //   Theme.of(context).colorScheme.surfaceTint,
       //   0.1,
       // ),
+    );
+  }
+}
+
+class MyFABCollection extends StatelessWidget {
+  final List<Widget> fabs;
+  const MyFABCollection({
+    super.key,
+    required this.fabs,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        ...fabs
+            .expand(
+              (e) => [
+                Gap(16),
+                Container(
+                  child: e,
+                ),
+              ],
+            )
+            .skip(1),
+      ],
+    );
+  }
+}
+
+class MyFloatingButton extends StatelessWidget {
+  final Function() onPressed;
+  final IconData iconData;
+  const MyFloatingButton({
+    super.key,
+    required this.onPressed,
+    required this.iconData,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      //todo: enable feedback
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      // extendedIconLabelSpacing: 0,
+      // extendedTextStyle: Theme.of(context).textTheme.labelLarge,
+      backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+
+      onPressed: onPressed,
+      elevation: 2,
+      // label: const Text('Save'),
+      // icon: const Icon(Icons.save),
+      child: Icon(
+        iconData,
+        size: 30,
+      ),
     );
   }
 }

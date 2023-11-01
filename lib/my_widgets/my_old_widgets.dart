@@ -7,20 +7,6 @@ import 'package:structures/structures.dart';
 
 import 'elevation_utils.dart';
 
-PreferredSizeWidget CreateMyAppBar(String titleInAppBar, BuildContext context) {
-  return AppBar(
-    elevation: 0,
-    scrolledUnderElevation: 1,
-    shadowColor: Theme.of(context).colorScheme.surface,
-    title: Text(
-      titleInAppBar,
-      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-            fontSize: 19,
-          ),
-    ),
-  );
-}
-
 class MyRepositoryProviders extends StatelessWidget {
   final Widget child;
   const MyRepositoryProviders({

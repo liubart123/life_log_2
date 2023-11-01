@@ -4,11 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:life_log_2/app_logical_parts/day_log/DayLogRepository.dart';
 import 'package:life_log_2/app_logical_parts/day_log/list_view/bloc/day_log_bloc.dart';
-import 'package:life_log_2/my_widgets/my_old_widgets.dart';
 
 import 'app_logical_parts/day_log/list_view/day_log_list_view.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 
+import 'my_widgets/my_widgets.dart';
 import 'test_of_flutter_possibilities/custom_widgets_test.dart';
 
 void main() {
@@ -35,8 +35,6 @@ class MyApp extends StatelessWidget {
             tintedDisabledControls: false,
             blendOnColors: false,
             useTextTheme: true,
-            inputDecoratorBorderType: FlexInputBorderType.underline,
-            inputDecoratorUnfocusedBorderIsColored: false,
             alignedDropdown: true,
             tooltipRadius: 4,
             tooltipSchemeColor: SchemeColor.inverseSurface,
@@ -80,17 +78,40 @@ class MyApp extends StatelessWidget {
 
       home: Builder(
         builder: (context) {
-          return MyRepositoryProviders(
-            child: Scaffold(
-              appBar: CreateMyAppBar(
-                'Day Logs',
-                context,
-              ),
-              body: Container(
-                color: Theme.of(context).colorScheme.surface,
-                child: const DayLogViewList(),
-                // child: const CustomWidgetsTest(),
-              ),
+          return Scaffold(
+            appBar: CreateMyAppBar(
+              'Day Logs',
+              context,
+            ),
+            body: Container(
+              color: Theme.of(context).colorScheme.surface,
+              child: const DayLogViewList(),
+              // child: const CustomWidgetsTest(),
+            ),
+            floatingActionButton: MyFABCollection(
+              fabs: [
+                MyFloatingButton(
+                  iconData: Icons.public_sharp,
+                  onPressed: () {
+                    print("FAB pressed");
+                    //context.read<DayLogEditBloc>().add(UpdateDayLogAfterEditing());
+                  },
+                ),
+                MyFloatingButton(
+                  iconData: Icons.add_a_photo_outlined,
+                  onPressed: () {
+                    print("FAB pressed");
+                    //context.read<DayLogEditBloc>().add(UpdateDayLogAfterEditing());
+                  },
+                ),
+                MyFloatingButton(
+                  iconData: Icons.add,
+                  onPressed: () {
+                    print("FAB pressed");
+                    //context.read<DayLogEditBloc>().add(UpdateDayLogAfterEditing());
+                  },
+                ),
+              ],
             ),
           );
         },
