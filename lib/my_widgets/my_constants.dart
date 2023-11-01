@@ -1,0 +1,6 @@
+double CARD_MARGIN = 8;
+double CARD_PADDING = 18;
+double INNER_CARD_GAP_LARGE = 24;
+double INNER_CARD_GAP_MEDIUM = 18;
+double INNER_CARD_GAP_SMALL = 10;
+double ELEMENT_DISTANCE = 6;

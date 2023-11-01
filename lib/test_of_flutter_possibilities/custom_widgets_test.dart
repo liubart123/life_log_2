@@ -13,232 +13,216 @@ class CustomWidgetsTest extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MyScaffoldBody(
-      child: ListView(
-        children: [
-          ...List.generate(
-            2,
-            (index) => MyCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MyTitlePrimaryText("23.05.2023"),
-                  // Gap(12),
-                  // MyDivider(),
-                  Gap(16),
-                  // MyDivider(),
-                  // SizedBox.square(dimension: 6),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                  //     MyLabelValuePairInColumn(
-                  //       "Fell Sleep",
-                  //       "23:12",
-                  //       textAlign: TextAlign.left,
-                  //     ),
-                  //     MyLabelValuePairInColumn(
-                  //       "Woke Up",
-                  //       "08:12",
-                  //       textAlign: TextAlign.center,
-                  //     ),
-                  //     MyLabelValuePairInColumn(
-                  //       "Sleep",
-                  //       "8:12",
-                  //       textAlign: TextAlign.right,
-                  //     ),
-                  //   ],
-                  // ),
-                  // SizedBox.square(dimension: 6),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                  //     MyLabelValuePairInColumn(
-                  //       "Deep Sleep",
-                  //       "2:48",
-                  //       textAlign: TextAlign.left,
-                  //     ),
-                  //     MyLabelValuePairInColumn(
-                  //       "Other Field",
-                  //       "Maybe long value",
-                  //       textAlign: TextAlign.center,
-                  //     ),
-                  //     MyLabelValuePairInColumn(
-                  //       "Sleep Score",
-                  //       "78",
-                  //       textAlign: TextAlign.right,
-                  //     ),
-                  //   ],
-                  // ),
-                  // SizedBox.square(dimension: 6),
-                  // // MyDivider(),
-                  // SizedBox.square(dimension: 10),
-                  TagCollection(List.generate(
-                      13,
-                      (index) => [
-                            "Fell asleep: 23:49",
-                            "Woke up: 07:42",
-                            "Sleep: 8:32",
-                            "Deep sleep: 3:48",
-                            "Foodie",
-                            "Adventure",
-                            "Photography",
-                            "Wanderlust",
-                            "Cats",
-                            "Mountains",
-                            "BeachLife",
-                            "Sustainability",
-                            "Exploration",
-                          ][index]))
-                ],
-              ),
-            ),
-          ),
-          ...List.generate(
-            2,
-            (index) => MyCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MyTitlePrimaryText("23.05.2023"),
-                  Gap(16),
-                  RoundTagCollection(List.generate(
-                      13,
-                      (index) => [
-                            "Fell asleep: 23:49",
-                            "Woke up: 07:42",
-                            "Sleep: 8:32",
-                            "Deep sleep: 3:48",
-                            "Foodie",
-                            "Adventure",
-                            "Photography",
-                            "Wanderlust",
-                            "Cats",
-                            "Mountains",
-                            "BeachLife",
-                            "Sustainability",
-                            "Exploration",
-                          ][index]))
-                ],
-              ),
-            ),
-          ),
-          MyCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                MyTitlePrimaryText("Title 2"),
-                MyDivider(),
-                MyBodyPrimaryText(
-                  "Awesome preety long text for description purposes. Even new sentence is provided to emulate long text description.",
-                ),
-                MyBodyPrimaryText(
-                  "Awesome preety long text for description purposes. Even new sentence is provided to emulate long text description.",
-                ),
-                MyDivider(),
-                MyBodyPrimaryText(
-                  "Awesome preety long text for description purposes. Even new sentence is provided to emulate long text description.",
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 8),
-                  decoration: BoxDecoration(
-                    color: Colors.amber.shade400,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        height: 50,
-                      ),
-                    ],
-                  ),
-                ),
-                MyDivider(),
-                MyBodyPrimaryText(
-                  "Awesome preety long text for description purposes. Even new sentence is provided to emulate long text description.",
-                ),
-                MyDivider(),
-                MyLabelValuePairInRow("Field1", "Gavno"),
-                MyDivider(),
-                MyLabelValuePairInRow("Date Field", "23.05.2023"),
-                MyDivider(),
-                MyLabelValuePairInRow("DateTime Field", "23:12"),
-              ],
-            ),
-          ),
-          MyCard(
+    return ListView(
+      children: [
+        ...List.generate(
+          2,
+          (index) => MyCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 MyTitlePrimaryText("23.05.2023"),
-                MyDivider(),
-                MyLabelValuePairInRow("Field1", "Gavno"),
-                MyDivider(),
-                MyLabelValuePairInRow("Date Field", "23.05.2023"),
-                MyDivider(),
-                MyLabelValuePairInRow("DateTime Field", "23:12"),
+                // Gap(12),
                 // MyDivider(),
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  decoration: BoxDecoration(
-                    color: Colors.amber.shade400,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        height: 50,
-                      ),
-                    ],
-                  ),
-                ),
+                Gap(16),
+                // MyDivider(),
+                // SizedBox.square(dimension: 6),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     MyLabelValuePairInColumn(
+                //       "Fell Sleep",
+                //       "23:12",
+                //       textAlign: TextAlign.left,
+                //     ),
+                //     MyLabelValuePairInColumn(
+                //       "Woke Up",
+                //       "08:12",
+                //       textAlign: TextAlign.center,
+                //     ),
+                //     MyLabelValuePairInColumn(
+                //       "Sleep",
+                //       "8:12",
+                //       textAlign: TextAlign.right,
+                //     ),
+                //   ],
+                // ),
+                // SizedBox.square(dimension: 6),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     MyLabelValuePairInColumn(
+                //       "Deep Sleep",
+                //       "2:48",
+                //       textAlign: TextAlign.left,
+                //     ),
+                //     MyLabelValuePairInColumn(
+                //       "Other Field",
+                //       "Maybe long value",
+                //       textAlign: TextAlign.center,
+                //     ),
+                //     MyLabelValuePairInColumn(
+                //       "Sleep Score",
+                //       "78",
+                //       textAlign: TextAlign.right,
+                //     ),
+                //   ],
+                // ),
+                // SizedBox.square(dimension: 6),
+                // // MyDivider(),
+                // SizedBox.square(dimension: 10),
+                TagCollection(List.generate(
+                    13,
+                    (index) => [
+                          "Fell asleep: 23:49",
+                          "Woke up: 07:42",
+                          "Sleep: 8:32",
+                          "Deep sleep: 3:48",
+                          "Foodie",
+                          "Adventure",
+                          "Photography",
+                          "Wanderlust",
+                          "Cats",
+                          "Mountains",
+                          "BeachLife",
+                          "Sustainability",
+                          "Exploration",
+                        ][index]))
               ],
             ),
           ),
-          MyCard(
+        ),
+        ...List.generate(
+          2,
+          (index) => MyCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 MyTitlePrimaryText("23.05.2023"),
-                MyDivider(),
-                MyLabelValuePairInRowTight("Field1", "Gavno"),
-                MyDivider(),
-                MyLabelValuePairInRowTight("Date Field", "23.05.2023"),
-                MyDivider(),
-                MyLabelValuePairInRowTight("DateTime Field", "23:12"),
-                // MyDivider(),
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  decoration: BoxDecoration(
-                    color: Colors.amber.shade400,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        height: 50,
-                      ),
-                    ],
-                  ),
-                ),
+                Gap(16),
+                RoundTagCollection(List.generate(
+                    13,
+                    (index) => [
+                          "Fell asleep: 23:49",
+                          "Woke up: 07:42",
+                          "Sleep: 8:32",
+                          "Deep sleep: 3:48",
+                          "Foodie",
+                          "Adventure",
+                          "Photography",
+                          "Wanderlust",
+                          "Cats",
+                          "Mountains",
+                          "BeachLife",
+                          "Sustainability",
+                          "Exploration",
+                        ][index]))
               ],
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class MyScaffoldBody extends StatelessWidget {
-  final Widget child;
-  const MyScaffoldBody({super.key, required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).colorScheme.surface,
-      padding: EdgeInsets.all(0),
-      child: child,
+        ),
+        MyCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              MyTitlePrimaryText("Title 2"),
+              MyDivider(),
+              MyBodyPrimaryText(
+                "Awesome preety long text for description purposes. Even new sentence is provided to emulate long text description.",
+              ),
+              MyBodyPrimaryText(
+                "Awesome preety long text for description purposes. Even new sentence is provided to emulate long text description.",
+              ),
+              MyDivider(),
+              MyBodyPrimaryText(
+                "Awesome preety long text for description purposes. Even new sentence is provided to emulate long text description.",
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.amber.shade400,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      height: 50,
+                    ),
+                  ],
+                ),
+              ),
+              MyDivider(),
+              MyBodyPrimaryText(
+                "Awesome preety long text for description purposes. Even new sentence is provided to emulate long text description.",
+              ),
+              MyDivider(),
+              MyLabelValuePairInRow("Field1", "Gavno"),
+              MyDivider(),
+              MyLabelValuePairInRow("Date Field", "23.05.2023"),
+              MyDivider(),
+              MyLabelValuePairInRow("DateTime Field", "23:12"),
+            ],
+          ),
+        ),
+        MyCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              MyTitlePrimaryText("23.05.2023"),
+              MyDivider(),
+              MyLabelValuePairInRow("Field1", "Gavno"),
+              MyDivider(),
+              MyLabelValuePairInRow("Date Field", "23.05.2023"),
+              MyDivider(),
+              MyLabelValuePairInRow("DateTime Field", "23:12"),
+              // MyDivider(),
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                decoration: BoxDecoration(
+                  color: Colors.amber.shade400,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      height: 50,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        MyCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              MyTitlePrimaryText("23.05.2023"),
+              MyDivider(),
+              MyLabelValuePairInRowTight("Field1", "Gavno"),
+              MyDivider(),
+              MyLabelValuePairInRowTight("Date Field", "23.05.2023"),
+              MyDivider(),
+              MyLabelValuePairInRowTight("DateTime Field", "23:12"),
+              // MyDivider(),
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                decoration: BoxDecoration(
+                  color: Colors.amber.shade400,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      height: 50,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -477,7 +461,7 @@ class TextTag extends StatelessWidget {
   Widget build(BuildContext context) {
     double hue = Random().nextInt(360).toDouble();
     Color chipColor = HSLColor.fromAHSL(1, hue, 0.1, 0.90).toColor();
-    Color textColor = HSLColor.fromAHSL(1, (hue + 0) % 360, 0.9, 0.2).toColor();
+    Color textColor = HSLColor.fromAHSL(1, hue, 0.99, 0.1).toColor();
     return Container(
       padding: EdgeInsets.fromLTRB(icon == null ? 6 : 4, 3, 8, 3),
       decoration: BoxDecoration(
@@ -507,7 +491,7 @@ class TextTag extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     color: textColor,
                     // color: Theme.of(context).colorScheme.surfaceTint,
-                    // fontSize: 12,
+                    // fontSize: 14,
                     fontWeight:
                         icon == null ? FontWeight.w500 : FontWeight.w500,
                   ),
@@ -562,8 +546,8 @@ class RoundTextTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double hue = Random().nextInt(360).toDouble();
-    Color chipColor = HSLColor.fromAHSL(1, hue, 0.3, 0.8).toColor();
-    Color textColor = HSLColor.fromAHSL(1, (hue + 0) % 360, 0.9, 0.2).toColor();
+    Color chipColor = HSLColor.fromAHSL(1, hue, 0.1, 0.90).toColor();
+    Color textColor = HSLColor.fromAHSL(1, hue, 0.99, 0.1).toColor();
     return Container(
       padding: EdgeInsets.fromLTRB(icon == null ? 10 : 4, 3, 12, 3),
       decoration: BoxDecoration(

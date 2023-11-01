@@ -2,8 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:life_log_2/app_logical_parts/day_log/SingleDayLogEditScreen/day_log_edit_screen.dart';
-import 'package:life_log_2/my_widgets/my_old_widgets.dart';
+import 'package:life_log_2/my_widgets/my_constants.dart';
+import 'package:life_log_2/my_widgets/my_widgets.dart';
 import 'package:life_log_2/my_widgets/scrollable_card_list.dart';
 import 'package:structures/structures.dart';
 
@@ -28,7 +30,7 @@ class DayLogViewList extends StatelessWidget {
           if (state is LoadingPageOfDayLogs && state.dayLogList.isEmpty)
             return InitialLoadingDisplayWidget();
           else
-            return MyScrollableCardList(
+            return MyScrollableList(
               reloadCallback: () async {
                 var bloc = context.read<DayLogViewListBloc>();
                 bloc.add(RefreshInitialPageOfDayLogs());
@@ -44,6 +46,9 @@ class DayLogViewList extends StatelessWidget {
                 } else {
                   return BottomElementsForDayLogList(state: state);
                 }
+              },
+              separatorBuilder: (context, index) {
+                return Gap(CARD_MARGIN);
               },
             );
         },
@@ -62,86 +67,64 @@ class DayLogCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MyScrollableCardList_Card(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) {
-            return DayLogEditScreen(
-              dayLogId: dayLogToBuild.id,
-            );
-          }),
-        );
-      },
+    return MyCard(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          MyScrollableCardList_Card_Title(
-              titleText: formatDate(dayLogToBuild.date)),
-          MyScrollableCardList_Card_InnerDivider(),
-          DayLogFieldsRenderer(dayLog: dayLogToBuild),
-          MyScrollableCardList_Card_InnerDivider(),
-          DayLogTagsRenderer(dayLogToBuild: dayLogToBuild),
-          MyScrollableCardList_Card_InnerSpacer.half(),
+          Text(
+            formatDate(dayLogToBuild.date),
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          Gap(INNER_CARD_GAP_MEDIUM),
+          DayLogFieldsAndTagsRenderer(dayLog: dayLogToBuild),
         ],
       ),
     );
   }
 }
 
-class DayLogFieldsRenderer extends StatelessWidget {
+class DayLogFieldsAndTagsRenderer extends StatelessWidget {
   final DayLog dayLog;
-  const DayLogFieldsRenderer({
+  const DayLogFieldsAndTagsRenderer({
     super.key,
     required this.dayLog,
   });
 
   @override
   Widget build(BuildContext context) {
-    return MyScrollableCardList_Card_InnerContainer(
-      useElevation: false,
-      child:
-          MyScrollableCardList_Card_InnerContainer_LabelValuePairColumnRenderer(
-        labelValuePairs: [
-          Pair("Fell asleep", formatTime(dayLog.sleepStartTime)),
-          Pair("Woke up", formatTime(dayLog.sleepEndTime)),
-          Pair("Sleep", formatDuration(dayLog.sleepDuration)),
-          Pair("Deep sleep", formatDuration(dayLog.deepSleepDuration)),
-        ],
-      ),
-    );
-  }
-}
-
-class DayLogTagsRenderer extends StatelessWidget {
-  const DayLogTagsRenderer({
-    super.key,
-    required this.dayLogToBuild,
-  });
-
-  final DayLog dayLogToBuild;
-
-  @override
-  Widget build(BuildContext context) {
-    return MyScrollableCardList_Card_InnerContainer(
-      useElevation: false,
-      elevation: 2,
-      shadowElevation: 1,
-      // padding: EdgeInsets.fromLTRB(4, 4, 4, 4),
-      child: Wrap(
-        spacing: 4,
-        runSpacing: 4,
-        alignment: WrapAlignment.start,
-        children: dayLogToBuild.tags
-            .map(
-              (e) => TextWithChip(
-                text: e,
-                chipColor:
-                    Colors.primaries[Random().nextInt(Colors.primaries.length)],
+    return Row(
+      children: [
+        Expanded(
+          child: Wrap(
+            alignment: WrapAlignment.start,
+            spacing: ELEMENT_DISTANCE,
+            runSpacing: ELEMENT_DISTANCE,
+            children: [
+              MyChip(
+                "Sleep start: ${formatTime(dayLog.sleepStartTime)}",
+                icon: Icons.access_time_outlined,
               ),
-            )
-            .toList(),
-      ),
+              MyChip(
+                "Sleep end: ${formatTime(dayLog.sleepEndTime)}",
+                icon: Icons.timer_off_outlined,
+              ),
+              MyChip(
+                "Sleep: ${formatDuration(dayLog.sleepDuration)}",
+                icon: Icons.alarm_outlined,
+              ),
+              MyChip(
+                "Deep sleep: ${formatDuration(dayLog.deepSleepDuration)}",
+                icon: Icons.alarm_on_outlined,
+              ),
+              ...dayLog.tags.map2(
+                (value, index) {
+                  return MyChip(value);
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -162,7 +145,7 @@ class BottomElementsForDayLogList extends StatelessWidget {
         if (state is LoadingPageOfDayLogs)
           Container(
               margin: EdgeInsets.fromLTRB(0, 6, 0, 6),
-              child: const MyProgressIndicator()),
+              child: const MyLoadingIndicator()),
         if (state is ErrorWithLoadingPageOfDayLogs)
           Text(
             "Error: ${(state as ErrorWithLoadingPageOfDayLogs).errorMessage ?? "unknown..."}",
@@ -182,7 +165,7 @@ class InitialLoadingDisplayWidget extends StatelessWidget {
     return Center(
       child: Container(
           margin: EdgeInsets.fromLTRB(0, 6, 0, 6),
-          child: const MyProgressIndicator()),
+          child: const MyLoadingIndicator()),
     );
   }
 }
