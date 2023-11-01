@@ -69,28 +69,37 @@ class _MyScrollableListState extends State<MyScrollableList> {
 
 class MyCard extends StatelessWidget {
   final Widget child;
+  final Function()? onTap;
 
-  const MyCard({super.key, required this.child});
+  const MyCard({super.key, required this.child, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        // color: Theme.of(context).colorScheme.primaryContainer,
-        // color: GetTintColor(
-        //   1,
-        //   Theme.of(context).colorScheme.surface,
-        //   Theme.of(context).colorScheme.surfaceTint,
-        // ),
-        // boxShadow: [GetElevatedBoxShadow(context, 1)],
-        border: Border.all(
-          width: 1,
-          color: Theme.of(context).colorScheme.outlineVariant,
-        ),
+    return Material(
+      child: InkWell(
         borderRadius: BorderRadius.circular(12),
+        // splashColor: Theme.of(context).colorScheme.primary,
+        onTap: onTap ?? () {},
+        child: Container(
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            // color: Theme.of(context).colorScheme.primaryContainer,
+            // color: GetTintColor(
+            //   1,
+            //   Theme.of(context).colorScheme.surface,
+            //   Theme.of(context).colorScheme.surfaceTint,
+            // ),
+            // boxShadow: [GetElevatedBoxShadow(context, 1)],
+            border: Border.all(
+              width: 1,
+              color: Theme.of(context).colorScheme.outlineVariant,
+            ),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          padding: EdgeInsets.all(CARD_PADDING),
+          child: child,
+        ),
       ),
-      padding: EdgeInsets.all(CARD_PADDING),
-      child: child,
     );
   }
 }
@@ -109,8 +118,7 @@ class MyChip extends StatelessWidget {
     double hue = Random().nextInt(360).toDouble();
     Color chipColor = HSLColor.fromAHSL(1, hue, 0.3, 0.9).toColor();
     Color textColor = HSLColor.fromAHSL(1, hue, 1, 0.15).toColor();
-    return Container(
-      padding: EdgeInsets.fromLTRB(icon == null ? 6 : 4, 3, 8, 3),
+    return Ink(
       decoration: BoxDecoration(
         color: chipColor,
         // color: GetTintColor(2, Theme.of(context).colorScheme.surface,
@@ -121,30 +129,33 @@ class MyChip extends StatelessWidget {
         //   color: Theme.of(context).colorScheme.outline,
         // ),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (icon != null)
+      child: Container(
+        padding: EdgeInsets.fromLTRB(icon == null ? 6 : 4, 3, 8, 3),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null)
+              Container(
+                child: Icon(
+                  icon,
+                  size: 20,
+                ),
+              ),
             Container(
-              child: Icon(
-                icon,
-                size: 20,
+              margin: EdgeInsets.only(left: 2),
+              child: Text(
+                text,
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: textColor,
+                      // color: Theme.of(context).colorScheme.surfaceTint,
+                      // fontSize: 14,
+                      fontWeight:
+                          icon == null ? FontWeight.w500 : FontWeight.w500,
+                    ),
               ),
             ),
-          Container(
-            margin: EdgeInsets.only(left: 2),
-            child: Text(
-              text,
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: textColor,
-                    // color: Theme.of(context).colorScheme.surfaceTint,
-                    // fontSize: 14,
-                    fontWeight:
-                        icon == null ? FontWeight.w500 : FontWeight.w500,
-                  ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

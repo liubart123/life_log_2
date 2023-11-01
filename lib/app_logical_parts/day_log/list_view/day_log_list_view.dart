@@ -68,6 +68,16 @@ class DayLogCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MyCard(
+      // onTap: () {
+      //   Navigator.push(
+      //     context,
+      //     MaterialPageRoute(builder: (context) {
+      //       return DayLogEditScreen(
+      //         dayLogId: dayLogToBuild.id,
+      //       );
+      //     }),
+      //   );
+      // },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

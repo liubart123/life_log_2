@@ -80,7 +80,13 @@ class MyScrollableCardList_Card extends StatelessWidget {
       shadowElevationLevel: 1,
       onTap: onTap ?? () {},
       clickable: true,
-      child: child,
+      child: Material(
+        color: Theme.of(context).colorScheme.surfaceTint,
+        child: InkWell(
+          onTap: onTap ?? () {},
+          child: child,
+        ),
+      ),
     );
   }
 }
