@@ -78,6 +78,7 @@ class MyApp extends StatelessWidget {
 
       home: Builder(
         builder: (context) {
+          print('main builder');
           return Scaffold(
             appBar: CreateMyAppBar(
               'Day Logs',
@@ -87,31 +88,6 @@ class MyApp extends StatelessWidget {
               color: Theme.of(context).colorScheme.surface,
               child: const DayLogViewList(),
               // child: const CustomWidgetsTest(),
-            ),
-            floatingActionButton: MyFABCollection(
-              fabs: [
-                MyFloatingButton(
-                  iconData: Icons.public_sharp,
-                  onPressed: () {
-                    print("FAB pressed");
-                    //context.read<DayLogEditBloc>().add(UpdateDayLogAfterEditing());
-                  },
-                ),
-                MyFloatingButton(
-                  iconData: Icons.add_a_photo_outlined,
-                  onPressed: () {
-                    print("FAB pressed");
-                    //context.read<DayLogEditBloc>().add(UpdateDayLogAfterEditing());
-                  },
-                ),
-                MyFloatingButton(
-                  iconData: Icons.add,
-                  onPressed: () {
-                    print("FAB pressed");
-                    //context.read<DayLogEditBloc>().add(UpdateDayLogAfterEditing());
-                  },
-                ),
-              ],
             ),
           );
         },

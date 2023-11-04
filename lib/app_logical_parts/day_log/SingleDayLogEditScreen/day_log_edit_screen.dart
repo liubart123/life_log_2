@@ -6,6 +6,8 @@ import 'package:life_log_2/app_logical_parts/day_log/DayLogModel.dart';
 import 'package:life_log_2/app_logical_parts/day_log/DayLogRepository.dart';
 import 'package:life_log_2/app_logical_parts/day_log/SingleDayLogEditScreen/bloc/day_log_edit_bloc.dart';
 import 'package:life_log_2/my_widgets/my_constants.dart';
+import 'package:life_log_2/my_widgets/my_icons.dart';
+import 'package:life_log_2/my_widgets/my_input_widgets.dart';
 import 'package:life_log_2/my_widgets/my_widgets.dart';
 import 'package:life_log_2/utils/StringFormatters.dart';
 
@@ -20,6 +22,7 @@ class DayLogEditScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('edit screen build');
     return DayLogRepositoryProvider(
       child: BlocProvider(
         create: ((context) {
@@ -66,13 +69,13 @@ class DayLogEditScreen extends StatelessWidget {
                     //context.read<DayLogEditBloc>().add(UpdateDayLogAfterEditing());
                   },
                 ),
-                MyFloatingButton(
-                  iconData: Icons.abc_outlined,
-                  onPressed: () {
-                    print("FAB pressed");
-                    //context.read<DayLogEditBloc>().add(UpdateDayLogAfterEditing());
-                  },
-                ),
+                // MyFloatingButton(
+                //   iconData: Icons.abc_outlined,
+                //   onPressed: () {
+                //     print("FAB pressed");
+                //     //context.read<DayLogEditBloc>().add(UpdateDayLogAfterEditing());
+                //   },
+                // ),
               ],
             ),
           );
@@ -90,7 +93,10 @@ class DayLogEditWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<DayLogEditWidget> createState() => _DayLogEditWidgetState(dayLog);
+  State<DayLogEditWidget> createState() {
+    print('deaulog widget createState');
+    return _DayLogEditWidgetState(dayLog);
+  }
 }
 
 class _DayLogEditWidgetState extends State<DayLogEditWidget> {
@@ -101,32 +107,32 @@ class _DayLogEditWidgetState extends State<DayLogEditWidget> {
 
   @override
   Widget build(BuildContext context) {
+    print('edit widget build');
     return Container(
       color: Theme.of(context).colorScheme.surface,
       padding: EdgeInsets.all(CARD_MARGIN + CARD_PADDING),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            child: Row(
-              children: [
-                SizedBox(
-                  height: 100,
-                ),
-              ],
-            ),
+          MyTextField(
+            label: "Sleep Start",
+            icon: ICON_SLEEP_START,
           ),
-          Gap(INNER_CARD_GAP_MEDIUM),
-          Text(
-            "Title",
-            style: Theme.of(context).textTheme.titleMedium,
+          Gap(INNER_CARD_GAP_SMALL),
+          MyTextField(
+            label: "Sleep End",
+            icon: ICON_SLEEP_START,
           ),
-          Gap(INNER_CARD_GAP_MEDIUM),
-          TextField(),
+          Gap(INNER_CARD_GAP_SMALL),
+          MyTextField(
+            label: "Sleep Duration",
+            icon: ICON_SLEEP_START,
+          ),
+          Gap(INNER_CARD_GAP_SMALL),
+          MyTextField(
+            label: "Deep Sleep Duration",
+            icon: ICON_SLEEP_START,
+          ),
         ],
       ),
     );

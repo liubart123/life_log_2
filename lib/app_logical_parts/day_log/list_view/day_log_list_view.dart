@@ -119,19 +119,19 @@ class DayLogFieldsAndTagsRenderer extends StatelessWidget {
             children: [
               MyChip(
                 "Sleep start: ${formatTime(dayLog.sleepStartTime)}",
-                icon: SLEEP_START,
+                icon: ICON_SLEEP_START,
               ),
               MyChip(
                 "Sleep end: ${formatTime(dayLog.sleepEndTime)}",
-                icon: SLEEP_END,
+                icon: ICON_SLEEP_END,
               ),
               MyChip(
                 "Sleep: ${formatDuration(dayLog.sleepDuration)}",
-                icon: SLEEP_DURATION,
+                icon: ICON_SLEEP_DURATION,
               ),
               MyChip(
                 "Deep sleep: ${formatDuration(dayLog.deepSleepDuration)}",
-                icon: DEEP_SLEEP_DURATION,
+                icon: ICON_DEEP_SLEEP_DURATION,
               ),
               ...dayLog.tags.map2(
                 (value, index) {
