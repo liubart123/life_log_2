@@ -28,10 +28,10 @@ class DayLogEditBloc extends Bloc<DayLogEditEvent, DayLogEditState> {
         dayLogId: dayLogId,
         formStatus: EInputFormStatus.initialLoading,
       ));
-      await Future.delayed(Duration(milliseconds: 3000));
+      // await Future.delayed(Duration(milliseconds: 3000));
       try {
         DayLog? loadedDayLog = await dayLogRepository.GetDayLog(dayLogId);
-        throw new Exception('Day Log not found');
+        // throw new Exception('Day Log not found');
         if (loadedDayLog == null) throw new Exception('Not found');
 
         print("emiting CreateStateFromModel");
@@ -104,11 +104,10 @@ class DayLogEditBloc extends Bloc<DayLogEditEvent, DayLogEditState> {
 DayLogEditState CreateStateFromModel(DayLog model) {
   return DayLogEditState(
     dayLogId: model.id,
-    sleepStart: MyInputResult(value: formatTime(model.sleepStartTime)),
-    sleepEnd: MyInputResult(value: formatTime(model.sleepEndTime)),
-    sleepDuration: MyInputResult(value: formatDuration(model.sleepDuration)),
-    deepSleepDuration:
-        MyInputResult(value: formatDuration(model.deepSleepDuration)),
+    sleepStart: MyInputResult(value: model.sleepStartTime),
+    sleepEnd: MyInputResult(value: model.sleepEndTime),
+    sleepDuration: MyInputResult(value: model.sleepDuration),
+    deepSleepDuration: MyInputResult(value: model.deepSleepDuration),
     formStatus: EInputFormStatus.idleRelevant,
   );
 }

@@ -55,6 +55,8 @@ class DayLogEditScreen extends StatelessWidget {
             BuildContext context,
             DayLogEditState state,
           ) {
+            print(
+                'Building BlocBuilder for DayLogEdit:${state.formStatus}:${state.formStatus.hashCode}');
             Widget? childForScaffold = null;
             if (state.formStatus == EInputFormStatus.initialLoading) {
               childForScaffold = const Center(
@@ -79,7 +81,7 @@ class DayLogEditScreen extends StatelessWidget {
                   MyFloatingButton(
                     iconData: Icons.save_as_rounded,
                     onPressed: () {
-                      print("FAB pressed");
+                      print("FAB pressed: ${state.sleepStart.value}");
                       //context.read<DayLogEditBloc>().add(UpdateDayLogAfterEditing());
                     },
                   ),
@@ -100,25 +102,12 @@ class DayLogEditScreen extends StatelessWidget {
   }
 }
 
-class DayLogEditWidget extends StatefulWidget {
+class DayLogEditWidget extends StatelessWidget {
   final DayLogEditState dayLogState;
   const DayLogEditWidget(
     this.dayLogState, {
     Key? key,
   }) : super(key: key);
-
-  @override
-  State<DayLogEditWidget> createState() {
-    print('deaulog widget createState');
-    return _DayLogEditWidgetState(dayLogState);
-  }
-}
-
-class _DayLogEditWidgetState extends State<DayLogEditWidget> {
-  final DayLogEditState dayLogState;
-  int index = 0;
-
-  _DayLogEditWidgetState(this.dayLogState);
 
   @override
   Widget build(BuildContext context) {
@@ -129,27 +118,51 @@ class _DayLogEditWidgetState extends State<DayLogEditWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          MyInputField(
+          MyDateTimeInputField(
             label: "Sleep Start",
             icon: ICON_SLEEP_START,
+            initialValue: dayLogState.sleepStart.value,
+            validValueHandler:
+                CreateValidValueHanlder(context, dayLogState.sleepStart),
           ),
           Gap(INNER_CARD_GAP_SMALL),
-          MyInputField(
+          MyDateTimeInputField(
             label: "Sleep End",
             icon: ICON_SLEEP_START,
+            initialValue: dayLogState.sleepEnd.value,
+            validValueHandler:
+                CreateValidValueHanlder(context, dayLogState.sleepEnd),
           ),
           Gap(INNER_CARD_GAP_SMALL),
-          MyInputField(
+          MyDurationInputField(
             label: "Sleep Duration",
             icon: ICON_SLEEP_START,
+            initialValue: dayLogState.sleepDuration.value,
+            validValueHandler:
+                CreateValidValueHanlder(context, dayLogState.sleepDuration),
           ),
           Gap(INNER_CARD_GAP_SMALL),
-          MyInputField(
+          MyDurationInputField(
             label: "Deep Sleep Duration",
             icon: ICON_SLEEP_START,
+            initialValue: dayLogState.deepSleepDuration.value,
+            validValueHandler:
+                CreateValidValueHanlder(context, dayLogState.deepSleepDuration),
           ),
         ],
       ),
     );
+  }
+
+  Function(T) CreateValidValueHanlder<T>(
+    BuildContext context,
+    MyInputResult<T> inputField,
+  ) {
+    return (newValue) {
+      context.read<DayLogEditBloc>().add(ChangeFieldInDayLogForm<T>(
+            inputField,
+            newValue,
+          ));
+    };
   }
 }

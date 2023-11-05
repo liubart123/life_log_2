@@ -2,10 +2,10 @@ part of 'day_log_edit_bloc.dart';
 
 class DayLogEditState extends Equatable {
   final int? dayLogId;
-  final MyInputResult<String> sleepStart;
-  final MyInputResult<String> sleepEnd;
-  final MyInputResult<String> sleepDuration;
-  final MyInputResult<String> deepSleepDuration;
+  final MyInputResult<DateTime> sleepStart;
+  final MyInputResult<DateTime> sleepEnd;
+  final MyInputResult<Duration> sleepDuration;
+  final MyInputResult<Duration> deepSleepDuration;
   final EInputFormStatus formStatus;
 
   const DayLogEditState({
@@ -18,10 +18,10 @@ class DayLogEditState extends Equatable {
   });
 
   DayLogEditState copyWith({
-    MyInputResult<String>? sleepStart,
-    MyInputResult<String>? sleepEnd,
-    MyInputResult<String>? sleepDuration,
-    MyInputResult<String>? deepSleepDuration,
+    MyInputResult<DateTime>? sleepStart,
+    MyInputResult<DateTime>? sleepEnd,
+    MyInputResult<Duration>? sleepDuration,
+    MyInputResult<Duration>? deepSleepDuration,
     EInputFormStatus? formStatus,
   }) {
     return DayLogEditState(
@@ -30,6 +30,7 @@ class DayLogEditState extends Equatable {
       sleepEnd: sleepEnd ?? this.sleepEnd,
       sleepDuration: sleepDuration ?? this.sleepDuration,
       deepSleepDuration: deepSleepDuration ?? this.deepSleepDuration,
+      formStatus: formStatus ?? this.formStatus,
     );
   }
 
@@ -38,7 +39,8 @@ class DayLogEditState extends Equatable {
   }
 
   @override
-  List<Object> get props => [...GetInputsCollection(), formStatus];
+  List<Object> get props =>
+      [sleepStart, sleepEnd, sleepDuration, deepSleepDuration, formStatus];
 
   bool isValid() {
     return !GetInputsCollection().any((element) => !element.IsValid());

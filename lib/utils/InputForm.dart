@@ -1,4 +1,6 @@
-final class MyInputResult<T> {
+import 'package:equatable/equatable.dart';
+
+final class MyInputResult<T> extends Equatable {
   final T? value;
   final String? errorMessage;
 
@@ -8,6 +10,9 @@ final class MyInputResult<T> {
     if (errorMessage != null) return false;
     return true;
   }
+
+  @override
+  List<Object?> get props => [value, errorMessage];
 }
 
 enum EInputFormStatus {
