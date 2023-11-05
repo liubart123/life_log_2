@@ -11,21 +11,26 @@ import 'my_old_widgets.dart';
 
 const String INVALID_INPUT_ERROR_MESSAGE = 'Invalid Data';
 
-class MyTextField extends StatefulWidget {
+class MyInputField extends StatefulWidget {
   final IconData? icon;
   final String label;
   final String? externalError;
-  const MyTextField({
+  final String? Function(TextEditingController, String)? inputHandler;
+  final String? value;
+
+  const MyInputField({
     super.key,
     required this.label,
     this.icon,
     this.externalError,
+    this.inputHandler,
+    this.value,
   });
 
   @override
-  State<MyTextField> createState() {
+  State<MyInputField> createState() {
     print('textField createState');
-    return _MyTextFieldState(timeInputHandler, externalError);
+    return _MyInputFieldState(inputHandler, externalError);
   }
 
   String? timeInputHandler(
@@ -53,22 +58,23 @@ class MyTextField extends StatefulWidget {
   }
 }
 
-class _MyTextFieldState extends State<MyTextField> {
+class _MyInputFieldState extends State<MyInputField> {
   final _controller = TextEditingController();
-  final String? Function(TextEditingController, String) inputHandler;
+  final String? Function(TextEditingController, String)? inputHandler;
   final String? externalErrorMessage;
-  String? internalErrorMessage;
-  String previousValue = "";
+  String? _internalErrorMessage;
+  String _previousValue = "";
 
-  _MyTextFieldState(this.inputHandler, this.externalErrorMessage);
+  _MyInputFieldState(this.inputHandler, this.externalErrorMessage);
 
   @override
   void initState() {
     super.initState();
     _controller.addListener(() {
       setState(() {
-        internalErrorMessage = inputHandler(_controller, previousValue);
-        previousValue = _controller.text;
+        if (inputHandler != null)
+          _internalErrorMessage = inputHandler!(_controller, _previousValue);
+        _previousValue = _controller.text;
       });
     });
   }
@@ -137,7 +143,7 @@ class _MyTextFieldState extends State<MyTextField> {
         floatingLabelStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
               color: Theme.of(context).colorScheme.outline.withOpacity(0.7),
             ),
-        errorText: externalErrorMessage ?? internalErrorMessage,
+        errorText: externalErrorMessage ?? _internalErrorMessage,
       ),
     );
   }

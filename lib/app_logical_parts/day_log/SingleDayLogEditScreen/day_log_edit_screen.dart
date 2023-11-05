@@ -9,6 +9,7 @@ import 'package:life_log_2/my_widgets/my_constants.dart';
 import 'package:life_log_2/my_widgets/my_icons.dart';
 import 'package:life_log_2/my_widgets/my_input_widgets.dart';
 import 'package:life_log_2/my_widgets/my_widgets.dart';
+import 'package:life_log_2/utils/InputForm.dart';
 import 'package:life_log_2/utils/StringFormatters.dart';
 
 import '../day_log_repository_provider.dart';
@@ -33,77 +34,91 @@ class DayLogEditScreen extends StatelessWidget {
               LoadInitialDayLog(),
             );
         }),
-        child: BlocBuilder<DayLogEditBloc, DayLogEditState>(builder: (
-          BuildContext context,
-          DayLogEditState state,
-        ) {
-          Widget childForScaffold;
-          if (state is InitialLoadingOfDayLog) {
-            childForScaffold = const Center(
-              child: const MyLoadingIndicator(),
+        child: BlocListener<DayLogEditBloc, DayLogEditState>(
+          listener: (context, state) {
+            if (state is InitialLoadingError) {
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(content: Text(state.errorMessage)),
+                );
+            }
+            if (!state.isValid())
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  const SnackBar(content: Text('Invalid...')),
+                );
+          },
+          child: BlocBuilder<DayLogEditBloc, DayLogEditState>(builder: (
+            BuildContext context,
+            DayLogEditState state,
+          ) {
+            Widget? childForScaffold = null;
+            if (state.formStatus == EInputFormStatus.initialLoading) {
+              childForScaffold = const Center(
+                child: const MyLoadingIndicator(),
+              );
+            } else if (state.formStatus == EInputFormStatus.idleDirty ||
+                state.formStatus == EInputFormStatus.idleRelevant) {
+              childForScaffold = DayLogEditWidget(state);
+            } else if (state.formStatus == EInputFormStatus.loading) {
+              childForScaffold = const Center(
+                child: const MyLoadingIndicator(),
+              );
+            }
+            return Scaffold(
+              appBar: CreateMyAppBar(
+                "Day Log",
+                context,
+              ),
+              body: childForScaffold,
+              floatingActionButton: MyFABCollection(
+                fabs: [
+                  MyFloatingButton(
+                    iconData: Icons.save_as_rounded,
+                    onPressed: () {
+                      print("FAB pressed");
+                      //context.read<DayLogEditBloc>().add(UpdateDayLogAfterEditing());
+                    },
+                  ),
+                  // MyFloatingButton(
+                  //   iconData: Icons.abc_outlined,
+                  //   onPressed: () {
+                  //     print("FAB pressed");
+                  //     //context.read<DayLogEditBloc>().add(UpdateDayLogAfterEditing());
+                  //   },
+                  // ),
+                ],
+              ),
             );
-          } else if (state is IdleState) {
-            childForScaffold = DayLogEditWidget(state.dayLog!);
-          } else if (state is LoadingOfDayLog) {
-            childForScaffold = const Center(
-              child: const MyLoadingIndicator(),
-            );
-          } else if (state is ErrorReturnedState) {
-            childForScaffold =
-                Center(child: Text("My Error message:${state.errorMessage}"));
-          } else
-            childForScaffold = Center(child: Text("Unhalded state"));
-
-          return Scaffold(
-            appBar: CreateMyAppBar(
-              state.dayLog == null ? "Day Log" : formatDate(state.dayLog!.date),
-              context,
-            ),
-            body: childForScaffold,
-            floatingActionButton: MyFABCollection(
-              fabs: [
-                MyFloatingButton(
-                  iconData: Icons.save_as_rounded,
-                  onPressed: () {
-                    print("FAB pressed");
-                    //context.read<DayLogEditBloc>().add(UpdateDayLogAfterEditing());
-                  },
-                ),
-                // MyFloatingButton(
-                //   iconData: Icons.abc_outlined,
-                //   onPressed: () {
-                //     print("FAB pressed");
-                //     //context.read<DayLogEditBloc>().add(UpdateDayLogAfterEditing());
-                //   },
-                // ),
-              ],
-            ),
-          );
-        }),
+          }),
+        ),
       ),
     );
   }
 }
 
 class DayLogEditWidget extends StatefulWidget {
-  final DayLog dayLog;
+  final DayLogEditState dayLogState;
   const DayLogEditWidget(
-    this.dayLog, {
+    this.dayLogState, {
     Key? key,
   }) : super(key: key);
 
   @override
   State<DayLogEditWidget> createState() {
     print('deaulog widget createState');
-    return _DayLogEditWidgetState(dayLog);
+    return _DayLogEditWidgetState(dayLogState);
   }
 }
 
 class _DayLogEditWidgetState extends State<DayLogEditWidget> {
-  final DayLog dayLog;
+  final DayLogEditState dayLogState;
   int index = 0;
 
-  _DayLogEditWidgetState(this.dayLog);
+  _DayLogEditWidgetState(this.dayLogState);
 
   @override
   Widget build(BuildContext context) {
@@ -114,22 +129,22 @@ class _DayLogEditWidgetState extends State<DayLogEditWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          MyTextField(
+          MyInputField(
             label: "Sleep Start",
             icon: ICON_SLEEP_START,
           ),
           Gap(INNER_CARD_GAP_SMALL),
-          MyTextField(
+          MyInputField(
             label: "Sleep End",
             icon: ICON_SLEEP_START,
           ),
           Gap(INNER_CARD_GAP_SMALL),
-          MyTextField(
+          MyInputField(
             label: "Sleep Duration",
             icon: ICON_SLEEP_START,
           ),
           Gap(INNER_CARD_GAP_SMALL),
-          MyTextField(
+          MyInputField(
             label: "Deep Sleep Duration",
             icon: ICON_SLEEP_START,
           ),
