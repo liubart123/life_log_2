@@ -47,7 +47,8 @@ class DayLogEditState extends Equatable {
   }
 }
 
-class InitialLoadingError extends DayLogEditState {
+class ErrorState extends DayLogEditState {
   final String errorMessage;
-  const InitialLoadingError(this.errorMessage);
+  final bool isFatal;
+  const ErrorState(this.errorMessage, {this.isFatal = false});
 }

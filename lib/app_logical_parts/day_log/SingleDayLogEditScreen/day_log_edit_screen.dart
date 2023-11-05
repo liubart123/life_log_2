@@ -36,8 +36,9 @@ class DayLogEditScreen extends StatelessWidget {
         }),
         child: BlocListener<DayLogEditBloc, DayLogEditState>(
           listener: (context, state) {
-            if (state is InitialLoadingError) {
-              Navigator.pop(context);
+            if (state is ErrorState) {
+              if (state.isFatal) Navigator.pop(context);
+
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
@@ -63,12 +64,9 @@ class DayLogEditScreen extends StatelessWidget {
                 child: const MyLoadingIndicator(),
               );
             } else if (state.formStatus == EInputFormStatus.idleDirty ||
-                state.formStatus == EInputFormStatus.idleRelevant) {
+                state.formStatus == EInputFormStatus.idleRelevant ||
+                state.formStatus == EInputFormStatus.loading) {
               childForScaffold = DayLogEditWidget(state);
-            } else if (state.formStatus == EInputFormStatus.loading) {
-              childForScaffold = const Center(
-                child: const MyLoadingIndicator(),
-              );
             }
             return Scaffold(
               appBar: CreateMyAppBar(
@@ -78,13 +76,23 @@ class DayLogEditScreen extends StatelessWidget {
               body: childForScaffold,
               floatingActionButton: MyFABCollection(
                 fabs: [
-                  MyFloatingButton(
-                    iconData: Icons.save_as_rounded,
-                    onPressed: () {
-                      print("FAB pressed: ${state.sleepStart.value}");
-                      //context.read<DayLogEditBloc>().add(UpdateDayLogAfterEditing());
-                    },
-                  ),
+                  if (state.formStatus != EInputFormStatus.loading &&
+                      state.formStatus != EInputFormStatus.initialLoading)
+                    MyFloatingButton.withIcon(
+                      iconData: Icons.save_as_rounded,
+                      onPressed: () {
+                        print("FAB pressed: ${state.sleepStart.value}");
+                        context.read<DayLogEditBloc>().add(SaveDayLog());
+                      },
+                    )
+                  else
+                    MyFloatingButton(
+                      child: MyLoadingIndicator(),
+                      onPressed: () {
+                        print("FAB pressed: ${state.sleepStart.value}");
+                        context.read<DayLogEditBloc>().add(SaveDayLog());
+                      },
+                    )
                   // MyFloatingButton(
                   //   iconData: Icons.abc_outlined,
                   //   onPressed: () {

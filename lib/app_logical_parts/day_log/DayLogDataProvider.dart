@@ -10,7 +10,7 @@ class DayLogDataProvider {
       // password: 'chZo12zBHnaN',
       // requireSsl: true,
 
-      host: '192.168.0.104',
+      host: '192.168.0.100',
       port: 5433,
       database: 'mydatabase',
       username: 'myuser',

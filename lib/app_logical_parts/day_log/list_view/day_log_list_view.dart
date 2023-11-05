@@ -80,7 +80,7 @@ class DayLogCard extends StatelessWidget {
           context,
           MaterialPageRoute(builder: (context) {
             return DayLogEditScreen(
-              dayLogId: dayLogToBuild.id,
+              dayLogId: dayLogToBuild.id!,
             );
           }),
         );

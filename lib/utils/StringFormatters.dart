@@ -2,7 +2,8 @@
 
 import 'package:intl/intl.dart';
 
-String formatDuration(Duration duration) {
+String formatDuration(Duration? duration) {
+  if (duration == null) return "";
   int hours = duration.inHours;
   int minutes = duration.inMinutes.remainder(60);
 
@@ -11,7 +12,8 @@ String formatDuration(Duration duration) {
   return formattedDuration;
 }
 
-String formatTimestamp(DateTime date) {
+String formatTimestamp(DateTime? date) {
+  if (date == null) return "";
   return DateFormat('yyyy-MM-dd HH:mm').format(date);
 }
 
@@ -19,6 +21,7 @@ String formatDate(DateTime date) {
   return DateFormat('yyyy-MM-dd').format(date);
 }
 
-String formatTime(DateTime dateTime) {
+String formatTime(DateTime? dateTime) {
+  if (dateTime == null) return "";
   return DateFormat.Hm().format(dateTime);
 }

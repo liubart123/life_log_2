@@ -1,16 +1,16 @@
 // ignore_for_file: file_names
 
 class DayLog {
-  int id;
+  int? id;
   DateTime date;
-  DateTime sleepStartTime;
-  DateTime sleepEndTime;
-  Duration sleepDuration;
-  Duration deepSleepDuration;
-  String notes;
+  DateTime? sleepStartTime;
+  DateTime? sleepEndTime;
+  Duration? sleepDuration;
+  Duration? deepSleepDuration;
+  String? notes;
   List<String> tags;
   DayLog({
-    required this.id,
+    this.id,
     required this.date,
     required this.sleepStartTime,
     required this.sleepEndTime,

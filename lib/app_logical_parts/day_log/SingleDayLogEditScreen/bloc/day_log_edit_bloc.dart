@@ -12,6 +12,7 @@ part 'day_log_edit_state.dart';
 class DayLogEditBloc extends Bloc<DayLogEditEvent, DayLogEditState> {
   final DayLogRepository dayLogRepository;
   final int dayLogId;
+  DayLog? dayLog;
 
   DayLogEditBloc(
     this.dayLogRepository,
@@ -30,17 +31,13 @@ class DayLogEditBloc extends Bloc<DayLogEditEvent, DayLogEditState> {
       ));
       // await Future.delayed(Duration(milliseconds: 3000));
       try {
-        DayLog? loadedDayLog = await dayLogRepository.GetDayLog(dayLogId);
-        // throw new Exception('Day Log not found');
-        if (loadedDayLog == null) throw new Exception('Not found');
-
-        print("emiting CreateStateFromModel");
-        emit(CreateStateFromModel(loadedDayLog));
+        await LoadModelFromDb(emit);
       } catch (e) {
-        print("emiting InitialLoadingError");
+        print("emiting LoadingError");
         emit(
-          InitialLoadingError(
+          ErrorState(
             e.toString(),
+            isFatal: true,
           ),
         );
       }
@@ -67,47 +64,56 @@ class DayLogEditBloc extends Bloc<DayLogEditEvent, DayLogEditState> {
             formStatus: status));
       }
     });
-    // on<UpdateDayLogAfterEditing>((event, emit) async {
-    //   print("UpdateDayLogAfterEditing - emiting LoadingOfDayLog");
-    //   emit(LoadingOfDayLog(dayLogId: state.dayLogId, dayLog: state.dayLog));
+    on<SaveDayLog>((event, emit) async {
+      print("SaveDayLog");
+      emit(state.copyWith(formStatus: EInputFormStatus.loading));
 
-    //   try {
-    //     if (state.dayLog == null) {
-    //       throw new Exception("State's dayLog is null");
-    //     }
-
-    //     await dayLogRepository.UpdateDayLog(state.dayLog!);
-    //     DayLog? loadedDayLog = await dayLogRepository.GetDayLog(dayLogId);
-    //     if (loadedDayLog == null) throw new Exception('Not found');
-
-    //     print("UpdateDayLogAfterEditing - emiting IdleState");
-    //     emit(
-    //       IdleState(
-    //         DateTime.now(),
-    //         dayLogId: dayLogId,
-    //         dayLog: loadedDayLog,
-    //       ),
-    //     );
-    //   } catch (e) {
-    //     print("UpdateDayLogAfterEditing - emiting ErrorReturnedState");
-    //     emit(
-    //       ErrorReturnedState(
-    //         dayLogId: dayLogId,
-    //         errorMessage: e.toString(),
-    //       ),
-    //     );
-    //   }
-    // });
+      try {
+        await dayLogRepository.UpdateDayLog(CreateModelFromState(state));
+        await LoadModelFromDb(emit);
+      } catch (e) {
+        print("emiting LoadingError");
+        emit(
+          ErrorState(
+            e.toString(),
+          ),
+        );
+      }
+    });
   }
-}
 
-DayLogEditState CreateStateFromModel(DayLog model) {
-  return DayLogEditState(
-    dayLogId: model.id,
-    sleepStart: MyInputResult(value: model.sleepStartTime),
-    sleepEnd: MyInputResult(value: model.sleepEndTime),
-    sleepDuration: MyInputResult(value: model.sleepDuration),
-    deepSleepDuration: MyInputResult(value: model.deepSleepDuration),
-    formStatus: EInputFormStatus.idleRelevant,
-  );
+  Future<void> LoadModelFromDb(Emitter<DayLogEditState> emit) async {
+    DayLog? loadedDayLog = await dayLogRepository.GetDayLog(dayLogId);
+    // throw new Exception('Day Log not found');
+    if (loadedDayLog == null) throw new Exception('Not found');
+
+    dayLog = loadedDayLog;
+    print("emiting CreateStateFromModel");
+    emit(CreateStateFromModel(loadedDayLog));
+  }
+
+  DayLogEditState CreateStateFromModel(DayLog model) {
+    return DayLogEditState(
+      dayLogId: model.id,
+      sleepStart: MyInputResult(value: model.sleepStartTime),
+      sleepEnd: MyInputResult(value: model.sleepEndTime),
+      sleepDuration: MyInputResult(value: model.sleepDuration),
+      deepSleepDuration: MyInputResult(value: model.deepSleepDuration),
+      formStatus: EInputFormStatus.idleRelevant,
+    );
+  }
+
+  DayLog CreateModelFromState(DayLogEditState state) {
+    if (dayLog == null) throw Exception("Trying to update null dayLog");
+    var result = DayLog(
+        id: dayLog!.id,
+        date: dayLog!.date,
+        sleepStartTime: state.sleepStart.value!,
+        sleepEndTime: state.sleepEnd.value,
+        sleepDuration: state.sleepDuration.value,
+        deepSleepDuration: state.deepSleepDuration.value,
+        notes: dayLog!.notes,
+        tags: dayLog!.tags);
+    return result;
+  }
 }

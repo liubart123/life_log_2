@@ -232,12 +232,17 @@ class MyFABCollection extends StatelessWidget {
 
 class MyFloatingButton extends StatelessWidget {
   final Function() onPressed;
-  final IconData iconData;
+  final IconData? iconData;
+  final Widget? child;
   const MyFloatingButton({
     super.key,
     required this.onPressed,
-    required this.iconData,
-  });
+    this.child = null,
+  }) : iconData = null;
+
+  const MyFloatingButton.withIcon({required this.iconData, required onPressed})
+      : onPressed = onPressed,
+        child = null;
 
   @override
   Widget build(BuildContext context) {
@@ -252,10 +257,11 @@ class MyFloatingButton extends StatelessWidget {
       elevation: 2,
       // label: const Text('Save'),
       // icon: const Icon(Icons.save),
-      child: Icon(
-        iconData,
-        size: 30,
-      ),
+      child: child ??
+          Icon(
+            iconData,
+            size: 30,
+          ),
     );
   }
 }
