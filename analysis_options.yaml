@@ -7,9 +7,17 @@
 
 # The following line activates a set of recommended lints for Flutter apps,
 # packages, and plugins designed to encourage good coding practices.
-#include: package:very_good_analysis/analysis_options.yaml
+include: package:very_good_analysis/analysis_options.yaml
 
 #include: package:flutter_lints/flutter.yaml
+analyzer:
+  language:
+    # strict-raw-types: false
+  errors:
+    inference_failure_on_function_return_type: ignore
+    # inference_failure_on_untyped_parameter: ignore
+    # inference_failure_on_instance_creation: ignore
+    # inference_failure_on_function_invocation: ignore
 
 linter:
   # The lint rules applied to this project can be customized in the
@@ -23,8 +31,10 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
+    sort_pub_dependencies: false
+    use_colored_box: false
+
     # avoid_print: false  # Uncomment to disable the `avoid_print` rule
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
-
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

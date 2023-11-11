@@ -1,6 +1,8 @@
 import 'package:postgres_pool/postgres_pool.dart';
 
+/// Provides connections to DB
 class DayLogDataProvider {
+  /// Database connection
   final connectionPool = PgPool(
     PgEndpoint(
       // host: 'ep-shrill-wave-97089462.us-east-2.aws.neon.tech',

@@ -1,19 +1,19 @@
 part of 'day_log_bloc.dart';
 
-class DayLogViewListBlocState extends Equatable {
+class DayLogListTabBlocState extends Equatable {
   final List<DayLog> dayLogList = [];
 
-  DayLogViewListBlocState copyState(DayLogViewListBlocState stateToCopy) {
+  DayLogListTabBlocState copyState(DayLogListTabBlocState stateToCopy) {
     dayLogList.addAll(stateToCopy.dayLogList);
     return this;
   }
 
-  DayLogViewListBlocState copyList(List<DayLog> newList) {
+  DayLogListTabBlocState copyList(List<DayLog> newList) {
     dayLogList.addAll(newList);
     return this;
   }
 
-  DayLogViewListBlocState newList(List<DayLog> newList) {
+  DayLogListTabBlocState newList(List<DayLog> newList) {
     dayLogList.clear();
     copyList(newList);
     return this;
@@ -23,11 +23,11 @@ class DayLogViewListBlocState extends Equatable {
   List<Object?> get props => [dayLogList];
 }
 
-class LoadingPageOfDayLogs extends DayLogViewListBlocState {}
+class LoadingPageOfDayLogs extends DayLogListTabBlocState {}
 
-class IdleState extends DayLogViewListBlocState {}
+class IdleState extends DayLogListTabBlocState {}
 
-class ErrorWithLoadingPageOfDayLogs extends DayLogViewListBlocState {
+class ErrorWithLoadingPageOfDayLogs extends DayLogListTabBlocState {
   final String? errorMessage;
 
   ErrorWithLoadingPageOfDayLogs(this.errorMessage);

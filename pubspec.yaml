@@ -45,6 +45,8 @@ dependencies:
   word_generator: ^0.4.3
   structures: ^1.4.0
   gap: ^3.0.1
+  loggy: ^2.0.3
+  bloc: ^8.1.2
 
 dev_dependencies:
   flutter_test:
@@ -55,7 +57,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
   very_good_analysis: ^5.1.0
 
 # For information on the generic Dart part of this file, see the

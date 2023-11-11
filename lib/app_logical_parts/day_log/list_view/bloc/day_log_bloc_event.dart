@@ -1,13 +1,14 @@
 part of 'day_log_bloc.dart';
 
 @immutable
-sealed class DayLogViewListBlocEvent extends Equatable {
+sealed class DayLogListTabBlocEvent extends Equatable {
   @override
   List<Object?> get props => [];
 }
 
-class LoadInitialPageOfDayLogs extends DayLogViewListBlocEvent {}
+//todo:don't use initial loading and use usual loading instead
+class LoadInitialPageOfDayLogs extends DayLogListTabBlocEvent {}
 
-class RefreshInitialPageOfDayLogs extends DayLogViewListBlocEvent {}
+class ResetDayLogListWithRefreshedInitialPage extends DayLogListTabBlocEvent {}
 
-class LoadNextPageOfDayLogs extends DayLogViewListBlocEvent {}
+class LoadNextPageOfDayLogs extends DayLogListTabBlocEvent {}

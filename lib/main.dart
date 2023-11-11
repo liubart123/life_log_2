@@ -1,17 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:life_log_2/app_logical_parts/day_log/DayLogRepository.dart';
-import 'package:life_log_2/app_logical_parts/day_log/list_view/bloc/day_log_bloc.dart';
+// ignore_for_file: public_member_api_docs
 
-import 'app_logical_parts/day_log/list_view/day_log_list_view.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
-
-import 'my_widgets/my_widgets.dart';
-import 'test_of_flutter_possibilities/custom_widgets_test.dart';
+import 'package:flutter/material.dart';
+import 'package:life_log_2/app_logical_parts/day_log/list_view/day_log_list_tab.dart';
+import 'package:life_log_2/my_widgets/my_widgets.dart';
+import 'package:loggy/loggy.dart';
 
 void main() {
+  Loggy.initLoggy(
+    logPrinter: const PrettyPrinter(),
+  );
   // debugRepaintRainbowEnabled = true;
   runApp(const MyApp());
 }
@@ -21,6 +19,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    logDebug('MyApp build');
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
@@ -78,16 +77,14 @@ class MyApp extends StatelessWidget {
 
       home: Builder(
         builder: (context) {
-          print('main builder');
           return Scaffold(
-            appBar: CreateMyAppBar(
+            appBar: createMyAppBar(
               'Day Logs',
               context,
             ),
             body: Container(
               color: Theme.of(context).colorScheme.surface,
-              child: const DayLogViewList(),
-              // child: const CustomWidgetsTest(),
+              child: const DayLogListTab(),
             ),
           );
         },

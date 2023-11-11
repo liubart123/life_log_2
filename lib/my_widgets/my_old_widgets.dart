@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:life_log_2/app_logical_parts/day_log/DayLogDataProvider.dart';
-import 'package:life_log_2/app_logical_parts/day_log/DayLogRepository.dart';
+import 'package:life_log_2/app_logical_parts/day_log/day_log_data_provider.dart';
+import 'package:life_log_2/app_logical_parts/day_log/day_log_repository.dart';
 import 'package:life_log_2/utils/StringFormatters.dart';
 import 'package:structures/structures.dart';
 
