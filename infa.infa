@@ -1,10 +1,12 @@
 taskes:
+    refactor
+        change bloc with GetX
+        snackbars change to use GetX
+        refactor naming of widgets
+        refactor file with TextStyles usage information
     Edit Screen:
         block saving FAB on validation errors
         add loading indicator for FABs while interacting with server 
-    refactor
-        refactor file with TextStyles usage information
-        removing unused libraries
     implement multiple FABs
     test fast clicking on dayLog card and returning back to list, multiple times
     optimization issues

@@ -16,7 +16,7 @@ analyzer:
   errors:
     inference_failure_on_function_return_type: ignore
     # inference_failure_on_untyped_parameter: ignore
-    # inference_failure_on_instance_creation: ignore
+    inference_failure_on_instance_creation: ignore
     # inference_failure_on_function_invocation: ignore
 
 linter:
@@ -33,7 +33,7 @@ linter:
   rules:
     sort_pub_dependencies: false
     use_colored_box: false
-
+    public_member_api_docs: false
     # avoid_print: false  # Uncomment to disable the `avoid_print` rule
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
 # Additional information about this file can be found at

@@ -2,7 +2,10 @@
 
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
-import 'package:life_log_2/app_logical_parts/day_log/list_view/day_log_list_tab.dart';
+import 'package:get/get.dart';
+import 'package:life_log_2/app_logical_parts/day_log/day_log_data_provider.dart';
+import 'package:life_log_2/app_logical_parts/day_log/day_log_list_tab/day_log_list_tab.dart';
+import 'package:life_log_2/app_logical_parts/day_log/day_log_repository.dart';
 import 'package:life_log_2/my_widgets/my_widgets.dart';
 import 'package:loggy/loggy.dart';
 
@@ -20,7 +23,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     logDebug('MyApp build');
-    return MaterialApp(
+    _initializeDependencies();
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       // Theme config for FlexColorScheme version 7.3.x. Make sure you use
@@ -90,5 +94,10 @@ class MyApp extends StatelessWidget {
         },
       ),
     );
+  }
+
+  _initializeDependencies() {
+    final dayLogDataProvider = Get.put(DayLogDataProvider());
+    Get.put(DayLogRepository(dayLogDataProvider));
   }
 }

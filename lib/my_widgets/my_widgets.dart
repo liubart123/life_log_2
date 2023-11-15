@@ -30,16 +30,16 @@ class MyScrollableList extends StatefulWidget {
     required this.itemCount,
     required this.itemBuilder,
     required this.separatorBuilder,
-    required this.reloadCallback,
-    required this.bottomScrolledCallback,
+    this.reloadCallback,
+    this.bottomScrolledCallback,
     super.key,
   });
 
   final int itemCount;
   final NullableIndexedWidgetBuilder itemBuilder;
   final IndexedWidgetBuilder separatorBuilder;
-  final Future<void> Function() reloadCallback;
-  final Function() bottomScrolledCallback;
+  final Future<void> Function()? reloadCallback;
+  final Function()? bottomScrolledCallback;
 
   @override
   State<MyScrollableList> createState() => _MyScrollableListState();
@@ -52,16 +52,18 @@ class _MyScrollableListState extends State<MyScrollableList> {
   @override
   void initState() {
     _scrollController = ScrollController();
-    _scrollController.addListener(handleScrolling);
+    if (widget.bottomScrolledCallback != null) {
+      _scrollController.addListener(handleScrolling);
+    }
     bottomWasScrolled = false;
     super.initState();
   }
 
   void handleScrolling() {
     if (_scrollController.position.extentAfter < 10) {
-      if (!bottomWasScrolled) widget.bottomScrolledCallback();
+      if (!bottomWasScrolled) widget.bottomScrolledCallback!();
       bottomWasScrolled = true;
-    } else {
+    } else if (_scrollController.position.extentAfter > 300) {
       bottomWasScrolled = false;
     }
   }
@@ -72,7 +74,7 @@ class _MyScrollableListState extends State<MyScrollableList> {
       color: Theme.of(context).colorScheme.surface,
       child: RefreshIndicator(
         triggerMode: RefreshIndicatorTriggerMode.anywhere,
-        onRefresh: widget.reloadCallback,
+        onRefresh: widget.reloadCallback ?? () async {},
         child: ListView.separated(
           controller: _scrollController,
           itemCount: widget.itemCount,
@@ -101,7 +103,7 @@ class MyCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       child: InkWell(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(CARD_BORDER_RADIUS),
         onTap: onTap ?? () {},
         child: Container(
           clipBehavior: Clip.antiAlias,
@@ -111,7 +113,7 @@ class MyCard extends StatelessWidget {
               width: 1,
               color: Theme.of(context).colorScheme.outlineVariant,
             ),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(CARD_BORDER_RADIUS),
           ),
           padding: EdgeInsets.all(CARD_PADDING),
           child: child,
@@ -254,6 +256,44 @@ class MyFloatingButton extends StatelessWidget {
             iconData,
             size: 30,
           ),
+    );
+  }
+}
+
+/// Widget to display message of major error.
+///
+/// This widget intended to take a lot of space.
+class MajorErrorMessage extends StatelessWidget {
+  const MajorErrorMessage(this.message, {super.key});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(CARD_BORDER_RADIUS),
+        color: Theme.of(context).colorScheme.errorContainer,
+      ),
+      padding: EdgeInsets.all(CARD_PADDING),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.warning_amber_rounded,
+            color: Theme.of(context).colorScheme.onErrorContainer,
+            size: 35,
+          ),
+          const Gap(2),
+          Text(
+            message,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.onErrorContainer,
+                ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:life_log_2/app_logical_parts/day_log/day_log_model.dart';
-import 'package:life_log_2/app_logical_parts/day_log/day_log_repository.dart';
+import 'package:get/get.dart';
 import 'package:life_log_2/app_logical_parts/day_log/SingleDayLogEditScreen/day_log_edit_screen.dart';
-import 'package:life_log_2/app_logical_parts/day_log/list_view/bloc/day_log_bloc.dart';
+import 'package:life_log_2/app_logical_parts/day_log/day_log_list_tab/day_log_list_tab_controller.dart';
+import 'package:life_log_2/app_logical_parts/day_log/day_log_model.dart';
 import 'package:life_log_2/my_widgets/my_constants.dart';
 import 'package:life_log_2/my_widgets/my_icons.dart';
 import 'package:life_log_2/my_widgets/my_widgets.dart';
 import 'package:life_log_2/utils/StringFormatters.dart';
+import 'package:life_log_2/utils/controller_status.dart';
 import 'package:loggy/loggy.dart';
 import 'package:structures/structures.dart';
 
@@ -25,53 +25,61 @@ class DayLogListTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DayLogRepositoryProvider(
-      child: BlocProvider(
-        create: (context) => DayLogListTabBloc(context.read<DayLogRepository>())
-          ..add(LoadInitialPageOfDayLogs()),
-        child: BlocBuilder<DayLogListTabBloc, DayLogListTabBlocState>(
-          builder: (context, state) {
-            logDebug('DayLogListTab build: $state');
-            if (state is LoadingPageOfDayLogs && state.dayLogList.isEmpty) {
-              return const _ProcessIndicatorForInitialLoadingOfDayLogs();
-            } else {
-              return _DayLogScrollableListBuilder(state);
-            }
-          },
-        ),
-      ),
+    return GetBuilder<DayLogListTabController>(
+      init: DayLogListTabController(),
+      builder: (controller) {
+        logDebug('DayLogListTab.tab controller build: ${controller.status}');
+        if (controller.status == EControllerStatus.initializing) {
+          return const _ProcessIndicatorForInitialLoadingOfDayLogs();
+        }
+        if (controller.status == EControllerStatus.majorError) {
+          return Padding(
+            padding: EdgeInsets.all(CARD_MARGIN),
+            child: Center(
+              child: MajorErrorMessage(controller.errorMessage!),
+            ),
+          );
+        } else {
+          return const _DayLogScrollableListBuilder();
+        }
+      },
     );
   }
 }
 
 class _DayLogScrollableListBuilder extends StatelessWidget {
-  const _DayLogScrollableListBuilder(this.state);
-
-  final DayLogListTabBlocState state;
+  const _DayLogScrollableListBuilder();
 
   @override
   Widget build(BuildContext context) {
-    return MyScrollableList(
-      reloadCallback: () async {
-        final bloc = context.read<DayLogListTabBloc>()
-          ..add(ResetDayLogListWithRefreshedInitialPage());
-
-        //waiting when initial page is loaded, so state is Idle
-        await bloc.stream.firstWhere((state) => state is IdleState);
-      },
-      bottomScrolledCallback: () {
-        context.read<DayLogListTabBloc>().add(LoadNextPageOfDayLogs());
-      },
-      itemCount: state.dayLogList.length + 1,
-      itemBuilder: (context, index) {
-        if (index < state.dayLogList.length) {
-          return _DayLogCardBuilder(dayLogToBuild: state.dayLogList[index]);
-        } else {
-          return _BottomUtilElementOfScrollableList(state: state);
-        }
-      },
-      separatorBuilder: (context, index) {
-        return Gap(CARD_MARGIN);
+    return GetBuilder<DayLogListTabController>(
+      builder: (controller) {
+        logDebug(
+          'DayLogListTab.tab.list controller build: ${controller.status}',
+        );
+        return MyScrollableList(
+          reloadCallback: () async {
+            //waiting when initial page is loaded, so state is Idle
+            await controller.resetDayLogListWithInitialPage();
+          },
+          bottomScrolledCallback: () {
+            logDebug('Bottom scrolled');
+            controller.loadNextPage();
+          },
+          itemCount: controller.dayLogList.length + 1,
+          itemBuilder: (context, index) {
+            if (index < controller.dayLogList.length) {
+              return _DayLogCardBuilder(
+                dayLogToBuild: controller.dayLogList[index],
+              );
+            } else {
+              return _BottomUtilElementOfScrollableList(controller);
+            }
+          },
+          separatorBuilder: (context, index) {
+            return Gap(CARD_MARGIN);
+          },
+        );
       },
     );
   }
@@ -86,6 +94,9 @@ class _DayLogCardBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // logDebug(
+    //   'DayLogListTab.tab.list.card build',
+    // );
     return MyCard(
       onTap: () {
         Navigator.push<void>(
@@ -161,30 +172,28 @@ class _DayLogFieldsAndTagsRenderer extends StatelessWidget {
 }
 
 class _BottomUtilElementOfScrollableList extends StatelessWidget {
-  const _BottomUtilElementOfScrollableList({
-    required this.state,
-  });
-
-  final DayLogListTabBlocState state;
+  const _BottomUtilElementOfScrollableList(this.controller);
+  final DayLogListTabController controller;
 
   @override
   Widget build(BuildContext context) {
-    final shownErrorMessage = state is ErrorWithLoadingPageOfDayLogs
-        ? (state as ErrorWithLoadingPageOfDayLogs).errorMessage ?? 'unknown...'
-        : null;
-    return Column(
-      children: [
-        if (state is LoadingPageOfDayLogs)
-          Container(
-            margin: const EdgeInsets.fromLTRB(0, 6, 0, 6),
-            child: const MyProcessIndicator(),
-          ),
-        if (shownErrorMessage != null)
-          Text(
-            'Error: $shownErrorMessage',
-          ),
-      ],
+    logDebug(
+      'DayLogListTab.tab.list.bottom controller build: ${controller.status}',
     );
+    if (controller.status == EControllerStatus.processing) {
+      return Center(
+        child: Container(
+          margin: const EdgeInsets.fromLTRB(0, 6, 0, 6),
+          child: const MyProcessIndicator(),
+        ),
+      );
+    }
+    if (controller.status == EControllerStatus.minorError) {
+      return Text(
+        'Error: ${controller.errorMessage ?? 'Unknown error :['}',
+      );
+    }
+    return Container();
   }
 }
 
