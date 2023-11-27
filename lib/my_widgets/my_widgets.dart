@@ -25,7 +25,6 @@ PreferredSizeWidget createMyAppBar(String titleInAppBar, BuildContext context) {
 ///
 /// Can be used for dispalying large list of large cards
 class MyScrollableList extends StatefulWidget {
-  // ignore: public_member_api_docs
   const MyScrollableList({
     required this.itemCount,
     required this.itemBuilder,
@@ -89,7 +88,6 @@ class _MyScrollableListState extends State<MyScrollableList> {
 
 /// Card that is ususally used in application
 class MyCard extends StatelessWidget {
-  // ignore: public_member_api_docs
   const MyCard({
     required this.child,
     super.key,
@@ -128,7 +126,6 @@ class MyCard extends StatelessWidget {
 /// Can be used as tag, filter indicator.
 /// Can have icon before text.
 class MyChip extends StatelessWidget {
-  // ignore: public_member_api_docs
   const MyChip(
     this.text, {
     super.key,
@@ -175,9 +172,8 @@ class MyChip extends StatelessWidget {
   }
 }
 
-/// Indicator of processing
+/// Indicator of processing. Is used to show user that something is in process.
 class MyProcessIndicator extends StatelessWidget {
-  // ignore: public_member_api_docs
   const MyProcessIndicator({
     super.key,
   });
@@ -186,7 +182,6 @@ class MyProcessIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircularProgressIndicator(
       strokeAlign: BorderSide.strokeAlignInside,
-      // ignore: avoid_redundant_argument_values
       strokeWidth: 4,
       strokeCap: StrokeCap.square,
       color: Theme.of(context).colorScheme.primary,
@@ -196,7 +191,6 @@ class MyProcessIndicator extends StatelessWidget {
 
 /// Displays multiple of FABs. Should be used inside [Scaffold]
 class MyFABCollection extends StatelessWidget {
-  // ignore: public_member_api_docs
   const MyFABCollection({
     required this.fabs,
     super.key,
@@ -227,13 +221,11 @@ class MyFABCollection extends StatelessWidget {
 ///
 /// Additionaly can have an icon.
 class MyFloatingButton extends StatelessWidget {
-  // ignore: public_member_api_docs
   const MyFloatingButton.withIcon({
     required this.iconData,
     required this.onPressed,
     super.key,
   }) : child = null;
-  // ignore: public_member_api_docs
   const MyFloatingButton({
     required this.onPressed,
     super.key,
@@ -260,11 +252,10 @@ class MyFloatingButton extends StatelessWidget {
   }
 }
 
-/// Widget to display message of major error.
-///
-/// This widget intended to take a lot of space.
-class MajorErrorMessage extends StatelessWidget {
-  const MajorErrorMessage(this.message, {super.key});
+/// Widget to display error's message.
+/// Wrapped in red colored card.
+class MyErrorMessage extends StatelessWidget {
+  const MyErrorMessage(this.message, {super.key});
 
   final String message;
 
@@ -274,6 +265,11 @@ class MajorErrorMessage extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(CARD_BORDER_RADIUS),
         color: Theme.of(context).colorScheme.errorContainer,
+        border: Border.all(
+          width: 1,
+          color:
+              Theme.of(context).colorScheme.onErrorContainer.withOpacity(0.4),
+        ),
       ),
       padding: EdgeInsets.all(CARD_PADDING),
       child: Column(

@@ -1,4 +1,12 @@
-taskes:
+
+temp:   
+    system for setting and resetting error messages in controller
+    show snackbars
+    way to initialize controller single time and use it
+    look how GetX binding can be used
+
+
+taskesosses:
     refactor
         change bloc with GetX
         snackbars change to use GetX
@@ -10,3 +18,20 @@ taskes:
     implement multiple FABs
     test fast clicking on dayLog card and returning back to list, multiple times
     optimization issues
+
+tasks2:
+    check if in listTab tabWidget itself is rebuilt when status of controller is changed
+    create new system of naming widgets
+        create categories of widgets by logical level of their usage, like 'tab', 'tabContent'...
+    tabgContent widgets like errorMessage or processIndicator should be common widgets
+
+widgets naming:
+    see termas used in UI and UI elements, like scaffold.
+    name of widget should comprehensively show place and aim of usage of the widget 
+
+
+
+                
+
+
+

@@ -12,12 +12,10 @@ import 'package:loggy/loggy.dart';
 
 /// Provides full-screen page for editing DayLog with given [dayLogId]
 class DayLogEditPage extends StatelessWidget {
-  // ignore: public_member_api_docs
   const DayLogEditPage({
     required this.dayLogId,
     super.key,
   });
-  // ignore: public_member_api_docs
   final int dayLogId;
 
   @override
@@ -116,13 +114,11 @@ class DayLogEditPage extends StatelessWidget {
 
 ///Form with fields for editing DayLog
 class DayLogEditWidget extends StatelessWidget {
-  // ignore: public_member_api_docs
   const DayLogEditWidget(
     this.dayLogState, {
     super.key,
   });
 
-  // ignore: public_member_api_docs
   final DayLogEditState dayLogState;
 
   @override

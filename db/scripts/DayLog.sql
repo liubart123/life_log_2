@@ -25,7 +25,7 @@ DECLARE
 BEGIN
 	truncate day_log cascade;
 
-    FOR i IN 1..10000 LOOP
+    FOR i IN 1..20 LOOP
         -- Generate a random date within a date range (adjust the range as needed)
         INSERT INTO day_log (id, day_date) VALUES (i, CURRENT_DATE - (i * interval '1 day'));
         -- Generate random sleep_start and sleep_end times within a day

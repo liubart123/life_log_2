@@ -6,17 +6,20 @@ import 'package:life_log_2/utils/controller_status.dart';
 import 'package:loggy/loggy.dart';
 import 'package:mutex/mutex.dart';
 
-/// Controller for [DayLogListTab] widget.
+/// Controller for [DayLogsViewTab] widget.
 ///
 /// Handles data for dayLog list, interaction with repositories.
-class DayLogListTabController extends GetxController {
-  String? errorMessage;
+class DayLogsViewTabController extends GetxController {
+  final errorMessage = RxString('');
   List<DayLog> dayLogList = List.empty(growable: true);
+  bool noMorePagesToLoad = false;
+
+  static DayLogsViewTabController get to => Get.find();
 
   /// Semaphor to prevent multiple simultaneous loading of same pages.
   /// Is used for loading next pages.
   final pageIsLoadingMutex = Mutex();
-  EControllerStatus status = EControllerStatus.initializing;
+  EControllerState state = EControllerState.initializing;
   late DayLogRepository repository;
 
   @override
@@ -25,100 +28,96 @@ class DayLogListTabController extends GetxController {
     super.onInit();
   }
 
-  Future<void> _initialize() async {
+  void _initialize() {
     repository = Get.find<DayLogRepository>();
-    await _loadInitialPage();
+    //todo: move it to controller's initialization
+    loadInitialPage();
   }
 
-  Future<void> _loadInitialPage() async {
-    logDebug('$runtimeType started loading of initial page...');
+  Future<void> loadInitialPage({
+    EControllerState stateDuringLoading = EControllerState.initializing,
+  }) async {
     try {
-      resetStatus(EControllerStatus.initializing);
-      update();
-
       await pageIsLoadingMutex.acquire();
+      logDebug('$runtimeType initial page loading start');
+      resetStatusWithUpdate(stateDuringLoading);
 
       final pageOfDayLogs = await repository.getAllDayLogs();
 
-      logDebug('$runtimeType finished loading of initial page');
-
-      resetStatus(EControllerStatus.idle);
-      dayLogList = pageOfDayLogs;
+      resetStatus(EControllerState.idle);
+      dayLogList = pageOfDayLogs.dayLogList;
+      noMorePagesToLoad = pageOfDayLogs.noMorePagesToLoad;
       update();
     } catch (ex) {
-      resetStatus(EControllerStatus.majorError);
-      errorMessage = ex.toString();
-      update();
+      logDebug('$runtimeType initial page loading error:$ex');
+      _setMinorError(ex.toString());
     } finally {
+      logDebug('$runtimeType initial page loading end');
       pageIsLoadingMutex.release();
     }
   }
 
-  /// Changes status to [EControllerStatus.processing] until new page is loaded.
-  /// Then status is returned to [EControllerStatus.idle] and list of daylogs
+  /// Changes status to [EControllerState.processing] until new page is loaded.
+  /// Then status is returned to [EControllerState.idle] and list of daylogs
   /// is updated with new page.
   Future<void> loadNextPage() async {
-    logDebug('${runtimeType} started loading of next page...');
-    if (pageIsLoadingMutex.isLocked) {
+    if (noMorePagesToLoad) {
       logDebug(
-          '${runtimeType} page loading is already in progress - don`t start new page loading');
-      return;
-    }
-    try {
-      resetStatus(EControllerStatus.processing);
-      update();
-
-      await pageIsLoadingMutex.acquire();
-
-      final pageOfDayLogs = await repository.getAllDayLogs(
-        maxDateFilter: dayLogList.last.date,
+        '$runtimeType no more pages to load - don`t start new page loading',
       );
+      return;
+    } else if (pageIsLoadingMutex.isLocked) {
+      logDebug(
+        '$runtimeType page loading is already in progress - don`t start new page loading',
+      );
+      return;
+    } else {
+      try {
+        await pageIsLoadingMutex.acquire();
+        logDebug('$runtimeType page loading start');
+        resetStatusWithUpdate(EControllerState.processing);
 
-      logDebug('$runtimeType finished loading of next page');
+        final pageOfDayLogs = await repository.getAllDayLogs(
+          maxDateFilter: dayLogList.last.date,
+        );
 
-      resetStatus(EControllerStatus.idle);
-      dayLogList.addAll(pageOfDayLogs);
-      update();
-    } catch (ex) {
-      resetStatus(EControllerStatus.majorError);
-      errorMessage = ex.toString();
-      update();
-    } finally {
-      pageIsLoadingMutex.release();
+        resetStatus(EControllerState.idle);
+        dayLogList.addAll(pageOfDayLogs.dayLogList);
+        noMorePagesToLoad = pageOfDayLogs.noMorePagesToLoad;
+        update();
+      } catch (ex) {
+        logDebug('$runtimeType page loading error:$ex');
+        _setMinorError(ex.toString());
+      } finally {
+        logDebug('$runtimeType page loading end');
+        pageIsLoadingMutex.release();
+      }
     }
   }
 
-  /// Changes status to [EControllerStatus.processing]
+  /// Changes status to [EControllerState.processing]
   /// until initial page is loaded.
-  /// Then status is returned to [EControllerStatus.idle] and list of daylogs
-  /// is reset to only dayLogs from loaded initial page.
+  /// Then status is returned to [EControllerState.idle] and list of daylogs
+  /// is reset to contain only dayLogs from loaded initial page.
   Future<void> resetDayLogListWithInitialPage() async {
-    logDebug('${runtimeType} started reseting to initial page...');
-
-    try {
-      resetStatus(EControllerStatus.processing);
-      update();
-
-      await pageIsLoadingMutex.acquire();
-
-      final pageOfDayLogs = await repository.getAllDayLogs();
-
-      logDebug('$runtimeType finished reseting to initial page');
-
-      resetStatus(EControllerStatus.idle);
-      dayLogList = pageOfDayLogs;
-      update();
-    } catch (ex) {
-      resetStatus(EControllerStatus.majorError);
-      errorMessage = ex.toString();
-      update();
-    } finally {
-      pageIsLoadingMutex.release();
-    }
+    logDebug('$runtimeType started reseting to initial page...');
+    await loadInitialPage(stateDuringLoading: EControllerState.processing);
   }
 
-  void resetStatus(EControllerStatus newStatus) {
-    status = newStatus;
-    errorMessage = '';
+  void resetStatus(EControllerState newStatus) {
+    state = newStatus;
+    errorMessage.value = '';
+    noMorePagesToLoad = false;
+  }
+
+  void resetStatusWithUpdate(EControllerState newStatus) {
+    resetStatus(newStatus);
+    update();
+  }
+
+  void _setMinorError(String message) {
+    state = EControllerState.idle;
+    errorMessage.value = message;
+    update();
   }
 }

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:postgres_pool/postgres_pool.dart';
+
 import 'package:life_log_2/app_logical_parts/day_log/day_log_data_provider.dart';
 import 'package:life_log_2/app_logical_parts/day_log/day_log_model.dart';
 import 'package:life_log_2/utils/DateTimeUtils.dart';
 import 'package:life_log_2/utils/StringFormatters.dart';
-import 'package:postgres_pool/postgres_pool.dart';
 
 /// Provides high-level functions to interact with DayLogs from database
 class DayLogRepository {
-  // ignore: public_member_api_docs
   DayLogRepository(this._dayLogDataProvider);
 
   final DayLogDataProvider _dayLogDataProvider;
@@ -40,9 +40,9 @@ limit 5''';
 
   /// Returns limited amount of days from DB orderd by date. If maxDateFilter is
   /// set then returns only days earlier then given date.
-  Future<List<DayLog>> getAllDayLogs({DateTime? maxDateFilter}) async {
+  Future<DayLogPageResult> getAllDayLogs({DateTime? maxDateFilter}) async {
     PostgreSQLResult results;
-    await Future.delayed(const Duration(milliseconds: 5000));
+    await Future.delayed(const Duration(milliseconds: 500));
     if (maxDateFilter != null) {
       results = await _dayLogDataProvider.connectionPool.query(
         '$_basicSelectQuery where day_date < @maxDate $_basicSelectQueryEnding',
@@ -54,8 +54,11 @@ limit 5''';
       results = await _dayLogDataProvider.connectionPool
           .query('$_basicSelectQuery $_basicSelectQueryEnding');
     }
-
-    return results.map(_parseDayLogFromRequest).toList();
+    final resultedList = results.map(_parseDayLogFromRequest).toList();
+    return DayLogPageResult(
+      dayLogList: resultedList,
+      noMorePagesToLoad: resultedList.length < 5,
+    );
   }
 
   /// Returns dayLog with given id
@@ -103,7 +106,6 @@ limit 5''';
 
 ///Provides [DayLogRepository] to children widgets
 class DayLogRepositoryProvider extends StatelessWidget {
-  // ignore: public_member_api_docs
   const DayLogRepositoryProvider({
     required Widget child,
     super.key,
@@ -118,4 +120,13 @@ class DayLogRepositoryProvider extends StatelessWidget {
       child: _child,
     );
   }
+}
+
+class DayLogPageResult {
+  DayLogPageResult({
+    required this.dayLogList,
+    required this.noMorePagesToLoad,
+  });
+  List<DayLog> dayLogList;
+  bool noMorePagesToLoad;
 }
