@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:life_log_2/app_logical_parts/day_log/SingleDayLogEditScreen/day_log_edit_screen.dart';
 import 'package:life_log_2/app_logical_parts/day_log/day_log_model.dart';
 import 'package:life_log_2/my_widgets/my_constants.dart';
 import 'package:life_log_2/my_widgets/my_icons.dart';

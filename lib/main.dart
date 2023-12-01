@@ -1,12 +1,10 @@
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:life_log_2/app_logical_parts/day_log/day_log_data_provider.dart';
-import 'package:life_log_2/app_logical_parts/day_log/day_log_list_tab/day_log_list_tab.dart';
 import 'package:life_log_2/app_logical_parts/day_log/day_log_repository.dart';
 import 'package:life_log_2/app_theme.dart';
 import 'package:life_log_2/home/home_tabs_screen.dart';
-import 'package:life_log_2/my_widgets/my_widgets.dart';
+import 'package:life_log_2/utils/log_utils.dart';
 import 'package:loggy/loggy.dart';
 
 void main() {
@@ -22,7 +20,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    logDebug('MyApp build');
+    MyLogger.testColors();
+    MyLogger.widget1('RootWidget build');
     _initializeMainDependencies();
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
@@ -33,7 +32,7 @@ class MyApp extends StatelessWidget {
   }
 
   void _initializeMainDependencies() {
-    logDebug('MyApp dependencies initializing');
+    MyLogger.widget1('RootWidget dependencies initializing');
     final dayLogDataProvider = Get.put(DayLogDataProvider());
     Get.put(DayLogRepository(dayLogDataProvider));
   }

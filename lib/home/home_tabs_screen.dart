@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:life_log_2/app_logical_parts/day_log/day_log_list_tab/day_log_list_tab.dart';
-import 'package:life_log_2/app_logical_parts/day_log/day_log_list_tab/day_log_list_tab_controller.dart';
-import 'package:loggy/loggy.dart';
+import 'package:life_log_2/utils/log_utils.dart';
+
+//todo:add info about logging levels to some documentation
 
 /// Is used as home/main page. Displayes main application tabs
 class HomeTabsScreen extends StatelessWidget {
   const HomeTabsScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    logDebug('_HomeTabsScreenState build');
+    MyLogger.widget1('HomeTabsScreen build');
     return DefaultTabController(
       length: 2,
       child: Scaffold(

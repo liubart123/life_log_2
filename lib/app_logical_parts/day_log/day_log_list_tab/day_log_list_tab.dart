@@ -14,6 +14,7 @@ import 'package:life_log_2/my_widgets/my_icons.dart';
 import 'package:life_log_2/my_widgets/my_widgets.dart';
 import 'package:life_log_2/utils/StringFormatters.dart';
 import 'package:life_log_2/utils/controller_status.dart';
+import 'package:life_log_2/utils/log_utils.dart';
 import 'package:life_log_2/utils/my_snackbar.dart';
 import 'package:loggy/loggy.dart';
 import 'package:structures/structures.dart';
@@ -26,29 +27,27 @@ class DayLogsViewTab extends StatelessWidget {
   const DayLogsViewTab({
     super.key,
   });
+
   @override
   Widget build(BuildContext context) {
-    logDebug('DayLogsViewTab building GetBuilder');
-
     return GetBuilder<DayLogsViewTabController>(
       initState: (builderState) {
-        logDebug('tab GetBuilder initState');
-        final controller = DayLogsViewTabController();
-        Get.put(controller);
-        _setupController(controller);
+        _initializeControllerIfNeed();
+        _setEventHandlersOnController();
+      },
+      dispose: (state) {
+        _dispouseEventHandlersFromController();
       },
       builder: (controller) {
-        logDebug('DayLogsViewTab build: ${controller.state}');
+        MyLogger.widget1(
+          'DayLogsViewTab build. Controller state: ${controller.state}',
+        );
         if (controller.state == EControllerState.initializing) {
           return _tabBodyForInitialLoadingState();
         } else if (controller.state == EControllerState.fatalError) {
-          return _tabBodyForFatalErrorState(
-            controller,
-          );
+          return _tabBodyForFatalErrorState();
         } else if (controller.dayLogList.isEmpty) {
-          return _tabBodyForEmptyDayLogList(
-            controller,
-          );
+          return _tabBodyForEmptyDayLogList();
         } else {
           return const TabBodyWithDayLogList();
         }
@@ -56,32 +55,35 @@ class DayLogsViewTab extends StatelessWidget {
     );
   }
 
-  void _setupController(
-    DayLogsViewTabController controller,
-  ) {
-    logDebug('tab _setupController');
-    _addHandlerOnErrorOccuring(controller);
+  void _initializeControllerIfNeed() {
+    Get.lazyPut(() {
+      MyLogger.widget1('DayLogsViewTab initializing controller...');
+      final controller = DayLogsViewTabController()..loadInitialPage();
+      return controller;
+    });
   }
 
-  void _addHandlerOnErrorOccuring(
-    DayLogsViewTabController controller,
-  ) {
+  void _setEventHandlersOnController() {
+    final controller = Get.find<DayLogsViewTabController>();
+    MyLogger.widget1('DayLogsViewTab setting controller`s event handlers...');
     ever(
       controller.errorMessage,
       (newValue) {
-        logDebug(
-          'error handled from widget $newValue',
-        );
         if (newValue.isNotEmpty) {
+          MyLogger.widget2('error handled from controller: $newValue');
           showMyErrorSnackbar(newValue);
         }
       },
     );
   }
 
-  Widget _tabBodyForEmptyDayLogList(
-    DayLogsViewTabController controller,
-  ) {
+  void _dispouseEventHandlersFromController() {
+    MyLogger.widget1('DayLogsViewTab disposing controller`s event handlers...');
+    Get.find<DayLogsViewTabController>().errorMessage.close();
+  }
+
+  Widget _tabBodyForEmptyDayLogList() {
+    final controller = Get.find<DayLogsViewTabController>();
     return LayoutBuilder(
       builder: (context, constraints) => RefreshIndicator(
         onRefresh: () async {
@@ -106,9 +108,8 @@ class DayLogsViewTab extends StatelessWidget {
     );
   }
 
-  Widget _tabBodyForFatalErrorState(
-    DayLogsViewTabController controller,
-  ) {
+  Widget _tabBodyForFatalErrorState() {
+    final controller = Get.find<DayLogsViewTabController>();
     return LayoutBuilder(
       builder: (context, constraints) => RefreshIndicator(
         onRefresh: () async {

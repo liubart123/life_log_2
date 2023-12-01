@@ -36,6 +36,7 @@ linter:
     public_member_api_docs: false
     avoid_redundant_argument_values: false
     no_runtimeType_toString: false
+    lines_longer_than_80_chars: false
     # avoid_print: false  # Uncomment to disable the `avoid_print` rule
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
 # Additional information about this file can be found at
