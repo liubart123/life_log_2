@@ -38,6 +38,7 @@ class DayLogCard extends StatelessWidget {
   }
 }
 
+//todo:move this widget to separate file
 //todo:create file with collection of terms' explanation, like 'Renderer'
 class _DayLogFieldsAndTagsRenderer extends StatelessWidget {
   const _DayLogFieldsAndTagsRenderer({

@@ -1,0 +1,38 @@
+Widget implementing principles:
+    Widgets can be defined as:
+        - helper function inside parent widget:
+            Used when
+                - this widget is called directly from parent widget's build() funciton
+                - its name clearly defines the place where this widget is called/used.        
+            Shouldn't call other helper widgets defined in the same file
+            Main goal of helper widget's name is to define place/conditions where this widget is used
+            Answers question 'Where/When to use it?'
+        - separate class in separate file
+            Used when helper widget cannot be used
+            Main goal of file widget's name is to define functionality of the widget
+            Main question 'What does it do?'
+            Can be placed inside folder with parent widget, to simplify its name by putting it in context of parent widget
+    Don't use long functions - freely fit in one screen 
+    Minimize number of inner widget's elements (functions/helprWidgets) used outside main build() function. Names of inner widget's elments should define place/conditions in main widget where these elements are used/called
+    
+Terms used in widget names:
+    Screen - widget that builds scaffold widget, appBar and maybe floating widgets
+    Tab - single tab for TabController
+    List - collection of elements. Usually vertical scrollable list
+    <TheWidget>Builder - creates TheWidget. Usually wraps TheWidget with necessary logic or provide complicated configuration for it
+    Card - visually separates its content. Usually takes almost whole width of the screen
+    <TheWidget>Body - widget that is used as child inside TheWidget. Usually it plays a role of a main visual component of TheWidget. Ususally is used if TheWidget already contains complicated logic and doesn't have enough space for implementing children itself, in this case ...Body widgets implement children.
+
+common widgets - widgets that can be used in various parts of application. Usually don't have complicated logic. Should be defined in my_widgets folder. Can have 'My_' prefix if it makes easier to distinguish standard/lib widget and custom widget, created for the app. 
+
+Model widget - widget that provides interface for interaction with single or multiple logical models.
+    Types of model widgets:
+        - View - displays model's data
+        - Edit - dispalys and edit model's data
+    Naming 
+        <Model name><Widget type>
+        Can be added 's' ending of Model name, in case of using collection of model instances
+
+
+
+
