@@ -40,8 +40,8 @@ class TabBodyWithDayLogList extends StatelessWidget {
     DayLogsViewTabController controller,
   ) {
     return (context, index) {
-      final dayLog = controller.dayLogList[index];
       if (index < controller.dayLogList.length) {
+        final dayLog = controller.dayLogList[index];
         return DayLogCard(
           dayLog: dayLog,
           onTapCallback: () {
@@ -81,7 +81,7 @@ class TabBodyWithDayLogList extends StatelessWidget {
           child: const MyProcessIndicator(),
         ),
       );
-    } else if (controller.errorMessage.value.isNotEmpty) {
+    } else if (controller.errorMessage?.isBlank == false) {
       return MyErrorMessage(
         'Error: ${controller.errorMessage}',
       );

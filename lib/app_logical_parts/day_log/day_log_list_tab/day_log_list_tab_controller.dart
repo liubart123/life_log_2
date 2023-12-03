@@ -14,10 +14,10 @@ class DayLogsViewTabController extends GetxController {
     MyLogger.controller1('$runtimeType constructor');
     repository = Get.find<DayLogRepository>();
   }
-
+  Set<Function(String)> onErrorCallback = {};
   List<DayLog> dayLogList = List.empty(growable: true);
   EControllerState state = EControllerState.initializing;
-  final errorMessage = RxString('');
+  String? errorMessage;
   bool noMorePagesToLoad = false;
   late DayLogRepository repository;
 
@@ -105,7 +105,7 @@ class DayLogsViewTabController extends GetxController {
 
   void resetStatus(EControllerState newStatus) {
     state = newStatus;
-    errorMessage.value = '';
+    errorMessage = null;
   }
 
   void updateStatus(EControllerState newStatus) {
@@ -115,7 +115,8 @@ class DayLogsViewTabController extends GetxController {
 
   void _setErrorMessage(String message) {
     state = EControllerState.idle;
-    errorMessage.value = message;
+    errorMessage = message;
+    onErrorCallback.forEach((callback) => callback(errorMessage!));
     update();
   }
 }

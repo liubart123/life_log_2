@@ -67,22 +67,21 @@ class DayLogsViewTab extends StatelessWidget {
   void _setEventHandlersOnController() {
     final controller = Get.find<DayLogsViewTabController>();
     MyLogger.widget1('$runtimeType setting controller`s event handlers...');
-    ever(
-      controller.errorMessage,
-      (newValue) {
-        if (newValue.isNotEmpty) {
-          MyLogger.widget2(
-              '$runtimeType error handled from controller: $newValue');
-          showMyErrorSnackbar(newValue);
-        }
-      },
-    );
+    controller.onErrorCallback.add(_errorMessageHandler);
   }
 
   void _dispouseEventHandlersFromController() {
+    final controller = Get.find<DayLogsViewTabController>();
     MyLogger.widget1('$runtimeType disposing controller`s event handlers...');
-    //todo:rework. CLose() - closes stream and state cannot work properly after this:)
-    Get.find<DayLogsViewTabController>().errorMessage.close();
+    controller.onErrorCallback.remove(_errorMessageHandler);
+  }
+
+  void _errorMessageHandler(String errorMessage) {
+    if (errorMessage.isNotEmpty) {
+      MyLogger.widget2(
+          '$runtimeType error handled from controller: $errorMessage');
+      showMyErrorSnackbar(errorMessage);
+    }
   }
 
   Widget _tabBodyForEmptyDayLogList() {
