@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
   }
 
   void _initializeMainDependencies() {
-    MyLogger.widget1('RootWidget dependencies initializing');
+    MyLogger.widget1('RootWidget dependencies initializing...');
     final dayLogDataProvider = Get.put(DayLogDataProvider());
     Get.put(DayLogRepository(dayLogDataProvider));
   }

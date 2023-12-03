@@ -39,8 +39,9 @@ class DayLogsViewTab extends StatelessWidget {
         _dispouseEventHandlersFromController();
       },
       builder: (controller) {
+        //todo:sometimes I see this message 2 times on first loading of the tab with initializing status
         MyLogger.widget1(
-          'DayLogsViewTab build. Controller state: ${controller.state}',
+          '$runtimeType build. Controller state: ${controller.state}',
         );
         if (controller.state == EControllerState.initializing) {
           return _tabBodyForInitialLoadingState();
@@ -57,7 +58,7 @@ class DayLogsViewTab extends StatelessWidget {
 
   void _initializeControllerIfNeed() {
     Get.lazyPut(() {
-      MyLogger.widget1('DayLogsViewTab initializing controller...');
+      MyLogger.widget1('$runtimeType creating controller...');
       final controller = DayLogsViewTabController()..loadInitialPage();
       return controller;
     });
@@ -65,12 +66,13 @@ class DayLogsViewTab extends StatelessWidget {
 
   void _setEventHandlersOnController() {
     final controller = Get.find<DayLogsViewTabController>();
-    MyLogger.widget1('DayLogsViewTab setting controller`s event handlers...');
+    MyLogger.widget1('$runtimeType setting controller`s event handlers...');
     ever(
       controller.errorMessage,
       (newValue) {
         if (newValue.isNotEmpty) {
-          MyLogger.widget2('error handled from controller: $newValue');
+          MyLogger.widget2(
+              '$runtimeType error handled from controller: $newValue');
           showMyErrorSnackbar(newValue);
         }
       },
@@ -78,7 +80,8 @@ class DayLogsViewTab extends StatelessWidget {
   }
 
   void _dispouseEventHandlersFromController() {
-    MyLogger.widget1('DayLogsViewTab disposing controller`s event handlers...');
+    MyLogger.widget1('$runtimeType disposing controller`s event handlers...');
+    //todo:rework. CLose() - closes stream and state cannot work properly after this:)
     Get.find<DayLogsViewTabController>().errorMessage.close();
   }
 

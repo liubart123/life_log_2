@@ -1,5 +1,7 @@
 import 'dart:developer' as developer;
 
+import 'package:intl/intl.dart';
+
 /// Levels mean importance of logged message, the higher - the less important.
 ///
 /// controllerX: 1st level - important rare actions of controllers:
@@ -17,52 +19,64 @@ import 'dart:developer' as developer;
 /// trace: anything that isn't important enough to care about choosing
 /// correct log category and level.
 class MyLogger {
+  static DateTime lastLogTime = DateTime.now();
+
   static void debug(String message) {
     developer.log('message');
   }
 
-  static void _print(String color, String message, int tabsBefore) {
-    developer.log('${''.padRight(tabsBefore * 2)}\x1B${color}m$message\x1B[0m');
+  static void _print(String color, String message) {
+    final messageToLog = StringBuffer();
+    final now = DateTime.now();
+    if (now.difference(lastLogTime).inMilliseconds > 500) {
+      messageToLog.write('\n');
+    }
+    messageToLog
+      ..write(DateFormat('HH:mm:ss.SSS').format(now))
+      ..write(' - ')
+      ..write('\x1B${color}m$message\x1B[0m');
+    developer.log(messageToLog.toString());
+    lastLogTime = now;
   }
 
   static void error(String message) {
-    _print('[38;5;202', message, 0);
+    _print('[38;5;202', message);
   }
 
   static void warning(String message) {
-    _print('[38;5;208', message, 0);
+    _print('[38;5;208', message);
   }
 
   static void controller1(String message) {
-    _print('[38;5;82', message, 1);
+    _print('[38;5;82', message);
   }
 
   static void controller2(String message) {
-    _print('[38;5;76', message, 2);
+    _print('[38;5;76', message);
   }
 
   static void input1(String message) {
-    _print('[38;5;44', message, 2);
+    _print('[38;5;44', message);
   }
 
   static void input2(String message) {
-    _print('[38;5;73', message, 3);
+    _print('[38;5;73', message);
   }
 
   static void widget1(String message) {
-    _print('[38;5;218', message, 1);
+    _print('[38;5;218', message);
   }
 
   static void widget2(String message) {
-    _print('[38;5;181', message, 2);
+    _print('[38;5;181', message);
   }
 
   static void widget3(String message) {
-    _print('[38;5;96', message, 3);
+    _print('[38;5;96', message);
   }
 
   static void trace(String message) {
-    _print('[38;5;8', message, 3);
+    _print('[38;5;8', message);
   }
 
   static void testColors() {

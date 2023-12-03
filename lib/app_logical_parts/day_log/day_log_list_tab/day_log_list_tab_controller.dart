@@ -31,16 +31,16 @@ class DayLogsViewTabController extends GetxController {
     try {
       MyLogger.controller2('$runtimeType loading initial page...');
       await pageLoadingInProcess.acquire();
-      resetStatusWithUpdate(stateDuringLoading);
+      updateStatus(stateDuringLoading);
 
       final pageOfDayLogs = await repository.getAllDayLogs();
 
       dayLogList = pageOfDayLogs.dayLogList;
       noMorePagesToLoad = pageOfDayLogs.noMorePagesToLoad;
-      resetStatusWithUpdate(EControllerState.idle);
+      updateStatus(EControllerState.idle);
     } catch (ex) {
       MyLogger.error('$runtimeType initial page loading error:$ex');
-      _setMinorError(ex.toString());
+      _setErrorMessage(ex.toString());
     } finally {
       MyLogger.controller2('$runtimeType loading initial page end.');
       pageLoadingInProcess.release();
@@ -52,12 +52,12 @@ class DayLogsViewTabController extends GetxController {
   /// is updated with new page.
   Future<void> loadNextPage() async {
     MyLogger.controller2('$runtimeType loading next page...');
-    if (!_nextPageLoadingIsNeeded()) {
+    if (_nextPageLoadingIsNotNeeded()) {
       return;
     } else {
       try {
         await pageLoadingInProcess.acquire();
-        resetStatusWithUpdate(EControllerState.processing);
+        updateStatus(EControllerState.processing);
 
         final pageOfDayLogs = await repository.getAllDayLogs(
           maxDateFilter: dayLogList.last.date,
@@ -65,11 +65,10 @@ class DayLogsViewTabController extends GetxController {
 
         dayLogList.addAll(pageOfDayLogs.dayLogList);
         noMorePagesToLoad = pageOfDayLogs.noMorePagesToLoad;
-        resetStatusWithUpdate(EControllerState.idle);
-        _setMinorError('test error after loading next page');
+        updateStatus(EControllerState.idle);
       } catch (ex) {
         MyLogger.error('$runtimeType next page loading error:$ex');
-        _setMinorError(ex.toString());
+        _setErrorMessage(ex.toString());
       } finally {
         MyLogger.controller2('$runtimeType loading next page end.');
         pageLoadingInProcess.release();
@@ -77,19 +76,19 @@ class DayLogsViewTabController extends GetxController {
     }
   }
 
-  bool _nextPageLoadingIsNeeded() {
+  bool _nextPageLoadingIsNotNeeded() {
     if (noMorePagesToLoad) {
       MyLogger.controller2(
         '$runtimeType no more pages to load - don`t start new page loading',
       );
-      return false;
+      return true;
     } else if (pageLoadingInProcess.isLocked) {
       MyLogger.controller2(
         '$runtimeType page loading is already in progress - don`t start new page loading',
       );
-      return false;
-    } else {
       return true;
+    } else {
+      return false;
     }
   }
 
@@ -109,12 +108,12 @@ class DayLogsViewTabController extends GetxController {
     errorMessage.value = '';
   }
 
-  void resetStatusWithUpdate(EControllerState newStatus) {
+  void updateStatus(EControllerState newStatus) {
     resetStatus(newStatus);
     update();
   }
 
-  void _setMinorError(String message) {
+  void _setErrorMessage(String message) {
     state = EControllerState.idle;
     errorMessage.value = message;
     update();

@@ -15,7 +15,7 @@ class TabBodyWithDayLogList extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<DayLogsViewTabController>(
       builder: (controller) {
-        MyLogger.widget2('$runtimeType building...');
+        MyLogger.widget2('$runtimeType build');
         return MyScrollableList(
           reloadCallback: () async {
             MyLogger.input1('$runtimeType refresh gesture');
@@ -40,10 +40,12 @@ class TabBodyWithDayLogList extends StatelessWidget {
     DayLogsViewTabController controller,
   ) {
     return (context, index) {
+      final dayLog = controller.dayLogList[index];
       if (index < controller.dayLogList.length) {
         return DayLogCard(
-          dayLog: controller.dayLogList[index],
+          dayLog: dayLog,
           onTapCallback: () {
+            MyLogger.input1('$runtimeType card tapped. Id: ${dayLog.id}');
             Get.to<Scaffold>(
               () => const Scaffold(
                 body: Center(
