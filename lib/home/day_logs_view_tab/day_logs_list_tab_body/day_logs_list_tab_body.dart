@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:life_log_2/app_logical_parts/day_log/day_log_list_tab/day_log_card.dart';
-import 'package:life_log_2/app_logical_parts/day_log/day_log_list_tab/day_log_list_tab_controller.dart';
+import 'package:life_log_2/home/day_logs_view_tab/day_logs_list_tab_body/day_log_card.dart';
+import 'package:life_log_2/home/day_logs_view_tab/day_logs_view_tab_controller.dart';
 import 'package:life_log_2/my_widgets/my_constants.dart';
 import 'package:life_log_2/my_widgets/my_widgets.dart';
 import 'package:life_log_2/utils/controller_status.dart';
 import 'package:life_log_2/utils/log_utils.dart';
 
-class TabBodyWithDayLogList extends StatelessWidget {
-  const TabBodyWithDayLogList({super.key});
+class DayLogsListTabBody extends StatelessWidget {
+  const DayLogsListTabBody({super.key});
 
   @override
   Widget build(BuildContext context) {

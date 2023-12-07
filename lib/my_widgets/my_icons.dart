@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 
 IconData ICON_SLEEP_START = Icons.access_time_outlined;

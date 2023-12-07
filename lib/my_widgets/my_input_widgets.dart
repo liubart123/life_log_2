@@ -3,15 +3,15 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:life_log_2/my_widgets/elevation_utils.dart';
 import 'package:life_log_2/my_widgets/my_constants.dart';
 import 'package:life_log_2/utils/DateTimeUtils.dart';
 import 'package:structures/structures.dart';
 
-import 'my_old_widgets.dart';
-
 const String INVALID_INPUT_ERROR_MESSAGE = 'Invalid Data';
 
+//todo:refact
 class MyDateTimeInputField extends StatelessWidget {
   final String label;
   final IconData? icon;
@@ -184,7 +184,7 @@ class _MyInputFieldState extends State<MyInputField> {
       textInputAction: TextInputAction.next,
       keyboardType: widget.textInputType,
       controller: _controller,
-      style: Theme.of(context).textTheme.bodyLarge,
+      style: Get.theme.textTheme.bodyLarge,
       decoration: InputDecoration(
         errorText: widget.errorMessage ?? inputHandleResult?.errorMessage,
         labelText: widget.label,
@@ -193,7 +193,7 @@ class _MyInputFieldState extends State<MyInputField> {
             ? Icon(
                 widget.icon,
                 size: 25,
-                color: Theme.of(context).colorScheme.outline,
+                color: Get.theme.colorScheme.outline,
               )
             : null,
         prefixIconConstraints: BoxConstraints.tight(Size.square(48)),
@@ -207,36 +207,36 @@ class _MyInputFieldState extends State<MyInputField> {
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(
             width: 3,
-            color: Theme.of(context).colorScheme.surfaceVariant,
+            color: Get.theme.colorScheme.surfaceVariant,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(
             width: 1,
-            color: Theme.of(context).colorScheme.surfaceVariant,
+            color: Get.theme.colorScheme.surfaceVariant,
           ),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(
             width: 1,
-            color: Theme.of(context).colorScheme.error.withOpacity(0.5),
+            color: Get.theme.colorScheme.error.withOpacity(0.5),
           ),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(
             width: 2,
-            color: Theme.of(context).colorScheme.error,
+            color: Get.theme.colorScheme.error,
           ),
         ),
-        labelStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
-              color: Theme.of(context).colorScheme.outline,
-            ),
-        floatingLabelStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
-              color: Theme.of(context).colorScheme.outline.withOpacity(0.7),
-            ),
+        labelStyle: Get.theme.textTheme.bodyLarge!.copyWith(
+          color: Get.theme.colorScheme.outline,
+        ),
+        floatingLabelStyle: Get.theme.textTheme.bodyLarge!.copyWith(
+          color: Get.theme.colorScheme.outline.withOpacity(0.7),
+        ),
       ),
     );
   }

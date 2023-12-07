@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 double CARD_MARGIN = 8;
 double CARD_PADDING = 18;
 double CARD_BORDER_RADIUS = 12;

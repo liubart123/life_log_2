@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:life_log_2/app_logical_parts/day_log/SingleDayLogEditScreen/day_log_edit_screen.dart';
-import 'package:life_log_2/app_logical_parts/day_log/day_log_list_tab/day_log_list_tab_controller.dart';
-import 'package:life_log_2/app_logical_parts/day_log/day_log_list_tab/tab_body_with_day_log_list.dart';
 import 'package:life_log_2/app_logical_parts/day_log/day_log_model.dart';
+import 'package:life_log_2/home/day_logs_view_tab/day_logs_list_tab_body/day_logs_list_tab_body.dart';
+import 'package:life_log_2/home/day_logs_view_tab/day_logs_view_tab_controller.dart';
 import 'package:life_log_2/my_widgets/my_constants.dart';
 import 'package:life_log_2/my_widgets/my_icons.dart';
 import 'package:life_log_2/my_widgets/my_widgets.dart';
@@ -44,13 +44,13 @@ class DayLogsViewTab extends StatelessWidget {
           '$runtimeType build. Controller state: ${controller.state}',
         );
         if (controller.state == EControllerState.initializing) {
-          return _tabBodyForInitialLoadingState();
+          return _initialLoadingStateTabBody();
         } else if (controller.state == EControllerState.fatalError) {
-          return _tabBodyForFatalErrorState();
+          return _fatalErrorStateTabBody();
         } else if (controller.dayLogList.isEmpty) {
-          return _tabBodyForEmptyDayLogList();
+          return _emptyDayLogListTabBody();
         } else {
-          return const TabBodyWithDayLogList();
+          return const DayLogsListTabBody();
         }
       },
     );
@@ -84,7 +84,7 @@ class DayLogsViewTab extends StatelessWidget {
     }
   }
 
-  Widget _tabBodyForEmptyDayLogList() {
+  Widget _emptyDayLogListTabBody() {
     final controller = Get.find<DayLogsViewTabController>();
     return LayoutBuilder(
       builder: (context, constraints) => RefreshIndicator(
@@ -104,13 +104,13 @@ class DayLogsViewTab extends StatelessWidget {
     );
   }
 
-  Widget _tabBodyForInitialLoadingState() {
+  Widget _initialLoadingStateTabBody() {
     return const Center(
       child: MyProcessIndicator(),
     );
   }
 
-  Widget _tabBodyForFatalErrorState() {
+  Widget _fatalErrorStateTabBody() {
     final controller = Get.find<DayLogsViewTabController>();
     return LayoutBuilder(
       builder: (context, constraints) => RefreshIndicator(

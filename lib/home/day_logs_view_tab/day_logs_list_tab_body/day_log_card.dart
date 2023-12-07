@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:life_log_2/app_logical_parts/day_log/day_log_model.dart';
 import 'package:life_log_2/my_widgets/my_constants.dart';
 import 'package:life_log_2/my_widgets/my_icons.dart';
@@ -28,27 +29,16 @@ class DayLogCard extends StatelessWidget {
         children: [
           Text(
             formatDate(dayLog.date),
-            style: Theme.of(context).textTheme.titleMedium,
+            style: Get.theme.textTheme.titleMedium,
           ),
           Gap(INNER_CARD_GAP_MEDIUM),
-          _DayLogFieldsAndTagsRenderer(dayLog: dayLog),
+          _fieldsAndTagsSection(dayLog),
         ],
       ),
     );
   }
-}
 
-//todo:move this widget to separate file
-//todo:create file with collection of terms' explanation, like 'Renderer'
-class _DayLogFieldsAndTagsRenderer extends StatelessWidget {
-  const _DayLogFieldsAndTagsRenderer({
-    required this.dayLog,
-  });
-
-  final DayLog dayLog;
-  //todo:explain in file allowed sizes of widget's code, spicies of widgets
-  @override
-  Widget build(BuildContext context) {
+  Widget _fieldsAndTagsSection(DayLog dayLog) {
     return Row(
       children: [
         Expanded(

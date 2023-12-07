@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:life_log_2/app_logical_parts/day_log//day_log_list_tab/day_log_list_tab.dart';
+import 'package:life_log_2/home/day_logs_view_tab/day_logs_view_tab.dart';
 import 'package:life_log_2/app_logical_parts/day_log/day_log_model.dart';
 import 'package:life_log_2/app_logical_parts/day_log/day_log_repository.dart';
 import 'package:life_log_2/utils/controller_status.dart';

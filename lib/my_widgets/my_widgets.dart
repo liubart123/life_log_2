@@ -5,17 +5,18 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:life_log_2/my_widgets/my_constants.dart';
 
 /// Creates AppBar that is intended to be used for screens in application
-PreferredSizeWidget createMyAppBar(String titleInAppBar, BuildContext context) {
+PreferredSizeWidget myAppBarWithTitle(String titleInAppBar) {
   return AppBar(
     elevation: 0,
     scrolledUnderElevation: 1,
-    shadowColor: Theme.of(context).colorScheme.surface,
+    shadowColor: Get.theme.colorScheme.surface,
     title: Text(
       titleInAppBar,
-      style: Theme.of(context).textTheme.titleLarge,
+      style: Get.theme.textTheme.titleLarge,
     ),
   );
 }
@@ -70,7 +71,7 @@ class _MyScrollableListState extends State<MyScrollableList> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).colorScheme.surface,
+      color: Get.theme.colorScheme.surface,
       child: RefreshIndicator(
         triggerMode: RefreshIndicatorTriggerMode.anywhere,
         onRefresh: widget.reloadCallback ?? () async {},
@@ -107,9 +108,8 @@ class MyCard extends StatelessWidget {
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             border: Border.all(
-              // ignore: avoid_redundant_argument_values
               width: 1,
-              color: Theme.of(context).colorScheme.outlineVariant,
+              color: Get.theme.colorScheme.outlineVariant,
             ),
             borderRadius: BorderRadius.circular(CARD_BORDER_RADIUS),
           ),
@@ -158,11 +158,10 @@ class MyChip extends StatelessWidget {
               margin: const EdgeInsets.only(left: 2),
               child: Text(
                 text,
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: textColor,
-                      fontWeight:
-                          icon == null ? FontWeight.w500 : FontWeight.w500,
-                    ),
+                style: Get.theme.textTheme.bodyMedium!.copyWith(
+                  color: textColor,
+                  fontWeight: icon == null ? FontWeight.w500 : FontWeight.w500,
+                ),
               ),
             ),
           ],
@@ -184,7 +183,7 @@ class MyProcessIndicator extends StatelessWidget {
       strokeAlign: BorderSide.strokeAlignInside,
       strokeWidth: 4,
       strokeCap: StrokeCap.square,
-      color: Theme.of(context).colorScheme.primary,
+      color: Get.theme.colorScheme.primary,
     );
   }
 }
@@ -221,16 +220,16 @@ class MyFABCollection extends StatelessWidget {
 ///
 /// Additionaly can have an icon.
 class MyFloatingButton extends StatelessWidget {
-  const MyFloatingButton.withIcon({
-    required this.iconData,
-    required this.onPressed,
-    super.key,
-  }) : child = null;
   const MyFloatingButton({
     required this.onPressed,
     super.key,
     this.child,
   }) : iconData = null;
+  const MyFloatingButton.withIcon({
+    required this.iconData,
+    required this.onPressed,
+    super.key,
+  }) : child = null;
   final Function() onPressed;
   final IconData? iconData;
   final Widget? child;
@@ -240,7 +239,7 @@ class MyFloatingButton extends StatelessWidget {
     return FloatingActionButton(
       //todo: enable feedback
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+      backgroundColor: Get.theme.colorScheme.surfaceVariant,
       onPressed: onPressed,
       elevation: 2,
       child: child ??
@@ -264,11 +263,10 @@ class MyErrorMessage extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(CARD_BORDER_RADIUS),
-        color: Theme.of(context).colorScheme.errorContainer,
+        color: Get.theme.colorScheme.errorContainer,
         border: Border.all(
           width: 1,
-          color:
-              Theme.of(context).colorScheme.onErrorContainer.withOpacity(0.4),
+          color: Get.theme.colorScheme.onErrorContainer.withOpacity(0.4),
         ),
       ),
       padding: EdgeInsets.all(CARD_PADDING),
@@ -277,16 +275,16 @@ class MyErrorMessage extends StatelessWidget {
         children: [
           Icon(
             Icons.warning_amber_rounded,
-            color: Theme.of(context).colorScheme.onErrorContainer,
+            color: Get.theme.colorScheme.onErrorContainer,
             size: 35,
           ),
           const Gap(2),
           Text(
             message,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.onErrorContainer,
-                ),
+            style: Get.theme.textTheme.labelLarge!.copyWith(
+              color: Get.theme.colorScheme.onErrorContainer,
+            ),
           ),
         ],
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:life_log_2/app_logical_parts/day_log/SingleDayLogEditScreen/bloc/day_log_edit_bloc.dart';
 import 'package:life_log_2/app_logical_parts/day_log/day_log_repository.dart';
 import 'package:life_log_2/my_widgets/my_constants.dart';
@@ -70,10 +71,7 @@ class DayLogEditPage extends StatelessWidget {
                 childForScaffold = DayLogEditWidget(state);
               }
               return Scaffold(
-                appBar: createMyAppBar(
-                  'Day Log',
-                  context,
-                ),
+                appBar: myAppBarWithTitle('Day Log'),
                 body: childForScaffold,
                 floatingActionButton: MyFABCollection(
                   fabs: [
@@ -125,7 +123,7 @@ class DayLogEditWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     logDebug('DayLogEditWidget build');
     return Container(
-      color: Theme.of(context).colorScheme.surface,
+      color: Get.theme.colorScheme.surface,
       padding: EdgeInsets.all(CARD_MARGIN + CARD_PADDING),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
