@@ -1,39 +1,54 @@
 part of 'day_log_edit_bloc.dart';
 
 class DayLogEditState extends Equatable {
-  final int dayLogId;
-  final DayLog? dayLog;
+  final int? dayLogId;
+  final MyInputResult<DateTime> sleepStart;
+  final MyInputResult<DateTime> sleepEnd;
+  final MyInputResult<Duration> sleepDuration;
+  final MyInputResult<Duration> deepSleepDuration;
+  final EInputFormStatus formStatus;
 
-  DayLogEditState({
-    required this.dayLogId,
-    this.dayLog,
+  const DayLogEditState({
+    this.dayLogId,
+    this.sleepStart = const MyInputResult(),
+    this.sleepEnd = const MyInputResult(),
+    this.sleepDuration = const MyInputResult(),
+    this.deepSleepDuration = const MyInputResult(),
+    this.formStatus = EInputFormStatus.initialLoading,
   });
 
+  DayLogEditState copyWith({
+    MyInputResult<DateTime>? sleepStart,
+    MyInputResult<DateTime>? sleepEnd,
+    MyInputResult<Duration>? sleepDuration,
+    MyInputResult<Duration>? deepSleepDuration,
+    EInputFormStatus? formStatus,
+  }) {
+    return DayLogEditState(
+      dayLogId: 2,
+      sleepStart: sleepStart ?? this.sleepStart,
+      sleepEnd: sleepEnd ?? this.sleepEnd,
+      sleepDuration: sleepDuration ?? this.sleepDuration,
+      deepSleepDuration: deepSleepDuration ?? this.deepSleepDuration,
+      formStatus: formStatus ?? this.formStatus,
+    );
+  }
+
+  List<MyInputResult> GetInputsCollection() {
+    return [sleepStart, sleepEnd, sleepDuration, deepSleepDuration];
+  }
+
   @override
-  List<Object> get props => [dayLogId, dayLog ?? {}];
+  List<Object> get props =>
+      [sleepStart, sleepEnd, sleepDuration, deepSleepDuration, formStatus];
+
+  bool isValid() {
+    return !GetInputsCollection().any((element) => !element.IsValid());
+  }
 }
 
-final class InitialLoadingOfDayLog extends DayLogEditState {
-  InitialLoadingOfDayLog({required super.dayLogId});
-}
-
-final class LoadingOfDayLog extends DayLogEditState {
-  LoadingOfDayLog({required super.dayLogId, super.dayLog});
-}
-
-final class IdleState extends DayLogEditState {
-  final DateTime lastUpdate;
-  IdleState(this.lastUpdate, {required super.dayLogId, required super.dayLog});
-
-  @override
-  List<Object> get props => [dayLogId, dayLog ?? {}, lastUpdate];
-}
-
-final class ErrorReturnedState extends DayLogEditState {
-  final String? errorMessage;
-
-  ErrorReturnedState({
-    this.errorMessage,
-    required super.dayLogId,
-  });
+class ErrorState extends DayLogEditState {
+  final String errorMessage;
+  final bool isFatal;
+  const ErrorState(this.errorMessage, {this.isFatal = false});
 }

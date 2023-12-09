@@ -1,209 +1,180 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:life_log_2/app_logical_parts/day_log/DayLogModel.dart';
-import 'package:life_log_2/app_logical_parts/day_log/DayLogRepository.dart';
+import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:life_log_2/app_logical_parts/day_log/SingleDayLogEditScreen/bloc/day_log_edit_bloc.dart';
+import 'package:life_log_2/app_logical_parts/day_log/day_log_repository.dart';
+import 'package:life_log_2/my_widgets/my_constants.dart';
+import 'package:life_log_2/my_widgets/my_icons.dart';
+import 'package:life_log_2/my_widgets/my_input_widgets.dart';
 import 'package:life_log_2/my_widgets/my_widgets.dart';
-import 'package:life_log_2/utils/StringFormatters.dart';
+import 'package:life_log_2/utils/InputForm.dart';
+import 'package:loggy/loggy.dart';
 
-class DayLogEditScreen extends StatelessWidget {
-  final int dayLogId;
-  const DayLogEditScreen({
-    super.key,
+/// Provides full-screen page for editing DayLog with given [dayLogId]
+class DayLogEditPage extends StatelessWidget {
+  const DayLogEditPage({
     required this.dayLogId,
+    super.key,
   });
+  final int dayLogId;
 
   @override
   Widget build(BuildContext context) {
-    return MyRepositoryProviders(
+    logDebug('DayLogEditPage build');
+    return DayLogRepositoryProvider(
       child: BlocProvider(
-        create: ((context) {
+        create: (context) {
           return DayLogEditBloc(
             context.read<DayLogRepository>(),
             dayLogId,
           )..add(
               LoadInitialDayLog(),
             );
-        }),
-        child: BlocBuilder<DayLogEditBloc, DayLogEditState>(builder: (
-          BuildContext context,
-          DayLogEditState state,
-        ) {
-          Widget childForScaffold;
-          if (state is InitialLoadingOfDayLog) {
-            childForScaffold = const Center(
-              child: const MyProgressIndicator(),
-            );
-          } else if (state is IdleState) {
-            childForScaffold = DayLogEditWidget(
-              dayLog: state.dayLog!,
-            );
-          } else if (state is LoadingOfDayLog) {
-            childForScaffold = const Center(
-              child: const MyProgressIndicator(),
-            );
-          } else if (state is ErrorReturnedState) {
-            childForScaffold = const Center(
-              child: const CardWithErrorMessage(
-                  erorrMessage:
-                      'My Error message:\nAwesome stacktrace for error'),
-            );
-          } else
-            childForScaffold = Center(child: Text("Unhalded state"));
+        },
+        child: BlocListener<DayLogEditBloc, DayLogEditState>(
+          listener: (context, state) {
+            if (state is ErrorState) {
+              if (state.isFatal) Navigator.pop(context);
 
-          return Scaffold(
-            appBar: CreateMyAppBar(
-              'Day Log Edit',
-              context,
-            ),
-            body: childForScaffold,
-            floatingActionButton: MyColumnOfFloatingWidgets(
-              FABs: [
-                MyFloatingButton(
-                  iconData: Icons.save_as_rounded,
-                  onPressed: () {
-                    print("FAB pressed");
-                    //context.read<DayLogEditBloc>().add(UpdateDayLogAfterEditing());
-                  },
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(content: Text(state.errorMessage)),
+                );
+            }
+            if (!state.isValid()) {
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  const SnackBar(content: Text('Invalid...')),
+                );
+            }
+          },
+          child: BlocBuilder<DayLogEditBloc, DayLogEditState>(
+            builder: (
+              BuildContext context,
+              DayLogEditState state,
+            ) {
+              logDebug(
+                // ignore: lines_longer_than_80_chars
+                'Building BlocBuilder for DayLogEdit:${state.formStatus}:${state.formStatus.hashCode}',
+              );
+              Widget? childForScaffold;
+              if (state.formStatus == EInputFormStatus.initialLoading) {
+                childForScaffold = const Center(
+                  child: MyProcessIndicator(),
+                );
+              } else if (state.formStatus == EInputFormStatus.idleDirty ||
+                  state.formStatus == EInputFormStatus.idleRelevant ||
+                  state.formStatus == EInputFormStatus.loading) {
+                childForScaffold = DayLogEditWidget(state);
+              }
+              return Scaffold(
+                appBar: myAppBarWithTitle('Day Log'),
+                body: childForScaffold,
+                floatingActionButton: MyFABCollection(
+                  fabs: [
+                    if (state.formStatus != EInputFormStatus.loading &&
+                        state.formStatus != EInputFormStatus.initialLoading)
+                      MyFloatingButton.withIcon(
+                        iconData: Icons.save_as_rounded,
+                        onPressed: () {
+                          logDebug('FAB pressed: ${state.sleepStart.value}');
+                          context.read<DayLogEditBloc>().add(SaveDayLog());
+                        },
+                      )
+                    else
+                      MyFloatingButton(
+                        child: const MyProcessIndicator(),
+                        onPressed: () {
+                          logDebug('FAB pressed: ${state.sleepStart.value}');
+                          context.read<DayLogEditBloc>().add(SaveDayLog());
+                        },
+                      ),
+                    // MyFloatingButton(
+                    //   iconData: Icons.abc_outlined,
+                    //   onPressed: () {
+                    //     logDebug("FAB pressed");
+                    //     //context.read<DayLogEditBloc>().add(UpdateDayLogAfterEditing());
+                    //   },
+                    // ),
+                  ],
                 ),
-              ],
-            ),
-          );
-        }),
+              );
+            },
+          ),
+        ),
       ),
     );
   }
 }
 
+///Form with fields for editing DayLog
 class DayLogEditWidget extends StatelessWidget {
-  final DayLog dayLog;
-  const DayLogEditWidget({
-    Key? key,
-    required this.dayLog,
-  }) : super(key: key);
+  const DayLogEditWidget(
+    this.dayLogState, {
+    super.key,
+  });
+
+  final DayLogEditState dayLogState;
 
   @override
   Widget build(BuildContext context) {
+    logDebug('DayLogEditWidget build');
     return Container(
+      color: Get.theme.colorScheme.surface,
+      padding: EdgeInsets.all(CARD_MARGIN + CARD_PADDING),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          MyCard(
-            margin: EdgeInsets.fromLTRB(6, 6, 6, 0),
-            child: Center(
-              child: SizedBox.square(
-                dimension: 100,
-                child: Text(
-                  'gavno',
-                ),
-              ),
-            ),
+          MyDateTimeInputField(
+            label: 'Sleep Start',
+            icon: ICON_SLEEP_START,
+            initialValue: dayLogState.sleepStart.value,
+            validValueHandler:
+                _createValidValueHanlder(context, dayLogState.sleepStart),
           ),
-          MyCard(
-            margin: EdgeInsets.fromLTRB(6, 6, 6, 0),
-            child: Center(
-              child: SizedBox.square(
-                dimension: 100,
-                child: Text(
-                  'gavno',
-                ),
-              ),
-            ),
+          Gap(INNER_CARD_GAP_SMALL),
+          MyDateTimeInputField(
+            label: 'Sleep End',
+            icon: ICON_SLEEP_START,
+            initialValue: dayLogState.sleepEnd.value,
+            validValueHandler:
+                _createValidValueHanlder(context, dayLogState.sleepEnd),
           ),
-          // Card(
-          //   child: Container(
-          //     padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
-          //     child: Column(
-          //       children: [
-          //         Row(
-          //           mainAxisAlignment: MainAxisAlignment.start,
-          //           children: [
-          //             Expanded(
-          //               child: Container(
-          //                 // child: Text("asd"),
-          //                 child: TextField(
-          //                   canRequestFocus: false,
-          //                   // obscureText: true,
-          //                   decoration: InputDecoration(
-          //                     border: OutlineInputBorder(),
-          //                     labelText: 'Password',
-          //                   ),
-          //                 ),
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //         Row(
-          //           mainAxisAlignment: MainAxisAlignment.start,
-          //           children: [
-          //             Expanded(
-          //               child: Container(
-          //                 // child: Text("asd"),
-          //                 child: TextField(
-          //                   // obscureText: true,
-          //                   decoration: InputDecoration(
-          //                     border: OutlineInputBorder(),
-          //                     labelText: 'Password',
-          //                   ),
-          //                 ),
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //         Row(
-          //           children: [
-          //             Expanded(
-          //               child: MyDatePicker(
-          //                 fieldValueToDisplay: dayLog.sleepStartTime,
-          //                 fieldNameToDisplay: "Fell asleep",
-          //                 actiononDatePick: (newValue) {
-          //                   dayLog.sleepStartTime = newValue;
-          //                   context.read<DayLogEditBloc>().add(FieldUpdate());
-          //                 },
-          //               ),
-          //             ),
-          //             SizedBox.square(
-          //               dimension: 8,
-          //             ),
-          //             Expanded(
-          //                 child: MyDatePicker(
-          //               fieldValueToDisplay: dayLog.sleepEndTime,
-          //               fieldNameToDisplay: "Woke up",
-          //               actiononDatePick: (newValue) {},
-          //             )),
-          //           ],
-          //         ),
-          //         Row(
-          //           children: [
-          //             Expanded(
-          //               child: MyDatePicker(
-          //                 fieldValueToDisplay: dayLog.sleepStartTime,
-          //                 fieldNameToDisplay: "Fell asleep",
-          //                 actiononDatePick: (newValue) {
-          //                   dayLog.sleepStartTime = newValue;
-          //                   context.read<DayLogEditBloc>().add(FieldUpdate());
-          //                 },
-          //               ),
-          //             ),
-          //             SizedBox.square(
-          //               dimension: 8,
-          //             ),
-          //             Expanded(
-          //                 child: MyDatePicker(
-          //               fieldValueToDisplay: dayLog.sleepEndTime,
-          //               fieldNameToDisplay: "Woke up",
-          //               actiononDatePick: (newValue) {},
-          //             )),
-          //           ],
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
+          Gap(INNER_CARD_GAP_SMALL),
+          MyDurationInputField(
+            label: 'Sleep Duration',
+            icon: ICON_SLEEP_START,
+            initialValue: dayLogState.sleepDuration.value,
+            validValueHandler:
+                _createValidValueHanlder(context, dayLogState.sleepDuration),
+          ),
+          Gap(INNER_CARD_GAP_SMALL),
+          MyDurationInputField(
+            label: 'Deep Sleep Duration',
+            icon: ICON_SLEEP_START,
+            initialValue: dayLogState.deepSleepDuration.value,
+            validValueHandler: _createValidValueHanlder(
+                context, dayLogState.deepSleepDuration),
+          ),
         ],
       ),
     );
+  }
+
+  Function(T) _createValidValueHanlder<T>(
+    BuildContext context,
+    MyInputResult<T> inputField,
+  ) {
+    return (newValue) {
+      context.read<DayLogEditBloc>().add(
+            ChangeFieldInDayLogForm<T>(
+              inputField,
+              newValue,
+            ),
+          );
+    };
   }
 }

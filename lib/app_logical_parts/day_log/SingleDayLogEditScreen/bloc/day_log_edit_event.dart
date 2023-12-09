@@ -7,12 +7,11 @@ class DayLogEditEvent extends Equatable {
 
 final class LoadInitialDayLog extends DayLogEditEvent {}
 
-final class FieldUpdate extends DayLogEditEvent {}
+final class ChangeFieldInDayLogForm<T> extends DayLogEditEvent {
+  final MyInputResult<T> changedInput;
+  final T newValue;
 
-final class UpdateDayLogAfterEditing extends DayLogEditEvent {}
+  ChangeFieldInDayLogForm(this.changedInput, this.newValue) : super();
+}
 
-final class LoadDayLogAfterEditing extends DayLogEditEvent {}
-
-final class DeleteDayLog extends DayLogEditEvent {}
-
-final class AddTagToDayLog extends DayLogEditEvent {}
+final class SaveDayLog extends DayLogEditEvent {}

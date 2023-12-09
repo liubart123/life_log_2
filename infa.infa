@@ -1,41 +1,37 @@
-Terms:
-    static text - hardcoded text, f.e. text in buttons, menus, field labels.
-    dynamic text - text that can be changes by user actions - field values.
 
-Usage of text styles:
-    Headline - emphasize static text
-        Medium - title at the top of screen, like 'Home page'
-    Title - emphasize dynamic text  
-        Large - Title of cards in scrollable list of cards
-    Body - dynamic&static text used to display data 
-        Medium - values and labels for fields
-    Label - static text for action elements
-        Medium - text for buttons, menu items
-        Large - text for FAB
+temp:   
+    system for setting and resetting error messages in controller
+    show snackbars
+    way to initialize controller single time and use it
+    look how GetX binding can be used
 
 
-tasks
-    edit Screen
-        card with input fields
-            create widget - elevatedCard on surface
-            create widget for inputs
-                text field
-                    update bloc state on input's update
-                date
-                dateTime
-                time range
-                multiline text
-            split input in columns
-            refactor existing widget for splitting readonly fields into columns
-        card for long descripiton text
-        card with tags
-            create widget - chip with text
-            wrap widget for displaying tags
-            color peaking depending on tag
-            icon button with each chip
-            change border/fill mode for chips
-        FAB
-            save dayLog
-            add tag
-    GENERAL
-        lags on view list screen
+taskesosses:
+    refactor
+        change bloc with GetX
+        snackbars change to use GetX
+        refactor naming of widgets
+        refactor file with TextStyles usage information
+    Edit Screen:
+        block saving FAB on validation errors
+        add loading indicator for FABs while interacting with server 
+    implement multiple FABs
+    test fast clicking on dayLog card and returning back to list, multiple times
+    optimization issues
+
+tasks2:
+    check if in listTab tabWidget itself is rebuilt when status of controller is changed
+    create new system of naming widgets
+        create categories of widgets by logical level of their usage, like 'tab', 'tabContent'...
+    tabgContent widgets like errorMessage or processIndicator should be common widgets
+
+widgets naming:
+    see termas used in UI and UI elements, like scaffold.
+    name of widget should comprehensively show place and aim of usage of the widget 
+
+
+
+                
+
+
+

@@ -1,0 +1,49 @@
+Widget implementing principles:
+    Widgets can be defined as:
+        - helper function inside parent widget:
+            Used when
+                - this widget is called directly from parent widget's build() funciton
+                - its name clearly defines the place where this widget is called/used.        
+            Shouldn't call other helper widgets defined in the same file
+            Main goal of helper widget's name is to define place/conditions where this widget is used
+            Answers question 'Where/When to use it?'
+        - separate class in separate file
+            Used when helper widget cannot be used
+            Main goal of file widget's name is to define functionality of the widget
+            Main question 'What does it do?'
+            Can be placed inside folder with parent widget, to simplify its name by putting it in context of parent widget
+    Don't use long functions - freely fit in one screen 
+    Minimize number of inner widget's elements (functions/helprWidgets) used outside main build() function. Names of inner widget's elments should define place/conditions in main widget where these elements are used/called
+    Widget name: standard convention for class Names - adjectives + nouns, ended with name of basic class or main essence of the class
+
+
+    
+Terms used in widget names:
+    Screen - widget that builds scaffold widget, appBar and maybe floating widgets
+    Tab - single tab for TabController
+        <WidgetName>Tab
+    List - collection of elements. Usually vertical scrollable list
+    Builder - creates widget, that requires much configuration and logic, so it's better to create a new widget just for configuration and logic. 
+        <Name of builded widget>Builder
+    Card - visually separates its content. Usually takes almost whole width of the screen
+    todo: refactor widget names to use cardSection 
+    CardSection - some part of card. Usually takes all width of the card.
+    Body - main visual component of more complex widget. Usually complex widget contains logic to display appropriate bodies for specific conditions or with specific configuration. For example, depending on controller state (loading, idle) tab will display different tabBodies.
+    Controller - dart class responsible for business logic, interaction with API and state of widgets. Single Controller can be used in multiple widgets. Controller can be created by highest using widget in hierarchy.
+        <WidgetName>Controller 
+    Chip - short single line text wrapped into rounded container (filled or bordered). Used as element of collections of chips, to emphasize wrapped text within collection. Example of usage - tags or filter indicators
+    Indicator/Process indicator
+
+common widgets - widgets that can be used in various parts of application. Usually don't have complicated logic. Should be defined in my_widgets folder. Can have 'My_' prefix if it makes easier to distinguish standard/lib widget and custom widget, created for the app. 
+
+Model widget - widget that provides interface for interaction with single or multiple logical models.
+    Types of model widgets:
+        - View - displays model's data
+        - Edit - dispalys and edit model's data
+    Naming 
+        <Model name><Widget type><Widget Name>
+        Can be added 's' ending of Model name, in case of using collection of model instances
+
+
+
+
