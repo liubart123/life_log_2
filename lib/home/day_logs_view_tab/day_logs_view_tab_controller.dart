@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
-import 'package:life_log_2/home/day_logs_view_tab/day_logs_view_tab.dart';
 import 'package:life_log_2/app_logical_parts/day_log/day_log_model.dart';
 import 'package:life_log_2/app_logical_parts/day_log/day_log_repository.dart';
+import 'package:life_log_2/home/day_logs_view_tab/day_logs_view_tab.dart';
 import 'package:life_log_2/utils/controller_status.dart';
 import 'package:life_log_2/utils/log_utils.dart';
 import 'package:mutex/mutex.dart';
@@ -32,15 +32,16 @@ class DayLogsViewTabController extends GetxController {
       MyLogger.controller2('$runtimeType loading initial page...');
       await pageLoadingInProcess.acquire();
       updateStatus(stateDuringLoading);
-
       final pageOfDayLogs = await repository.getAllDayLogs();
-
       dayLogList = pageOfDayLogs.dayLogList;
       noMorePagesToLoad = pageOfDayLogs.noMorePagesToLoad;
       updateStatus(EControllerState.idle);
     } catch (ex) {
       MyLogger.error('$runtimeType initial page loading error:$ex');
-      _setErrorMessage(ex.toString());
+      _setErrorMessage(
+        ex.toString(),
+        isFatal: true,
+      );
     } finally {
       MyLogger.controller2('$runtimeType loading initial page end.');
       pageLoadingInProcess.release();
@@ -113,8 +114,8 @@ class DayLogsViewTabController extends GetxController {
     update();
   }
 
-  void _setErrorMessage(String message) {
-    state = EControllerState.idle;
+  void _setErrorMessage(String message, {bool isFatal = false}) {
+    state = isFatal ? EControllerState.fatalError : EControllerState.idle;
     errorMessage = message;
     onErrorCallback.forEach((callback) => callback(errorMessage!));
     update();

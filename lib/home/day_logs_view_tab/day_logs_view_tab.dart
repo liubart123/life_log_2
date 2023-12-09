@@ -32,7 +32,7 @@ class DayLogsViewTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<DayLogsViewTabController>(
       initState: (builderState) {
-        _initializeControllerIfNeed();
+        _initializeControllerIfNeeded();
         _setEventHandlersOnController();
       },
       dispose: (state) {
@@ -56,7 +56,7 @@ class DayLogsViewTab extends StatelessWidget {
     );
   }
 
-  void _initializeControllerIfNeed() {
+  void _initializeControllerIfNeeded() {
     Get.lazyPut(() {
       MyLogger.widget1('$runtimeType creating controller...');
       final controller = DayLogsViewTabController()..loadInitialPage();
