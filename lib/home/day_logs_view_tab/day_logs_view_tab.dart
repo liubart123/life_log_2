@@ -16,7 +16,6 @@ import 'package:life_log_2/utils/StringFormatters.dart';
 import 'package:life_log_2/utils/controller_status.dart';
 import 'package:life_log_2/utils/log_utils.dart';
 import 'package:life_log_2/utils/my_snackbar.dart';
-import 'package:loggy/loggy.dart';
 import 'package:structures/structures.dart';
 
 /// Pulls pages of DayLogs and displayis them as a scrollable list.

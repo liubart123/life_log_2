@@ -1,14 +1,15 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:postgres/postgres.dart';
 
 class MyDatabseConnector {
   static Future<Connection> openDatabaseConnection() async {
     final conn = Connection.open(
       Endpoint(
-        host: '192.168.0.102',
-        port: 5433,
-        database: 'mydatabase',
-        username: 'myuser',
-        password: 'mypassword',
+        host: dotenv.get('HOST'),
+        port: int.parse(dotenv.get('PORT')),
+        database: dotenv.get('DATABASE'),
+        username: dotenv.get('USERNAME'),
+        password: dotenv.get('PASSWORD'),
       ),
       settings: const ConnectionSettings(
         sslMode: SslMode.disable,

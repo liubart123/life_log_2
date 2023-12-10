@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:life_log_2/app_logical_parts/day_log/day_log_repository.dart';
 import 'package:life_log_2/app_theme.dart';
 import 'package:life_log_2/home/home_tabs_screen.dart';
 import 'package:life_log_2/utils/log_utils.dart';
-import 'package:loggy/loggy.dart';
 
-void main() {
-  Loggy.initLoggy(
-    logPrinter: const PrettyPrinter(),
-  );
-  // debugRepaintRainbowEnabled = true;
+void main() async {
+  initializeEnvVariables();
+  _initializeMainDependencies();
   runApp(const MyApp());
+}
+
+Future<void> initializeEnvVariables() async {
+  await dotenv.load(fileName: '.env');
+}
+
+void _initializeMainDependencies() {
+  MyLogger.widget1('RootWidget dependencies initializing...');
+  throw UnimplementedError();
 }
 
 class MyApp extends StatelessWidget {
@@ -21,17 +27,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     MyLogger.testColors();
     MyLogger.widget1('RootWidget build');
-    _initializeMainDependencies();
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: createAppTheme(context),
       home: const HomeTabsScreen(),
     );
-  }
-
-  void _initializeMainDependencies() {
-    throw UnimplementedError();
-    MyLogger.widget1('RootWidget dependencies initializing...');
   }
 }

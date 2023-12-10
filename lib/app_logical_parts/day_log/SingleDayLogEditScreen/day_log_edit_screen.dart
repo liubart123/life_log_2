@@ -8,7 +8,6 @@ import 'package:life_log_2/my_widgets/my_icons.dart';
 import 'package:life_log_2/my_widgets/my_input_widgets.dart';
 import 'package:life_log_2/my_widgets/my_widgets.dart';
 import 'package:life_log_2/utils/InputForm.dart';
-import 'package:loggy/loggy.dart';
 
 ///Form with fields for editing DayLog
 class DayLogEditWidget extends StatelessWidget {
@@ -18,7 +17,6 @@ class DayLogEditWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    logDebug('DayLogEditWidget build');
     return Container(
       color: Get.theme.colorScheme.surface,
       padding: EdgeInsets.all(CARD_MARGIN + CARD_PADDING),
