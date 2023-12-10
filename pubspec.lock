@@ -29,10 +29,10 @@ packages:
     dependency: transitive
     description:
       name: buffer
-      sha256: "8962c12174f53e2e848a6acd7ac7fd63d8a1a6a316c20c458a832d87eba5422a"
+      sha256: "94f60815065a8f0fd4f05be51faf86cf86519327e039d5c2aac72e1d1cc1dad4"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.0"
+    version: "1.2.2"
   characters:
     dependency: transitive
     description:
@@ -97,14 +97,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.5"
-  executor:
-    dependency: transitive
-    description:
-      name: executor
-      sha256: "87d935b31b2bdf7fe2af0b77dd8ffe8864eaade25715e9c68bc49497e48c9851"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.3"
   fake_async:
     dependency: transitive
     description:
@@ -387,21 +379,13 @@ packages:
     source: hosted
     version: "1.5.1"
   postgres:
-    dependency: transitive
-    description:
-      name: postgres
-      sha256: "98457afc06dd3f9d6892c178ea03ca9659e454107c9be90111e607691998d70d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.6.2"
-  postgres_pool:
     dependency: "direct main"
     description:
-      name: postgres_pool
-      sha256: "589b7aceb97e061db7e78aff6d6e988320aa2a43f232340b51aa2d9b922acacc"
+      name: postgres
+      sha256: "0eedfad91b1c847e45cf58e64db28305391cb9f59b981ca77a871662e4d4e444"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.6"
+    version: "3.0.3"
   process:
     dependency: transitive
     description:
@@ -418,14 +402,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.5"
-  retry:
-    dependency: transitive
-    description:
-      name: retry
-      sha256: "822e118d5b3aafed083109c72d5f484c6dc66707885e07c0fbcb8b986bba7efc"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.2"
   sasl_scram:
     dependency: transitive
     description:

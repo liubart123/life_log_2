@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:life_log_2/app_logical_parts/day_log/day_log_data_provider.dart';
 import 'package:life_log_2/app_logical_parts/day_log/day_log_repository.dart';
 import 'package:life_log_2/app_theme.dart';
 import 'package:life_log_2/home/home_tabs_screen.dart';
@@ -32,8 +31,7 @@ class MyApp extends StatelessWidget {
   }
 
   void _initializeMainDependencies() {
+    throw UnimplementedError();
     MyLogger.widget1('RootWidget dependencies initializing...');
-    final dayLogDataProvider = Get.put(DayLogDataProvider());
-    Get.put(DayLogRepository(dayLogDataProvider));
   }
 }
