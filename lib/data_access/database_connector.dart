@@ -1,7 +1,7 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:postgres/postgres.dart';
 
-class MyDatabseConnector {
+class DatabaseConnector {
   static Future<Connection> openDatabaseConnection() async {
     final conn = Connection.open(
       Endpoint(

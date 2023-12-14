@@ -5,7 +5,7 @@ import 'package:life_log_2/main.dart';
 void main() async {
   await initializeEnvVariables();
   test('Basic database connection', () async {
-    final connection = await MyDatabseConnector.openDatabaseConnection();
+    final connection = await DatabaseConnector.openDatabaseConnection();
     expect(connection.isOpen, true);
   });
 }

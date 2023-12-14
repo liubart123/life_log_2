@@ -3,10 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:life_log_2/app_logical_parts/day_log/day_log_model.dart';
 import 'package:life_log_2/utils/DateTimeUtils.dart';
 import 'package:life_log_2/utils/StringFormatters.dart';
+import 'package:postgres/postgres.dart';
 
 /// Provides high-level functions to interact with DayLogs from database
 class DayLogRepository {
-  DayLogRepository();
+  DayLogRepository(this.connection);
+  Connection connection;
 
   /// Returns limited amount of days from DB orderd by date. If maxDateFilter is
   /// set then returns only days earlier then given date.
