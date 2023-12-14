@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:life_log_2/my_widgets/my_constants.dart';
+import 'package:life_log_2/my_flutter_elements/my_constants.dart';
 
 /// Creates AppBar that is intended to be used for screens in application
 PreferredSizeWidget myAppBarWithTitle(String titleInAppBar) {
