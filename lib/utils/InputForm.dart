@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+//todo:refactor
 final class MyInputResult<T> extends Equatable {
   final T? value;
   final String? errorMessage;

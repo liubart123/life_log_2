@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 
+//todo:refactor
 DateTime parseDateTime(String inputString,
     {String format = "yyyy-MM-dd HH:mm"}) {
   final formatter = DateFormat(format);

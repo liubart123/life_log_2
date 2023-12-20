@@ -2,6 +2,7 @@
 
 import 'package:intl/intl.dart';
 
+//todo:refactor
 String formatDuration(Duration? duration) {
   if (duration == null) return "";
   int hours = duration.inHours;
