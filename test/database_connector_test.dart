@@ -7,7 +7,7 @@ void main() async {
   await initializeTestEnvVariables();
   test('Basic database connection', () async {
     final connection =
-        await DatabaseConnector.openDatabaseConnectionUsingEnvConnection();
+        await DatabaseConnector.openDatabaseConnectionUsingEnvConfiguration();
     expect(connection.isOpen, true);
   });
 }

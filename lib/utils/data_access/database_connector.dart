@@ -2,7 +2,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:postgres/postgres.dart';
 
 class DatabaseConnector {
-  static Future<Connection> openDatabaseConnectionUsingEnvConnection() async {
+  static Future<Connection>
+      openDatabaseConnectionUsingEnvConfiguration() async {
     final conn = Connection.open(
       Endpoint(
         host: dotenv.get('HOST'),

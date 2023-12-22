@@ -47,7 +47,7 @@ Future<void> main() async {
   );
 
   final connection =
-      await DatabaseConnector.openDatabaseConnectionUsingEnvConnection();
+      await DatabaseConnector.openDatabaseConnectionUsingEnvConfiguration();
   final categoriesConfiguration =
       DailyActivityCategoriesConfiguration(overridenCategories: [category]);
   final dailyActivityBuilder = DailyActivityBuilder(categoriesConfiguration);
