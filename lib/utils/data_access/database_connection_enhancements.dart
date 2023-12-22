@@ -1,10 +1,9 @@
-import 'package:life_log_2/domain/daily_activity/daily_activity.dart';
 import 'package:life_log_2/utils/data_access/database_datatypes_converting.dart';
 import 'package:postgres/postgres.dart';
 
 dynamic _convertDynamicObjectToDatabaseObject(dynamic input) {
   if (input is Duration) {
-    return convertDurationToString(input);
+    return convertDurationToPostgresString(input);
   } else if (input is DateTime) {
     return input;
   }
