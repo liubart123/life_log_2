@@ -5,7 +5,8 @@ import 'package:intl/intl.dart';
 /// Levels mean importance of logged message, the higher - the less important.
 ///
 /// controllerX: 1st level - important rare actions of controllers:
-/// initialization, slow operations. 2nd level - for other logs
+/// initialization, slow operations.
+/// 2nd level - for other logs
 ///
 /// widgetX: logs for lifecycle of widget. 1 - tabs/screen widgets
 /// and higher in hierarchy. 2 - Intermediate widgets or not important
@@ -21,10 +22,6 @@ import 'package:intl/intl.dart';
 class MyLogger {
   static DateTime lastLogTime = DateTime.now();
 
-  static void debug(String message) {
-    developer.log('message');
-  }
-
   static void _print(String color, String message) {
     final messageToLog = StringBuffer();
     final now = DateTime.now();
@@ -37,6 +34,10 @@ class MyLogger {
       ..write('\x1B${color}m$message\x1B[0m');
     developer.log(messageToLog.toString());
     lastLogTime = now;
+  }
+
+  static void debug(String message) {
+    _print('[38;5;7', message);
   }
 
   static void error(String message) {
@@ -90,5 +91,6 @@ class MyLogger {
     input1('input1');
     input2('input2');
     trace('trace');
+    debug('debug');
   }
 }
