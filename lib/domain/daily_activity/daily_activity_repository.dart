@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:life_log_2/domain/daily_activity/daily_activity.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity_attribute.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity_builder.dart';
-import 'package:life_log_2/domain/daily_activity/daily_activity_categories_configuration.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity_specific_attributes.dart';
 import 'package:life_log_2/utils/data_access/database_connection_enhancements.dart';
 import 'package:postgres/postgres.dart';
@@ -11,12 +10,10 @@ import 'package:postgres/postgres.dart';
 class DailyActivityRepository {
   DailyActivityRepository(
     this.connection,
-    this.categoriesConfiguration,
     this.dailyActivityBuilder,
   );
   Connection connection;
   DailyActivityBuilder dailyActivityBuilder;
-  DailyActivityCategoriesConfiguration categoriesConfiguration;
 
   /// Creates or updates activity in datasource.
   Future<void> saveDailyActivity(DailyActivity source) async {

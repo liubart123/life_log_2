@@ -53,7 +53,6 @@ Future<void> main() async {
   final dailyActivityBuilder = DailyActivityBuilder(categoriesConfiguration);
   final repository = DailyActivityRepository(
     connection,
-    categoriesConfiguration,
     dailyActivityBuilder,
   );
   test(
