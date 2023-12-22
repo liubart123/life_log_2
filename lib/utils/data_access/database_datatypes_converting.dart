@@ -1,8 +1,3 @@
-import 'dart:convert';
-
-import 'package:intl/intl.dart';
-
-//todo:rename refactor
 String convertDurationToPostgresString(Duration duration) {
   final hours = duration.inHours;
   final minutes = duration.inMinutes.remainder(60);

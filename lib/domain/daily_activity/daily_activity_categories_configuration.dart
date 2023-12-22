@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:life_log_2/domain/daily_activity/daily_activity_category.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity_specific_attributes.dart';
 

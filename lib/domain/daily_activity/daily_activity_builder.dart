@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity_attribute.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity_categories_configuration.dart';

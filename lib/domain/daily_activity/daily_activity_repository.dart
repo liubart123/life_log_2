@@ -52,6 +52,22 @@ class DailyActivityRepository {
     return result;
   }
 
+  Future<List<DailyActivity>> readLatestDailyActivitiesNextPage(
+    DailyActivity previousPageEarliestDailyActivity,
+  ) async {
+    final selectResult =
+        await connection.selectFromFunction('select_daily_activity', [
+      previousPageEarliestDailyActivity.startTime,
+      previousPageEarliestDailyActivity.id,
+    ]);
+    final result = selectResult
+        .map(
+          _convertResultRowToDailyActivity,
+        )
+        .toList();
+    return result;
+  }
+
   Future<DailyActivity?> readDailyActivityById(int id) async {
     final selectResult =
         await connection.selectFromFunction('select_daily_activity', [id]);
