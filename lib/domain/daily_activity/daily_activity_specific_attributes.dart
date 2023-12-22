@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_equals_and_hash_code_on_mutable_classes
+
 import 'package:life_log_2/domain/daily_activity/daily_activity_attribute.dart';
 
 class IntDailyActivityAttribute extends DailyActivityAttribute {
@@ -12,10 +14,17 @@ class IntDailyActivityAttribute extends DailyActivityAttribute {
           source.label,
           source.value,
         );
+
   int value;
+
   @override
   IntDailyActivityAttribute clone() {
     return IntDailyActivityAttribute.clone(this);
+  }
+
+  @override
+  dynamic getValue() {
+    return value;
   }
 }
 
@@ -31,10 +40,17 @@ class DoubleDailyActivityAttribute extends DailyActivityAttribute {
           source.label,
           source.value,
         );
+
   double value;
+
   @override
   DoubleDailyActivityAttribute clone() {
     return DoubleDailyActivityAttribute.clone(this);
+  }
+
+  @override
+  dynamic getValue() {
+    return value;
   }
 }
 
@@ -46,10 +62,17 @@ class DurationDailyActivityAttribute extends DailyActivityAttribute {
   );
   DurationDailyActivityAttribute.clone(DurationDailyActivityAttribute source)
       : this(source.name, source.label, source.value);
+
   Duration value;
+
   @override
   DurationDailyActivityAttribute clone() {
     return DurationDailyActivityAttribute.clone(this);
+  }
+
+  @override
+  dynamic getValue() {
+    return value;
   }
 }
 
@@ -57,7 +80,7 @@ class EnumDailyActivityAttribute extends DailyActivityAttribute {
   EnumDailyActivityAttribute(
     super.name,
     super.label,
-    this.enumValueLabelPairs,
+    this.enumOptions,
     String stringValue,
   ) {
     setValue(stringValue);
@@ -67,23 +90,28 @@ class EnumDailyActivityAttribute extends DailyActivityAttribute {
           source.name,
           source.label,
           List.from(
-            source.enumValueLabelPairs.map(
+            source.enumOptions.map(
               EnumDailyActivityAttributeOption.clone,
             ),
           ),
           source.value.key,
         );
 
-  List<EnumDailyActivityAttributeOption> enumValueLabelPairs;
+  List<EnumDailyActivityAttributeOption> enumOptions;
   late EnumDailyActivityAttributeOption value;
 
   void setValue(String newValueKey) {
-    value = enumValueLabelPairs.firstWhere((x) => x.key == newValueKey);
+    value = enumOptions.firstWhere((x) => x.key == newValueKey);
   }
 
   @override
   EnumDailyActivityAttribute clone() {
     return EnumDailyActivityAttribute.clone(this);
+  }
+
+  @override
+  dynamic getValue() {
+    return value;
   }
 }
 
@@ -97,6 +125,16 @@ class EnumDailyActivityAttributeOption {
         );
   String key;
   String label;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is EnumDailyActivityAttributeOption &&
+          runtimeType == other.runtimeType &&
+          key == other.key;
+
+  @override
+  int get hashCode => key.hashCode;
 }
 
 class TagDailyActivityAttribute extends DailyActivityAttribute {
@@ -116,5 +154,10 @@ class TagDailyActivityAttribute extends DailyActivityAttribute {
   @override
   TagDailyActivityAttribute clone() {
     return TagDailyActivityAttribute.clone(this);
+  }
+
+  @override
+  dynamic getValue() {
+    return value;
   }
 }

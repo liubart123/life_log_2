@@ -1,11 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:life_log_2/data_access/database_connector.dart';
-import 'package:life_log_2/main.dart';
+import 'package:life_log_2/utils/data_access/database_connector.dart';
+
+import 'test_utils.dart';
 
 void main() async {
-  await initializeEnvVariables();
+  await initializeTestEnvVariables();
   test('Basic database connection', () async {
-    final connection = await DatabaseConnector.openDatabaseConnection();
+    final connection =
+        await DatabaseConnector.openDatabaseConnectionUsingEnvConnection();
     expect(connection.isOpen, true);
   });
 }

@@ -6,17 +6,17 @@ import 'package:life_log_2/home/home_tabs_screen.dart';
 import 'package:life_log_2/utils/log_utils.dart';
 
 void main() async {
-  await initializeEnvVariables();
+  await _initializeEnvVariables();
   await initializeDatabaseRelatedClassesForDI();
   runApp(const MyApp());
 }
 
-Future<void> initializeEnvVariables() async {
+Future<void> _initializeEnvVariables() async {
   await dotenv.load(fileName: '.env');
 }
 
 Future<void> initializeDatabaseRelatedClassesForDI() async {
-  MyLogger.widget1('_initializeDatabaseRelatedClassesForDI...');
+  MyLogger.debug('_initializeDatabaseRelatedClassesForDI...');
 }
 
 class MyApp extends StatelessWidget {

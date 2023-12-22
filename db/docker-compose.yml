@@ -15,8 +15,23 @@ services:
       - mynetwork2
     volumes:
       - postgra:/var/lib/postgresql/data
+  postgres-test:
+    image: postgres:latest
+    container_name: my-postgres-test-db
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5434:5432"
+    # network_mode: "host"
+    networks:
+      - mynetwork2
+    volumes:
+      - postgra-test:/var/lib/postgresql/data
 
 networks:
   mynetwork2:
 volumes:
   postgra:
+  postgra-test:

@@ -1,11 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity_builder.dart';
+import 'package:life_log_2/domain/daily_activity/daily_activity_categories_configuration.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity_category.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity_specific_attributes.dart';
 
 void main() {
   test(
-    'Building initial DailyActivity',
+    'Basic test of DailyActivityBuilder',
     () {
       //setup
       const subCategoryName = 'testSubCategory';
@@ -35,16 +36,19 @@ void main() {
         [subCategory],
       );
 
-      var buildedDailyActivity =
-          DailyActivityBuilder().buildInitialDailyActivity(
-        category,
-        subCategory,
+      final categoriesConfiguration =
+          DailyActivityCategoriesConfiguration(overridenCategories: [category]);
+      final activityBuilder = DailyActivityBuilder(categoriesConfiguration);
+
+      var buildedDailyActivity = activityBuilder.buildInitialDailyActivity(
+        category.name,
+        subCategory.name,
       );
 
       // check if common fields where initialized properly
       expect(
         DateTime.now()
-                .difference(buildedDailyActivity.dateTime)
+                .difference(buildedDailyActivity.startTime)
                 .inMilliseconds <
             1000,
         true,
@@ -80,7 +84,7 @@ void main() {
         (buildedDailyActivity.attributes
                     .firstWhere((x) => x.name == enumAttrName)
                 as EnumDailyActivityAttribute)
-            .enumValueLabelPairs
+            .enumOptions
             .length,
         2,
       );
@@ -88,7 +92,7 @@ void main() {
         (buildedDailyActivity.attributes
                     .firstWhere((x) => x.name == enumAttrName)
                 as EnumDailyActivityAttribute)
-            .enumValueLabelPairs[1]
+            .enumOptions[1]
             .key,
         enumOptions[1].key,
       );

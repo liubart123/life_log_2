@@ -5,14 +5,15 @@ class DailyActivity {
   DailyActivity(
     this.category,
     this.subCategory,
-    this.dateTime,
+    this.startTime,
     this.duration,
-    this.attributes,
-  );
-
+    this.attributes, {
+    this.id,
+  });
+  int? id;
   DailyActivityCategory category;
   DailyActivitySubCategory subCategory;
-  DateTime dateTime;
+  DateTime startTime;
   Duration duration;
   List<DailyActivityAttribute> attributes;
 }

@@ -4,4 +4,5 @@ abstract class DailyActivityAttribute {
   String name;
   String label;
   DailyActivityAttribute clone();
+  dynamic getValue();
 }
