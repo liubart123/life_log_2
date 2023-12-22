@@ -97,7 +97,7 @@ class DailyActivityRepository {
       row[0] as int?,
       row[1]! as String,
       row[2]! as String,
-      row[3]! as DateTime,
+      (row[3]! as DateTime).toLocal(),
       Duration(microseconds: (row[4]! as Interval).microseconds),
       row[5]! as Map<String, dynamic>,
     );

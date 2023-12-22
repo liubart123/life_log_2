@@ -22,7 +22,7 @@ class DailyActivityBuilder {
     final resultedActivity = DailyActivity(
       category,
       subCategory,
-      DateTime.now().toUtc(),
+      DateTime.now(),
       subCategory.defaultDuration,
       clonedAttributes,
     );

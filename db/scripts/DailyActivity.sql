@@ -4,7 +4,7 @@ create table daily_activity(
 	id serial primary key,
 	category varchar(255) not null,
 	subcategory varchar(255) not null,
-	start_time timestamp not null,
+	start_time timestamptz not null,
 	duration interval not null,
 	attrs jsonb not null
 );
@@ -13,7 +13,7 @@ CREATE OR REPLACE procedure upsert_daily_activity(
 	inout p_id int,
     p_category VARCHAR(255),
     p_subcategory VARCHAR(255),
-    p_start_time TIMESTAMP,
+    p_start_time TIMESTAMPTZ,
     p_duration INTERVAL,
     p_attrs JSONB
 )
