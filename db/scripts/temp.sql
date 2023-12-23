@@ -33,9 +33,6 @@ insert into daily_activity (category,subcategory,start_time) values
 ('test1','subtest9','2023-12-20 14:34:56')
 ;
 
-update daily_activity set start_time = '2023-12-20 13:34:56' where subcategory = 'subtest8';
-update daily_activity set start_time = '2023-12-20 13:34:56' where subcategory = 'subtest1';
-update daily_activity set start_time = '2023-12-20 14:34:56' where subcategory = 'subtest5';
-
+select * from daily_activity;
 
 

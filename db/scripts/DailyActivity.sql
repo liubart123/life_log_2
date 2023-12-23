@@ -67,3 +67,24 @@ $$
 	where start_time < last_start_time or (start_time = last_start_time and id < last_id)
 	order by start_time desc, id desc limit 10;
 $$ LANGUAGE SQL;
+
+
+
+DO $$ 
+DECLARE 
+    start_time TIMESTAMP := '2023-01-01 00:00:00';
+    end_time TIMESTAMP := '2023-11-30 23:59:59';
+    cur_time TIMESTAMP;
+    random_interval INTERVAL;
+   	temp_id int;
+BEGIN
+    FOR i IN 1..30 LOOP -- Adjust the loop count as needed
+	    temp_id := null;
+        cur_time := start_time + (end_time - start_time) * (i - 1) / 30; -- Set current_time closer to end_time
+        random_interval := random() * interval '10 hour'; -- Random interval within a day
+        
+		call upsert_daily_activity(temp_id, 'sport', 'fitness', cur_time, random_interval, '{"highIntensity": true, "to the limit": false}');
+	    temp_id := null;
+		call upsert_daily_activity(temp_id, 'sport', 'running', cur_time + interval '1 hour', random_interval + interval '1 hour', '{"run duration": "01:18:12", "distance": 6}');
+    END LOOP;
+END $$;
