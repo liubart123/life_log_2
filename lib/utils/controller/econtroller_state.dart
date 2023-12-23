@@ -1,4 +1,4 @@
-/// Possible statuses for standard widget controller
+/// Possible states for standard widget controller
 enum EControllerState {
   /// First loading/processing for the widget. Usually there are not
   /// much useful data to display during this status.

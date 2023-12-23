@@ -1,9 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity.dart';
+import 'package:life_log_2/domain/daily_activity/daily_activity_attribute.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity_builder.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity_categories_configuration.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity_category.dart';
-import 'package:life_log_2/domain/daily_activity/daily_activity_repository.dart';
+import 'package:life_log_2/domain/daily_activity/repository/daily_activity_repository.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity_specific_attributes.dart';
 import 'package:life_log_2/utils/data_access/database_connector.dart';
 
@@ -26,6 +27,14 @@ Future<void> main() async {
         1.234,
       ),
       TagDailyActivityAttribute('tagAttr', 'tagAttr', value: true),
+      DurationDailyActivityAttribute(
+        'durationAttr',
+        'durationAttr',
+        const Duration(
+          minutes: 78,
+          seconds: 12,
+        ),
+      ),
       EnumDailyActivityAttribute(
         'enumAttr',
         'enumAttr',
@@ -53,7 +62,7 @@ Future<void> main() async {
   final dailyActivityBuilder = DailyActivityBuilder(categoriesConfiguration);
   final repository = DailyActivityRepository(
     connection,
-    dailyActivityBuilder,
+    categoriesConfiguration,
   );
   test(
     'repository basic testing',
@@ -136,10 +145,20 @@ bool compareDailyActivities(
       act1.attributes.length == act2.attributes.length &&
       act1.attributes.every(
         (atr1) => act2.attributes.any(
-          (atr2) =>
-              atr2.name == atr1.name &&
-              atr2.label == atr1.label &&
-              atr2.getValue() == atr1.getValue(),
+          (atr2) => _compareAttributes(atr1, atr2),
         ),
       );
+}
+
+bool _compareAttributes(
+  DailyActivityAttribute atr1,
+  DailyActivityAttribute atr2,
+) {
+  if (atr2.name != atr1.name || atr2.label != atr1.label) {
+    return false;
+  } else if (atr1 is DurationDailyActivityAttribute &&
+      atr2 is DurationDailyActivityAttribute) {
+    return atr1.value == atr2.value;
+  }
+  return atr2.getValue() == atr1.getValue();
 }

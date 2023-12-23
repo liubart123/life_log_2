@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:life_log_2/home/daily_activity_tab/daily_activities_view_tab.dart';
 import 'package:life_log_2/home/my_sandbox.dart';
 import 'package:life_log_2/utils/log_utils.dart';
 
@@ -27,7 +28,7 @@ class HomeTabsScreen extends StatelessWidget {
           color: Get.theme.colorScheme.surface,
           child: const Icon(Icons.error_outline_outlined),
         ),
-        const Icon(Icons.directions_transit),
+        const DailyActivitiesViewTab(),
         Container(
           color: Get.theme.colorScheme.surface,
           child: const MySandbox(),
@@ -48,7 +49,9 @@ class HomeTabsScreen extends StatelessWidget {
       bottom: const TabBar(
         tabs: [
           Tab(icon: Icon(Icons.directions_car)),
-          Tab(icon: Icon(Icons.directions_transit)),
+          Tab(
+            text: 'Daily Activity',
+          ),
           Tab(
             text: 'Sandbox tab',
           ),

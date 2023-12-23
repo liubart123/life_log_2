@@ -29,7 +29,7 @@ class DailyActivityCategoriesConfiguration {
             'running',
             [
               DurationDailyActivityAttribute(
-                'runDuration',
+                'run duration',
                 'run duration',
                 Duration.zero,
               ),
