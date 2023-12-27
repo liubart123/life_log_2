@@ -3,6 +3,7 @@ import 'package:life_log_2/domain/daily_activity/daily_activity.dart';
 import 'package:life_log_2/domain/daily_activity/repository/daily_activity_repository.dart';
 import 'package:life_log_2/utils/controller/econtroller_state.dart';
 import 'package:life_log_2/utils/log_utils.dart';
+import 'package:mutex/mutex.dart';
 
 class DailyActivitiesViewTabController extends GetxController {
   DailyActivitiesViewTabController(
@@ -15,10 +16,12 @@ class DailyActivitiesViewTabController extends GetxController {
   DailyActivityRepository repository;
   EControllerState? controllerState;
   late List<DailyActivity> dailyActivityList = List.empty(growable: true);
+  final _pageLoadingMutex = Mutex();
 
   Future<void> loadAndSetFirstDailyActivityListPage() async {
     MyLogger.controller2('$runtimeType loadAndSetFirstDailyActivityListPage');
 
+    await _pageLoadingMutex.acquire();
     controllerState = EControllerState.processing;
     update();
 
@@ -31,11 +34,18 @@ class DailyActivitiesViewTabController extends GetxController {
     } finally {
       controllerState = EControllerState.idle;
       update();
+      _pageLoadingMutex.release();
     }
   }
 
   Future<void> loadNextDailyActivityListPage() async {
     MyLogger.controller2('$runtimeType loadAndNextDailyActivityListPage');
+    if (_pageLoadingMutex.isLocked) {
+      MyLogger.controller2('$runtimeType pageLoadingMutex is locked - end function and don`t start new loading');
+      return;
+    }
+    await _pageLoadingMutex.acquire();
+    await Future.delayed(Duration(milliseconds: 1000));
 
     controllerState = EControllerState.processing;
     update();
@@ -50,6 +60,7 @@ class DailyActivitiesViewTabController extends GetxController {
     } finally {
       controllerState = EControllerState.idle;
       update();
+      _pageLoadingMutex.release();
     }
   }
 }

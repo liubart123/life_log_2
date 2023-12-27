@@ -16,7 +16,13 @@ class DailyActivitiesViewScrollableListTabBody extends StatelessWidget {
       builder: (controller) {
         final dailActivityList = controller.dailyActivityList;
         return MyScrollableList(
-          itemCount: dailActivityList.length,
+          bottomScrolledCallback: () {
+            controller.loadNextDailyActivityListPage();
+          },
+          reloadCallback: () async {
+            await controller.loadAndSetFirstDailyActivityListPage();
+          },
+          itemCount: dailActivityList.length + 1,
           itemBuilder: _createScrollableListItemBuilder(dailActivityList),
           separatorBuilder: (
             context,
@@ -36,6 +42,8 @@ class DailyActivitiesViewScrollableListTabBody extends StatelessWidget {
       if (index == 0) {
         displayStartDateOnTop = true;
         highlightStartTime = true;
+      } else if (index == list.length) {
+        return _loadingIndicatorAtBottomOfTheList();
       } else {
         if (index == list.length - 1) {
           highlightStartTime = true;
@@ -54,5 +62,14 @@ class DailyActivitiesViewScrollableListTabBody extends StatelessWidget {
         highlightStartTime: highlightStartTime,
       );
     };
+  }
+
+  Widget? _loadingIndicatorAtBottomOfTheList() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+      child: const Center(
+        child: MyProcessIndicator(),
+      ),
+    );
   }
 }
