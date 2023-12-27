@@ -21,22 +21,6 @@ class HomeTabsScreen extends StatelessWidget {
     );
   }
 
-  TabBarView _tabControllerBody() {
-    return TabBarView(
-      children: [
-        Container(
-          color: Get.theme.colorScheme.surface,
-          child: const Icon(Icons.error_outline_outlined),
-        ),
-        const DailyActivitiesViewTab(),
-        Container(
-          color: Get.theme.colorScheme.surface,
-          child: const MySandbox(),
-        ),
-      ],
-    );
-  }
-
   PreferredSizeWidget _appBar(BuildContext context) {
     return AppBar(
       elevation: 0,
@@ -57,6 +41,22 @@ class HomeTabsScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  TabBarView _tabControllerBody() {
+    return TabBarView(
+      children: [
+        Container(
+          color: Get.theme.colorScheme.surface,
+          child: const Icon(Icons.error_outline_outlined),
+        ),
+        const DailyActivitiesViewTab(),
+        Container(
+          color: Get.theme.colorScheme.surface,
+          child: const MySandbox(),
+        ),
+      ],
     );
   }
 }

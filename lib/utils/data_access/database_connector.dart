@@ -4,7 +4,7 @@ import 'package:postgres/postgres.dart';
 class DatabaseConnector {
   static Future<Connection>
       openDatabaseConnectionUsingEnvConfiguration() async {
-    final conn = Connection.open(
+    final conn = await Connection.open(
       Endpoint(
         host: dotenv.get('HOST'),
         port: int.parse(dotenv.get('PORT')),

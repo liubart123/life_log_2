@@ -20,19 +20,6 @@ select * from select_daily_activity('2023-12-20 13:34:58', 12);
 
 truncate daily_activity ;
 
-insert into daily_activity (category,subcategory,start_time) values
-('test1','subtest0','2023-12-20 12:34:56'),
-('test1','subtest1','2023-12-20 12:34:56'),
-('test1','subtest2','2023-12-20 12:34:56'),
-('test1','subtest3','2023-12-20 13:34:56'),
-('test1','subtest4','2023-12-20 13:34:56'),
-('test1','subtest5','2023-12-20 13:34:56'),
-('test1','subtest6','2023-12-20 13:34:56'),
-('test1','subtest7','2023-12-20 14:34:56'),
-('test1','subtest8','2023-12-20 14:34:56'),
-('test1','subtest9','2023-12-20 14:34:56')
-;
-
 select * from daily_activity;
 
 

@@ -80,7 +80,7 @@ class _MyScrollableListState extends State<MyScrollableList> {
           itemCount: widget.itemCount,
           itemBuilder: widget.itemBuilder,
           separatorBuilder: widget.separatorBuilder,
-          padding: EdgeInsets.all(CARD_MARGIN),
+          padding: EdgeInsets.all(SMALL_CARD_MARGIN),
         ),
       ),
     );
@@ -88,33 +88,45 @@ class _MyScrollableListState extends State<MyScrollableList> {
 }
 
 /// Card that is ususally used in application
-class MyCard extends StatelessWidget {
-  const MyCard({
+class MySmallCard extends StatelessWidget {
+  const MySmallCard({
     required this.child,
+    required this.color,
     super.key,
     this.onTap,
   });
 
   final Widget child;
+  final Color color;
   final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: InkWell(
+    final hslColor = HSLColor.fromColor(color);
+    final splashColor = hslColor.withLightness(hslColor.lightness - 0.2).toColor();
+    return Container(
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(CARD_BORDER_RADIUS),
-        onTap: onTap ?? () {},
-        child: Container(
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            border: Border.all(
-              width: 1,
-              color: Get.theme.colorScheme.outlineVariant,
-            ),
-            borderRadius: BorderRadius.circular(CARD_BORDER_RADIUS),
+        boxShadow: [
+          BoxShadow(
+            color: Get.theme.colorScheme.shadow.withOpacity(0.1),
+            offset: const Offset(1, 2),
+            spreadRadius: 0,
+            blurRadius: 1,
           ),
-          padding: EdgeInsets.all(CARD_PADDING),
-          child: child,
+        ],
+      ),
+      child: Material(
+        color: color,
+        child: InkWell(
+          splashColor: splashColor,
+          borderRadius: BorderRadius.circular(CARD_BORDER_RADIUS),
+          onTap: onTap ?? () {},
+          child: Container(
+            padding: const EdgeInsets.all(SMALL_CARD_PADDING),
+            child: child,
+          ),
         ),
       ),
     );
@@ -269,7 +281,7 @@ class MyErrorMessage extends StatelessWidget {
           color: Get.theme.colorScheme.onErrorContainer.withOpacity(0.4),
         ),
       ),
-      padding: EdgeInsets.all(CARD_PADDING),
+      padding: EdgeInsets.all(SMALL_CARD_PADDING),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

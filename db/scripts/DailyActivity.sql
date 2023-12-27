@@ -57,7 +57,7 @@ $$ LANGUAGE SQL;
 create or replace FUNCTION select_daily_activity() 
 RETURNS SETOF daily_activity AS 
 $$ 
-	SELECT * FROM daily_activity order by start_time desc, id desc limit 10;
+	SELECT * FROM daily_activity order by start_time desc, id desc limit 50;
 $$ LANGUAGE SQL;
 
 create or replace FUNCTION select_daily_activity(last_start_time timestamp, last_id int) 
@@ -65,10 +65,11 @@ RETURNS SETOF daily_activity AS
 $$ 
 	SELECT * FROM daily_activity 
 	where start_time < last_start_time or (start_time = last_start_time and id < last_id)
-	order by start_time desc, id desc limit 10;
+	order by start_time desc, id desc limit 50;
 $$ LANGUAGE SQL;
 
 
+truncate daily_activity ;
 
 DO $$ 
 DECLARE 
@@ -77,14 +78,20 @@ DECLARE
     cur_time TIMESTAMP;
     random_interval INTERVAL;
    	temp_id int;
+   	activities_per_day int;
 BEGIN
     FOR i IN 1..30 LOOP -- Adjust the loop count as needed
 	    temp_id := null;
         cur_time := start_time + (end_time - start_time) * (i - 1) / 30; -- Set current_time closer to end_time
-        random_interval := random() * interval '10 hour'; -- Random interval within a day
-        
-		call upsert_daily_activity(temp_id, 'sport', 'fitness', cur_time, random_interval, '{"highIntensity": true, "to the limit": false}');
-	    temp_id := null;
-		call upsert_daily_activity(temp_id, 'sport', 'running', cur_time + interval '1 hour', random_interval + interval '1 hour', '{"run duration": "01:18:12", "distance": 6}');
+	   	activities_per_day = ceil(random() * 20);
+	   	for j in 1..activities_per_day loop	
+	   		cur_time := cur_time + random() * interval '30 minutes';
+	        random_interval := random() * interval '30 minutes'; -- Random interval within a day
+	        
+			call upsert_daily_activity(temp_id, 'sport', 'fitness', cur_time, random_interval, '{"high intensity": true, "to the limit": false}');
+		    temp_id := null;
+			call upsert_daily_activity(temp_id, 'sport', 'running', cur_time + interval '1 hour', random_interval + interval '1 hour', '{"run duration": "01:18:12", "distance": 6.0}');
+	   	end loop;
+	   	
     END LOOP;
 END $$;

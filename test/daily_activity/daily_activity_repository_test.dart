@@ -4,8 +4,8 @@ import 'package:life_log_2/domain/daily_activity/daily_activity_attribute.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity_builder.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity_categories_configuration.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity_category.dart';
-import 'package:life_log_2/domain/daily_activity/repository/daily_activity_repository.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity_specific_attributes.dart';
+import 'package:life_log_2/domain/daily_activity/repository/daily_activity_repository.dart';
 import 'package:life_log_2/utils/data_access/database_connector.dart';
 
 import '../test_utils.dart';

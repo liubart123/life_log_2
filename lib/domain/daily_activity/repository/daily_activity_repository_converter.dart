@@ -38,8 +38,7 @@ DailyActivity convertResultRowToDailyActivity(
   ResultRow row,
   DailyActivityCategoriesConfiguration categoriesConfiguration,
 ) {
-  final (category, subCategory) =
-      categoriesConfiguration.getCategoryAndSubCategoryByNames(
+  final (category, subCategory) = categoriesConfiguration.getCategoryAndSubCategoryByNames(
     row[1]! as String,
     row[2]! as String,
   );
@@ -64,8 +63,7 @@ List<DailyActivityAttribute> _convertMapFromJsonToDailyActivityAttributes(
   return attrbiutesMap
       .map(
         (key, value) {
-          final attributeTemplate =
-              subCategory.attributes.firstWhere((attr) => attr.name == key);
+          final attributeTemplate = subCategory.attributes.firstWhere((attr) => attr.name == key);
           return MapEntry(
             key,
             _createAttributeByTemplateAndDynamicValue(
