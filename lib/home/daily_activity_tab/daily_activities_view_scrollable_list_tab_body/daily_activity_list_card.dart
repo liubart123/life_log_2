@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 import 'dart:ui';
 
@@ -9,6 +10,7 @@ import 'package:life_log_2/my_flutter_elements/my_constants.dart';
 import 'package:life_log_2/my_flutter_elements/my_widgets.dart';
 import 'package:life_log_2/utils/datetime/datetime_extension.dart';
 import 'package:life_log_2/utils/duration/duration_extension.dart';
+import 'package:life_log_2/utils/random/random_utils.dart';
 
 class DailyActivityListCard extends StatelessWidget {
   const DailyActivityListCard(
@@ -78,8 +80,10 @@ class DailyActivityListCard extends StatelessWidget {
   }
 
   Color _getColorForDailyActivityCard() {
-    final hue = Random().nextInt(360).toDouble();
-    final cardColor = HSLColor.fromAHSL(1, hue, 0.3, 0.8).toColor();
+    final categoryHue = RandomUtils.getRandomWithStringSeed(dailyActivity.category.name).nextInt(360).toDouble();
+    final subcategoryHue = RandomUtils.getRandomWithStringSeed(dailyActivity.subCategory.name).nextInt(50).toDouble();
+    final resultedHue = (categoryHue + subcategoryHue) % 360;
+    final cardColor = HSLColor.fromAHSL(1, resultedHue, 0.3, 0.8).toColor();
     return cardColor;
   }
 
