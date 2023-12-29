@@ -1,9 +1,8 @@
 version: '3'
 
 services:
-  postgres:
+  my-postgres-db:
     image: postgres:latest
-    container_name: my-postgres-db
     environment:
       POSTGRES_DB: mydatabase
       POSTGRES_USER: myuser
@@ -15,9 +14,8 @@ services:
       - mynetwork2
     volumes:
       - postgra:/var/lib/postgresql/data
-  postgres-test:
+  my-postgres-test-db:
     image: postgres:latest
-    container_name: my-postgres-test-db
     environment:
       POSTGRES_DB: mydatabase
       POSTGRES_USER: myuser
