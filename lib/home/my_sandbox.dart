@@ -1,4 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:life_log_2/my_flutter_elements/my_tab.dart';
+import 'package:life_log_2/utils/log_utils.dart';
+
+class MySandboxTabControllerChild extends MyTabControllerChild {
+  @override
+  Tab buildTabBarIcon() {
+    return const Tab(
+      text: 'Sandbox tab',
+    );
+  }
+
+  @override
+  Widget buildTabBody() {
+    return Container(
+      color: Get.theme.colorScheme.surface,
+      child: const MySandbox(),
+    );
+  }
+
+  @override
+  Widget? buildTabFABs() {
+    return 
+        FloatingActionButton(
+          onPressed: () {
+            MyLogger.input1('FAB1 click');
+          },
+          child: Icon(Icons.abc),
+        );
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        FloatingActionButton(
+          onPressed: () {
+            MyLogger.input1('FAB1 click');
+          },
+          child: Icon(Icons.abc),
+        )
+      ],
+    );
+  }
+}
 
 class MySandbox extends StatelessWidget {
   const MySandbox({

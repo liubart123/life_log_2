@@ -2,9 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:life_log_2/home/daily_activity_tab/daily_activities_view_scrollable_list_tab_body/daily_activities_view_scrollable_list_tab_body.dart';
 import 'package:life_log_2/home/daily_activity_tab/daily_activities_view_tab_controller.dart';
+import 'package:life_log_2/my_flutter_elements/my_tab.dart';
 import 'package:life_log_2/my_flutter_elements/my_widgets.dart';
 import 'package:life_log_2/utils/controller/econtroller_state.dart';
 import 'package:life_log_2/utils/log_utils.dart';
+
+class DailyActivitiesViewTabControlerChild extends MyTabControllerChild {
+  @override
+  Tab buildTabBarIcon() {
+    return const Tab(
+      text: 'Daily Activity',
+    );
+  }
+
+  @override
+  Widget buildTabBody() {
+    return const DailyActivitiesViewTab();
+  }
+
+  @override
+  Widget? buildTabFABs() {
+    return null;
+  }
+}
 
 class DailyActivitiesViewTab extends StatelessWidget {
   const DailyActivitiesViewTab({super.key});
@@ -21,11 +41,13 @@ class DailyActivitiesViewTab extends StatelessWidget {
       },
       // global: true,
       builder: (controller) {
-        MyLogger.widget2('$runtimeType build. Controller state:${controller.controllerState}');
+        MyLogger.widget2(
+            '$runtimeType build. Controller state:${controller.controllerState}');
         if (controller.dailyActivityList.isEmpty) {
           if (controller.controllerState == EControllerState.idle) {
             return _emptyActivitiesListTextTabBody();
-          } else if (controller.controllerState == EControllerState.processing) {
+          } else if (controller.controllerState ==
+              EControllerState.processing) {
             return _loadingIndicatorTabBody();
           }
         } else {
@@ -39,7 +61,8 @@ class DailyActivitiesViewTab extends StatelessWidget {
   void _initializeControllerState() {
     MyLogger.widget1('$runtimeType _InitializeControllerState...');
     final controller = Get.find<DailyActivitiesViewTabController>();
-    if (controller.controllerState == EControllerState.idle && controller.dailyActivityList.isEmpty) {
+    if (controller.controllerState == EControllerState.idle &&
+        controller.dailyActivityList.isEmpty) {
       controller.loadAndSetFirstDailyActivityListPage();
     }
   }
