@@ -25,7 +25,7 @@ PreferredSizeWidget myAppBarWithTitle(String titleInAppBar) {
 /// and 'reload' gesture.
 ///
 /// Can be used for dispalying large list of large cards
-class MyScrollableList extends StatefulWidget  {
+class MyScrollableList extends StatefulWidget {
   const MyScrollableList({
     required this.itemCount,
     required this.itemBuilder,
@@ -45,10 +45,12 @@ class MyScrollableList extends StatefulWidget  {
   State<MyScrollableList> createState() => _MyScrollableListState();
 }
 
-class _MyScrollableListState extends State<MyScrollableList> with AutomaticKeepAliveClientMixin  {
+class _MyScrollableListState extends State<MyScrollableList> with AutomaticKeepAliveClientMixin {
   late final ScrollController _scrollController;
   late bool bottomWasScrolled;
 
+  @override
+  bool get wantKeepAlive => true;
   @override
   void initState() {
     _scrollController = ScrollController();
@@ -70,6 +72,7 @@ class _MyScrollableListState extends State<MyScrollableList> with AutomaticKeepA
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
       color: Get.theme.colorScheme.surface,
       child: RefreshIndicator(
@@ -80,14 +83,11 @@ class _MyScrollableListState extends State<MyScrollableList> with AutomaticKeepA
           itemCount: widget.itemCount,
           itemBuilder: widget.itemBuilder,
           separatorBuilder: widget.separatorBuilder,
-          padding: EdgeInsets.all(SMALL_CARD_MARGIN),
+          padding: const EdgeInsets.all(SMALL_CARD_MARGIN),
         ),
       ),
     );
   }
-  
-  @override
-  bool get wantKeepAlive => true;
 }
 
 /// Card that is ususally used in application

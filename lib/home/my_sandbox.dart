@@ -21,23 +21,11 @@ class MySandboxTabControllerChild extends MyTabControllerChild {
 
   @override
   Widget? buildTabFABs() {
-    return 
-        FloatingActionButton(
-          onPressed: () {
-            MyLogger.input1('FAB1 click');
-          },
-          child: Icon(Icons.abc),
-        );
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        FloatingActionButton(
-          onPressed: () {
-            MyLogger.input1('FAB1 click');
-          },
-          child: Icon(Icons.abc),
-        )
-      ],
+    return FloatingActionButton(
+      onPressed: () {
+        MyLogger.input1('FAB1 click');
+      },
+      child: const Icon(Icons.abc),
     );
   }
 }
