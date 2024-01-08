@@ -30,6 +30,7 @@ class DailyActivitiesViewScrollableListTabBody extends StatelessWidget {
           ) {
             return const Gap(SMALL_CARD_MARGIN);
           },
+          keepAlive: false,
         );
       },
     );

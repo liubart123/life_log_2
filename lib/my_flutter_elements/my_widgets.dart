@@ -30,6 +30,7 @@ class MyScrollableList extends StatefulWidget {
     required this.itemCount,
     required this.itemBuilder,
     required this.separatorBuilder,
+    this.keepAlive = true,
     this.reloadCallback,
     this.bottomScrolledCallback,
     super.key,
@@ -39,18 +40,17 @@ class MyScrollableList extends StatefulWidget {
   final NullableIndexedWidgetBuilder itemBuilder;
   final IndexedWidgetBuilder separatorBuilder;
   final Future<void> Function()? reloadCallback;
+  final bool keepAlive;
   final Function()? bottomScrolledCallback;
 
   @override
   State<MyScrollableList> createState() => _MyScrollableListState();
 }
 
-class _MyScrollableListState extends State<MyScrollableList> with AutomaticKeepAliveClientMixin {
+class _MyScrollableListState extends State<MyScrollableList> {
   late final ScrollController _scrollController;
   late bool bottomWasScrolled;
 
-  @override
-  bool get wantKeepAlive => true;
   @override
   void initState() {
     _scrollController = ScrollController();
@@ -72,7 +72,6 @@ class _MyScrollableListState extends State<MyScrollableList> with AutomaticKeepA
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Container(
       color: Get.theme.colorScheme.surface,
       child: RefreshIndicator(

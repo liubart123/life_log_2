@@ -20,7 +20,7 @@ class MySandboxTabControllerChild extends MyTabControllerChild {
   }
 
   @override
-  Widget? buildTabFABs() {
+  Widget? buildTabFAB() {
     return FloatingActionButton(
       onPressed: () {
         MyLogger.input1('FAB1 click');

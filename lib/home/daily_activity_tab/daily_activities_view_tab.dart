@@ -21,16 +21,25 @@ class DailyActivitiesViewTabControlerChild extends MyTabControllerChild {
   }
 
   @override
-  Widget? buildTabFABs() {
+  Widget? buildTabFAB() {
     return null;
   }
 }
 
-class DailyActivitiesViewTab extends StatelessWidget {
+class DailyActivitiesViewTab extends StatefulWidget {
   const DailyActivitiesViewTab({super.key});
 
   @override
+  State<DailyActivitiesViewTab> createState() => _DailyActivitiesViewTabState();
+}
+
+class _DailyActivitiesViewTabState extends State<DailyActivitiesViewTab> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return GetBuilder<DailyActivitiesViewTabController>(
       initState: (builderState) {
         MyLogger.widget1('$runtimeType initState');
@@ -39,15 +48,12 @@ class DailyActivitiesViewTab extends StatelessWidget {
       dispose: (state) {
         MyLogger.widget1('$runtimeType dispose');
       },
-      // global: true,
       builder: (controller) {
-        MyLogger.widget2(
-            '$runtimeType build. Controller state:${controller.controllerState}');
+        MyLogger.widget2('$runtimeType build. Controller state:${controller.controllerState}');
         if (controller.dailyActivityList.isEmpty) {
           if (controller.controllerState == EControllerState.idle) {
             return _emptyActivitiesListTextTabBody();
-          } else if (controller.controllerState ==
-              EControllerState.processing) {
+          } else if (controller.controllerState == EControllerState.processing) {
             return _loadingIndicatorTabBody();
           }
         } else {
@@ -61,8 +67,7 @@ class DailyActivitiesViewTab extends StatelessWidget {
   void _initializeControllerState() {
     MyLogger.widget1('$runtimeType _InitializeControllerState...');
     final controller = Get.find<DailyActivitiesViewTabController>();
-    if (controller.controllerState == EControllerState.idle &&
-        controller.dailyActivityList.isEmpty) {
+    if (controller.controllerState == EControllerState.idle && controller.dailyActivityList.isEmpty) {
       controller.loadAndSetFirstDailyActivityListPage();
     }
   }

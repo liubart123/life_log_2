@@ -5,7 +5,7 @@ import 'package:life_log_2/utils/log_utils.dart';
 abstract class MyTabControllerChild {
   Widget buildTabBody();
   Tab buildTabBarIcon();
-  Widget? buildTabFABs();
+  Widget? buildTabFAB();
 }
 
 class MyScaffoldWithTabController extends StatelessWidget {
@@ -27,8 +27,7 @@ class MyScaffoldWithTabController extends StatelessWidget {
           return Scaffold(
             appBar: _appBar(defaultControllerContext),
             body: _tabControllerBody(defaultControllerContext),
-            floatingActionButton: _ScaffoldWithTabsFABs(
-                tabs: tabs, context: defaultControllerContext),
+            floatingActionButton: _tabControllerFABs(defaultControllerContext),
           );
         },
       ),
@@ -55,56 +54,11 @@ class MyScaffoldWithTabController extends StatelessWidget {
       children: tabs.map((e) => e.buildTabBody()).toList(),
     );
   }
-}
 
-class _ScaffoldWithTabsFABs extends StatefulWidget {
-  const _ScaffoldWithTabsFABs({
-    super.key,
-    required this.tabs,
-    required this.context,
-  });
-
-  final List<MyTabControllerChild> tabs;
-  final BuildContext context;
-
-  @override
-  State<_ScaffoldWithTabsFABs> createState() => _ScaffoldWithTabsFABsState();
-}
-
-class _ScaffoldWithTabsFABsState extends State<_ScaffoldWithTabsFABs> {
-  @override
-  void didChangeDependencies() {
-    final tabController = DefaultTabController.of(context);
-    MyLogger.debug('adding listener on tab chanigng');
-    tabController.addListener(_onTabChange);
-    super.didChangeDependencies();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    final tabController = DefaultTabController.of(context);
-    tabController.removeListener(_onTabChange);
-    super.dispose();
-  }
-
-  void _onTabChange() {
-    final tabController = DefaultTabController.of(context);
-    if (!tabController.indexIsChanging) {
-      MyLogger.debug('tab index was changed');
-      setState(() {});
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final tabController = DefaultTabController.of(context);
-    final currentTabFABs =
-        widget.tabs[tabController.index].buildTabFABs() ?? Container();
-    return currentTabFABs;
+  Widget _tabControllerFABs(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [...tabs.map((e) => e.buildTabFAB()).nonNulls],
+    );
   }
 }

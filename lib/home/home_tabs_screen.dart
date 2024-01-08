@@ -15,7 +15,7 @@ class HomeTabsScreen extends StatelessWidget {
         DailyActivitiesViewTabControlerChild(),
         MySandboxTabControllerChild(),
       ],
-      appBarTitle: 'Gvano title',
+      appBarTitle: 'Guano title',
     );
   }
 }
