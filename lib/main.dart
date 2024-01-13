@@ -27,8 +27,7 @@ Future<void> initializeDependencies() async {
 Future<void> initializeDatabaseConnectionDependencies() async {
   MyLogger.debug('_initializeDatabaseRelatedClassesForDI...');
 
-  final connection =
-      await DatabaseConnector.openDatabaseConnectionUsingEnvConfiguration();
+  final connection = await DatabaseConnector.openDatabaseConnectionUsingEnvConfiguration();
   Get.put(connection);
 }
 

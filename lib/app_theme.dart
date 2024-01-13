@@ -5,11 +5,15 @@ import 'package:get/get.dart';
 ThemeData createAppTheme(BuildContext context) {
   return FlexThemeData.light(
     scheme: FlexScheme.bahamaBlue,
+    surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
+    blendLevel: 3,
     subThemesData: const FlexSubThemesData(
       interactionEffects: false,
       tintedDisabledControls: false,
       blendOnColors: false,
       useTextTheme: true,
+      inputDecoratorBorderType: FlexInputBorderType.underline,
+      inputDecoratorUnfocusedBorderIsColored: false,
       alignedDropdown: true,
       tooltipRadius: 4,
       tooltipSchemeColor: SchemeColor.inverseSurface,
@@ -24,7 +28,7 @@ ThemeData createAppTheme(BuildContext context) {
       navigationBarUnselectedIconSchemeColor: SchemeColor.onSurface,
       navigationBarMutedUnselectedIcon: false,
       navigationBarIndicatorSchemeColor: SchemeColor.secondaryContainer,
-      navigationBarIndicatorOpacity: 1,
+      navigationBarIndicatorOpacity: 1.00,
       navigationRailSelectedLabelSchemeColor: SchemeColor.onSurface,
       navigationRailUnselectedLabelSchemeColor: SchemeColor.onSurface,
       navigationRailMutedUnselectedLabel: false,
@@ -32,21 +36,13 @@ ThemeData createAppTheme(BuildContext context) {
       navigationRailUnselectedIconSchemeColor: SchemeColor.onSurface,
       navigationRailMutedUnselectedIcon: false,
       navigationRailIndicatorSchemeColor: SchemeColor.secondaryContainer,
-      navigationRailIndicatorOpacity: 1,
+      navigationRailIndicatorOpacity: 1.00,
       navigationRailBackgroundSchemeColor: SchemeColor.surface,
       navigationRailLabelType: NavigationRailLabelType.none,
     ),
-    keyColors: const FlexKeyColors(),
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
     useMaterial3: true,
     swapLegacyOnMaterial3: true,
-    textTheme: TextTheme(
-      titleMedium: TextStyle(
-        fontWeight: FontWeight.w600,
-        fontSize: 16,
-        color: Get.theme.colorScheme.onSurfaceVariant,
-      ),
-    ),
     // To use the Playground font, add GoogleFonts package and uncomment
     // fontFamily: GoogleFonts.notoSans().fontFamily,
   );

@@ -36,7 +36,7 @@ class MyScaffoldWithTabController extends StatelessWidget {
 
   PreferredSizeWidget _appBar(BuildContext context) {
     return AppBar(
-      elevation: 0,
+      elevation: 1,
       scrolledUnderElevation: 1,
       shadowColor: Get.theme.colorScheme.surface,
       title: Text(
