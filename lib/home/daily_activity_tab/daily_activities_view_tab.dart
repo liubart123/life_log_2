@@ -21,7 +21,7 @@ class DailyActivitiesViewTabControlerChild extends MyTabControllerChild {
   }
 
   @override
-  Widget? buildTabFAB() {
+  Widget? buildTabFAB(BuildContext context) {
     return null;
   }
 }

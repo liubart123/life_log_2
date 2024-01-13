@@ -4,6 +4,7 @@ const double SMALL_CARD_MARGIN = 10;
 
 ///padding for all edges of small card
 const double SMALL_CARD_PADDING = 2;
+const double MEDIUM_CARD_PADDING = 10;
 
 ///padding for horizontal edges of small card. Is used to properly place text children inside small card
 const double SMALL_CARD_ADDITIONAL_HORIZONTAL_PADDING = 4;

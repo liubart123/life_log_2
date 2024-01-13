@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:life_log_2/my_flutter_elements/my_modal_bottom_sheet.dart';
 import 'package:life_log_2/my_flutter_elements/my_tab.dart';
 import 'package:life_log_2/utils/log_utils.dart';
 
@@ -20,10 +21,21 @@ class MySandboxTabControllerChild extends MyTabControllerChild {
   }
 
   @override
-  Widget? buildTabFAB() {
+  Widget? buildTabFAB(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
         MyLogger.input1('FAB1 click');
+        showMyModalBottomSheet(
+          context,
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ...List.generate(50, (index) => Text('element: $index')),
+            ],
+          ),
+        );
       },
       child: const Icon(Icons.abc),
     );

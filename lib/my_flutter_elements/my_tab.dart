@@ -5,7 +5,7 @@ import 'package:life_log_2/utils/log_utils.dart';
 abstract class MyTabControllerChild {
   Widget buildTabBody();
   Tab buildTabBarIcon();
-  Widget? buildTabFAB();
+  Widget? buildTabFAB(BuildContext context);
 }
 
 class MyScaffoldWithTabController extends StatelessWidget {
@@ -58,7 +58,7 @@ class MyScaffoldWithTabController extends StatelessWidget {
   Widget _tabControllerFABs(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
-      children: [...tabs.map((e) => e.buildTabFAB()).nonNulls],
+      children: [...tabs.map((e) => e.buildTabFAB(context)).nonNulls],
     );
   }
 }
