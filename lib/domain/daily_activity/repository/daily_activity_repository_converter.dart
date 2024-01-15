@@ -53,6 +53,7 @@ DailyActivity convertResultRowToDailyActivity(
     Duration(microseconds: (row[4]! as Interval).microseconds),
     attributes,
     id: row[0]! as int,
+    notes: row[6] as String?,
   );
 }
 

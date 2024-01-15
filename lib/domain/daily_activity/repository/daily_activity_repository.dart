@@ -23,6 +23,7 @@ class DailyActivityRepository {
         source.startTime,
         source.duration,
         convertDailyActivityAttributesToJson(source.attributes),
+        source.notes,
       ],
     );
     source.id ??= result.first.first! as int;
@@ -36,8 +37,7 @@ class DailyActivityRepository {
   }
 
   Future<List<DailyActivity>> readLatestDailyActivities() async {
-    final selectResult =
-        await connection.selectFromFunction('select_daily_activity', []);
+    final selectResult = await connection.selectFromFunction('select_daily_activity', []);
     final result = selectResult
         .map(
           (x) => convertResultRowToDailyActivity(x, categoriesConfiguration),
@@ -49,8 +49,7 @@ class DailyActivityRepository {
   Future<List<DailyActivity>> readLatestDailyActivitiesNextPage(
     DailyActivity previousPageEarliestDailyActivity,
   ) async {
-    final selectResult =
-        await connection.selectFromFunction('select_daily_activity', [
+    final selectResult = await connection.selectFromFunction('select_daily_activity', [
       previousPageEarliestDailyActivity.startTime,
       previousPageEarliestDailyActivity.id,
     ]);
@@ -63,8 +62,7 @@ class DailyActivityRepository {
   }
 
   Future<DailyActivity?> readDailyActivityById(int id) async {
-    final selectResult =
-        await connection.selectFromFunction('select_daily_activity', [id]);
+    final selectResult = await connection.selectFromFunction('select_daily_activity', [id]);
     if (selectResult.isEmpty) return null;
     return convertResultRowToDailyActivity(
       selectResult.first,

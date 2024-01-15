@@ -8,6 +8,7 @@ class DailyActivity {
     this.startTime,
     this.duration,
     this.attributes, {
+    this.notes,
     this.id,
   });
   int? id;
@@ -16,4 +17,5 @@ class DailyActivity {
   DateTime startTime;
   Duration duration;
   List<DailyActivityAttribute> attributes;
+  String? notes;
 }

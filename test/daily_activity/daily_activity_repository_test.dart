@@ -55,10 +55,8 @@ Future<void> main() async {
     [subCategory],
   );
 
-  final connection =
-      await DatabaseConnector.openDatabaseConnectionUsingEnvConfiguration();
-  final categoriesConfiguration =
-      DailyActivityCategoriesConfiguration(overridenCategories: [category]);
+  final connection = await DatabaseConnector.openDatabaseConnectionUsingEnvConfiguration();
+  final categoriesConfiguration = DailyActivityCategoriesConfiguration(overridenCategories: [category]);
   final dailyActivityBuilder = DailyActivityBuilder(categoriesConfiguration);
   final repository = DailyActivityRepository(
     connection,
@@ -67,9 +65,8 @@ Future<void> main() async {
   test(
     'repository basic testing',
     () async {
-      final createdDailyActivity = dailyActivityBuilder
-          .buildInitialDailyActivity(category.name, subCategory.name);
-
+      final createdDailyActivity = dailyActivityBuilder.buildInitialDailyActivity(category.name, subCategory.name);
+      createdDailyActivity.notes = 'test notes';
       expect(
         createdDailyActivity.id,
         null,
@@ -94,8 +91,7 @@ Future<void> main() async {
         reason: 'last activity should be same as previously created activity',
       );
 
-      var readDailyActivity =
-          await repository.readDailyActivityById(createdDailyActivity.id!);
+      var readDailyActivity = await repository.readDailyActivityById(createdDailyActivity.id!);
       expect(
         readDailyActivity,
         isNotNull,
@@ -107,22 +103,19 @@ Future<void> main() async {
           createdDailyActivity,
         ),
         isTrue,
-        reason:
-            'the read result of created activity should be same as previously created activity',
+        reason: 'the read result of created activity should be same as previously created activity',
       );
 
       await repository.deleteDailyActivity(createdDailyActivity);
 
       latestDailyActivities = await repository.readLatestDailyActivities();
       expect(
-        latestDailyActivities
-            .any((element) => element.id == createdDailyActivity.id),
+        latestDailyActivities.any((element) => element.id == createdDailyActivity.id),
         false,
         reason: 'list of last activities shoudn`t contain deleted activity',
       );
 
-      readDailyActivity =
-          await repository.readDailyActivityById(createdDailyActivity.id!);
+      readDailyActivity = await repository.readDailyActivityById(createdDailyActivity.id!);
       expect(
         readDailyActivity,
         isNull,
@@ -142,6 +135,7 @@ bool compareDailyActivities(
       act1.duration == act2.duration &&
       act1.category.name == act2.category.name &&
       act1.subCategory.name == act2.subCategory.name &&
+      act1.notes == act2.notes &&
       act1.attributes.length == act2.attributes.length &&
       act1.attributes.every(
         (atr1) => act2.attributes.any(
@@ -156,8 +150,7 @@ bool _compareAttributes(
 ) {
   if (atr2.name != atr1.name || atr2.label != atr1.label) {
     return false;
-  } else if (atr1 is DurationDailyActivityAttribute &&
-      atr2 is DurationDailyActivityAttribute) {
+  } else if (atr1 is DurationDailyActivityAttribute && atr2 is DurationDailyActivityAttribute) {
     return atr1.value == atr2.value;
   }
   return atr2.getValue() == atr1.getValue();
