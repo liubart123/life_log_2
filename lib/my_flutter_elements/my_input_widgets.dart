@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:life_log_2/utils/duration/duration_extension.dart';
 import 'package:life_log_2/utils/log_utils.dart';
 
 TextInputFormatter _createTextInputFormatterForTimeFormat(RegExp regexpForInvalidFormat) {
@@ -27,7 +28,6 @@ TextInputFormatter _createTextInputFormatterForTimeFormat(RegExp regexpForInvali
     if (processedString.length == 3 && (oldValue.text.length == 1) || oldValue.text.length == 2) {
       resultedSelectionStart++;
     }
-    MyLogger.input2('resulted value:$processedString');
     return TextEditingValue(
       selection: TextSelection.fromPosition(
         TextPosition(
@@ -55,10 +55,10 @@ class MyTimeInputField extends StatelessWidget {
     return MyRawTextInputField(
       initialValue: initialValue,
       label: label,
-      onSubmit: onSubmit,
+      onSubmit: (newValue, resetValue) => onSubmit(newValue),
       inputType: TextInputType.number,
       onChangeFormatter: _createTextInputFormatterForTimeFormat(
-        RegExp(r'^\d?\d?(?<=\d{2})[6-9]\d?$'),
+        RegExp(r'^([2][4-9]|[3-9]|\d{2}[6-9])'),
       ),
     );
   }
@@ -71,25 +71,33 @@ class MyIntervalInputField extends StatelessWidget {
     required this.onSubmit,
     super.key,
   });
-  final String initialValue;
+  final Duration initialValue;
   final String label;
-  final Function(String newValue) onSubmit;
+  final Function(Duration? newValue) onSubmit;
 
   @override
   Widget build(BuildContext context) {
     return MyRawTextInputField(
-      initialValue: initialValue,
+      initialValue: initialValue.toFormattedString(),
       label: label,
-      onSubmit: onSubmit,
+      onSubmit: (newString, resetValue) {
+        if (newString == '') {
+          onSubmit(null);
+        } else if (!RegExp(r'^\d{2}:[0-5]\d$').hasMatch(newString)) {
+          resetValue();
+        } else {
+          onSubmit(convertStringToDuration(newString));
+        }
+      },
       inputType: TextInputType.number,
       onChangeFormatter: _createTextInputFormatterForTimeFormat(
-        RegExp(r'^([2][4-9]|[3-9]|\d{2}[6-9])'),
+        RegExp(r'^\d?\d?(?<=\d{2})[6-9]\d?$'),
       ),
     );
   }
 }
 
-class MyRawTextInputField extends StatelessWidget {
+class MyRawTextInputField extends StatefulWidget {
   const MyRawTextInputField({
     required this.initialValue,
     required this.label,
@@ -102,32 +110,67 @@ class MyRawTextInputField extends StatelessWidget {
   final String initialValue;
   final String label;
   final String? errorMessage;
-  final Function(String newValue) onSubmit;
+  final Function(String newValue, Function({String? newValue}) resetValue) onSubmit;
   final TextInputFormatter? onChangeFormatter;
   final TextInputType inputType;
 
   @override
+  State<MyRawTextInputField> createState() => _MyRawTextInputFieldState();
+}
+
+class _MyRawTextInputFieldState extends State<MyRawTextInputField> {
+  late TextEditingController _controller;
+  late String previousSubmittedValue = widget.initialValue;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.initialValue);
+    // previousSubmittedValue = widget.initialValue;
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _resetValue({String? newValue}) {
+    if (newValue == null) {
+      _controller.text = previousSubmittedValue;
+    } else {
+      _controller.text = newValue;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: _controller,
       textInputAction: TextInputAction.next,
-      keyboardType: inputType,
+      keyboardType: widget.inputType,
       scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 20),
       style: Get.textTheme.bodyMedium!.copyWith(
         color: Get.theme.colorScheme.onSurface,
       ),
       inputFormatters: [
-        if (onChangeFormatter != null) onChangeFormatter!,
+        if (widget.onChangeFormatter != null) widget.onChangeFormatter!,
       ],
       onTapOutside: (event) {
         FocusManager.instance.primaryFocus?.unfocus();
+        widget.onSubmit(_controller.text, _resetValue);
+        previousSubmittedValue = _controller.text;
       },
-      onSubmitted: onSubmit,
+      onSubmitted: (value) {
+        widget.onSubmit(value, _resetValue);
+        previousSubmittedValue = _controller.text;
+      },
       decoration: InputDecoration(
-        errorText: errorMessage,
+        errorText: widget.errorMessage,
         errorStyle: Get.textTheme.bodyMedium!.copyWith(
           color: Get.theme.colorScheme.error,
         ),
-        labelText: label,
+        labelText: widget.label,
         isDense: true,
         contentPadding: const EdgeInsets.all(12),
         labelStyle: Get.textTheme.bodyMedium!.copyWith(

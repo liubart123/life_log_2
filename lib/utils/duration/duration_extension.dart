@@ -15,3 +15,13 @@ extension DurationExtension on Duration {
     return '${inMinutes}m';
   }
 }
+
+Duration convertStringToDuration(String inputString) {
+  final List<String> timeParts = inputString.split(':');
+
+  return Duration(
+    hours: int.parse(timeParts[0]),
+    minutes: int.parse(timeParts[1]),
+    seconds: timeParts.length >= 3 ? int.parse(timeParts[2]) : 0,
+  );
+}

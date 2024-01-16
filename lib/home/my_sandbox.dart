@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:life_log_2/my_flutter_elements/my_input_widgets.dart';
 import 'package:life_log_2/my_flutter_elements/my_tab.dart';
+import 'package:life_log_2/utils/log_utils.dart';
 
 class MySandboxTabControllerChild extends MyTabControllerChild {
   @override
@@ -44,16 +45,18 @@ class MySandbox extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            MyTimeInputField(
-              initialValue: '',
-              onSubmit: (newValue) {},
-              label: 'My label2',
-            ),
+            // MyTimeInputField(
+            //   initialValue: '',
+            //   onSubmit: (newValue) {},
+            //   label: 'My label2',
+            // ),
             Gap(10),
             MyIntervalInputField(
-              initialValue: '',
-              onSubmit: (newValue) {},
-              label: 'My label2',
+              initialValue: const Duration(hours: 12, minutes: 45, seconds: 55),
+              onSubmit: (newValue) {
+                MyLogger.debug('duration newValue:$newValue');
+              },
+              label: 'Duratio',
             ),
           ],
         ),
