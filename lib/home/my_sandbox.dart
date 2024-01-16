@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:life_log_2/my_flutter_elements/my_input_widgets.dart';
 import 'package:life_log_2/my_flutter_elements/my_tab.dart';
 
 class MySandboxTabControllerChild extends MyTabControllerChild {
@@ -33,40 +35,25 @@ class MySandbox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        width: 200,
+        padding: EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 30,
+        ),
+        // width: 200,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Flexible(
-                  flex: 0,
-                  // fit: FlexFit.tight,
-                  child: Container(
-                    color: Colors.amber,
-                    child: Text('Super text long'),
-                  ),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: Container(
-                    color: Colors.red,
-                    // width: 100,
-                    child: Text(
-                      overflow: TextOverflow.ellipsis,
-                      '2. Ultra long texto 1234567689123345667871231231238',
-                    ),
-                  ),
-                ),
-                Flexible(
-                  flex: 0,
-                  // fit: FlexFit.tight,
-                  child: Container(
-                    color: Colors.green,
-                    child: Text('text'),
-                  ),
-                ),
-              ],
+            MyTimeInputField(
+              initialValue: '',
+              onSubmit: (newValue) {},
+              label: 'My label2',
+            ),
+            Gap(10),
+            MyIntervalInputField(
+              initialValue: '',
+              onSubmit: (newValue) {},
+              label: 'My label2',
             ),
           ],
         ),

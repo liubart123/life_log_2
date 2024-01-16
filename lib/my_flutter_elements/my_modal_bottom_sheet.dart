@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:life_log_2/my_flutter_elements/my_constants.dart';
 
 Future<void> showMyModalBottomSheet(
   BuildContext context,
@@ -39,25 +38,14 @@ Future<void> showMyModalBottomSheet(
               controller: scrollController,
               child: Column(
                 children: [
-                  Gap(MEDIUM_CARD_PADDING),
+                  const Gap(14),
                   Center(
                     widthFactor: 2,
                     child: SizedBox(
-                      height: 4,
-                      width: 30,
+                      height: 5,
+                      width: 35,
                       child: Container(
                         decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              offset: Offset(1, 2),
-                              blurRadius: 1,
-                              color: Color.lerp(
-                                Get.theme.colorScheme.surfaceVariant,
-                                Get.theme.colorScheme.onSurfaceVariant,
-                                0.6,
-                              )!,
-                            ),
-                          ],
                           borderRadius: BorderRadius.circular(5),
                           color: Color.lerp(
                             Get.theme.colorScheme.surfaceVariant,
@@ -68,8 +56,8 @@ Future<void> showMyModalBottomSheet(
                       ),
                     ),
                   ),
-                  Gap(5),
-                  Divider(height: 5),
+                  const Gap(14),
+                  const Divider(height: 0),
                   // Gap(5),
                 ],
               ),

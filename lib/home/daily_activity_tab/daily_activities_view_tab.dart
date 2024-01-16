@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:life_log_2/home/daily_activity_edit_bottom_sheet/daily_activity_edit_bottom_sheet.dart';
 import 'package:life_log_2/home/daily_activity_tab/daily_activities_view_scrollable_list_tab_body/daily_activities_view_scrollable_list_tab_body.dart';
 import 'package:life_log_2/home/daily_activity_tab/daily_activities_view_tab_controller.dart';
 import 'package:life_log_2/my_flutter_elements/my_modal_bottom_sheet.dart';
@@ -24,28 +25,23 @@ class DailyActivitiesViewTabControlerChild extends MyTabControllerChild {
   @override
   Widget? buildTabFAB(BuildContext context) {
     return FloatingActionButton(
-      backgroundColor: Get.theme.colorScheme.secondaryContainer,
-      elevation: 0,
+      backgroundColor: Color.lerp(
+        Get.theme.colorScheme.surface,
+        Get.theme.colorScheme.primary,
+        0.1,
+      ),
+      elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
           14,
         ),
-        side: BorderSide(
-          width: 2,
-          color: Get.theme.colorScheme.outline,
-        ),
       ),
       onPressed: () {
-        MyLogger.input1('FAB1 click');
+        final controller = Get.find<DailyActivitiesViewTabController>();
         showMyModalBottomSheet(
           context,
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              ...List.generate(50, (index) => Text('element: $index')),
-            ],
+          DailyActivityEditBottomSheet(
+            controller.dailyActivityList.first,
           ),
         );
       },
