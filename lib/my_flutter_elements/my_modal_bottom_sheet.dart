@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:life_log_2/utils/log_utils.dart';
 
 Future<void> showMyModalBottomSheet(
   BuildContext context,
@@ -17,13 +17,53 @@ Future<void> showMyModalBottomSheet(
       ),
     ),
     enableDrag: true,
-    builder: (ctx) => DraggableScrollableSheet(
+    builder: (ctx) => MyDraggableScrollableSheet(bottomSheetBody),
+  );
+}
+
+class MyDraggableScrollableSheet extends StatefulWidget {
+  const MyDraggableScrollableSheet(
+    this.bottomSheetBody, {
+    super.key,
+  });
+  final Widget bottomSheetBody;
+
+  @override
+  State<MyDraggableScrollableSheet> createState() => _MyDraggableScrollableSheetState();
+}
+
+class _MyDraggableScrollableSheetState extends State<MyDraggableScrollableSheet> {
+  final DraggableScrollableController _scrollableController = DraggableScrollableController();
+
+  @override
+  void initState() {
+    _scrollableController.addListener(_scrollableControllerListener);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollableController.removeListener(_scrollableControllerListener);
+    super.dispose();
+  }
+
+  void _scrollableControllerListener() {
+    MyLogger.input2('bottomSheet size:${_scrollableController.size}');
+    if (_scrollableController.size < 0.01) {
+      _scrollableController.jumpTo(0);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DraggableScrollableSheet(
       maxChildSize: 0.8,
       minChildSize: 0,
       initialChildSize: 0.4,
       expand: false,
       snap: true,
       snapSizes: const [0.4],
+      controller: _scrollableController,
       shouldCloseOnMinExtent: true,
       builder: (context, scrollController) => Container(
         decoration: BoxDecoration(
@@ -34,43 +74,15 @@ Future<void> showMyModalBottomSheet(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // SingleChildScrollView(
-            //   controller: scrollController,
-            //   child: Column(
-            //     children: [
-            //       // const Gap(14),
-            //       // Center(
-            //       //   widthFactor: 2,
-            //       //   child: SizedBox(
-            //       //     height: 5,
-            //       //     width: 35,
-            //       //     child: Container(
-            //       //       decoration: BoxDecoration(
-            //       //         borderRadius: BorderRadius.circular(5),
-            //       //         color: Color.lerp(
-            //       //           Get.theme.colorScheme.surfaceVariant,
-            //       //           Get.theme.colorScheme.onSurfaceVariant,
-            //       //           0.3,
-            //       //         ),
-            //       //       ),
-            //       //     ),
-            //       //   ),
-            //       // ),
-            //       // const Gap(14),
-            //       // const Divider(height: 0),
-            //       // Gap(5),
-            //     ],
-            //   ),
-            // ),
             Expanded(
               child: SingleChildScrollView(
                 controller: scrollController,
-                child: bottomSheetBody,
+                child: widget.bottomSheetBody,
               ),
             ),
           ],
         ),
       ),
-    ),
-  );
+    );
+  }
 }
