@@ -27,44 +27,44 @@ Future<void> showMyModalBottomSheet(
       shouldCloseOnMinExtent: true,
       builder: (context, scrollController) => Container(
         decoration: BoxDecoration(
-          // borderRadius: BorderRadius.circular(2),
+          borderRadius: BorderRadius.circular(8),
           color: Get.theme.colorScheme.surfaceVariant,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SingleChildScrollView(
-              controller: scrollController,
-              child: Column(
-                children: [
-                  const Gap(14),
-                  Center(
-                    widthFactor: 2,
-                    child: SizedBox(
-                      height: 5,
-                      width: 35,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Color.lerp(
-                            Get.theme.colorScheme.surfaceVariant,
-                            Get.theme.colorScheme.onSurfaceVariant,
-                            0.3,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const Gap(14),
-                  const Divider(height: 0),
-                  // Gap(5),
-                ],
-              ),
-            ),
+            // SingleChildScrollView(
+            //   controller: scrollController,
+            //   child: Column(
+            //     children: [
+            //       // const Gap(14),
+            //       // Center(
+            //       //   widthFactor: 2,
+            //       //   child: SizedBox(
+            //       //     height: 5,
+            //       //     width: 35,
+            //       //     child: Container(
+            //       //       decoration: BoxDecoration(
+            //       //         borderRadius: BorderRadius.circular(5),
+            //       //         color: Color.lerp(
+            //       //           Get.theme.colorScheme.surfaceVariant,
+            //       //           Get.theme.colorScheme.onSurfaceVariant,
+            //       //           0.3,
+            //       //         ),
+            //       //       ),
+            //       //     ),
+            //       //   ),
+            //       // ),
+            //       // const Gap(14),
+            //       // const Divider(height: 0),
+            //       // Gap(5),
+            //     ],
+            //   ),
+            // ),
             Expanded(
               child: SingleChildScrollView(
-                // controller: scrollController,
+                controller: scrollController,
                 child: bottomSheetBody,
               ),
             ),

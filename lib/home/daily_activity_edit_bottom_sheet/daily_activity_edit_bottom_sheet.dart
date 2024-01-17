@@ -19,7 +19,15 @@ class DailyActivityEditBottomSheet extends StatelessWidget {
       child: Column(
         children: [
           Text('empty space'),
-          Gap(500),
+          Container(
+            color: Colors.amber,
+            height: 500,
+          ),
+          Container(
+            color: Colors.red,
+            height: 1000,
+          ),
+          // Gap(500),
           // MyTextInputField(
           //   initialValue: 'initialValue',
           //   onValueChangedCallback: (newValue) {
@@ -27,7 +35,7 @@ class DailyActivityEditBottomSheet extends StatelessWidget {
           //   },
           //   label: ,
           // ),
-          Gap(MediaQuery.of(context).viewInsets.bottom + 20),
+          // Gap(MediaQuery.of(context).viewInsets.bottom + 20),
         ],
       ),
     );

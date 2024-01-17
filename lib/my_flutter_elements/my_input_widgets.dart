@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:life_log_2/utils/datetime/datetime_extension.dart';
 import 'package:life_log_2/utils/duration/duration_extension.dart';
-import 'package:life_log_2/utils/log_utils.dart';
 
 TextInputFormatter _createTextInputFormatterForTimeFormat(RegExp regexpForInvalidFormat) {
   return TextInputFormatter.withFunction((oldValue, newValue) {
