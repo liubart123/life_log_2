@@ -13,3 +13,8 @@ extension DurationExtension on DateTime {
     return formatter.format(this);
   }
 }
+
+DateTime convertStringToDateTime(String inputString, {String format = 'HH:mm'}) {
+  final formatter = DateFormat(format);
+  return formatter.parse(inputString);
+}

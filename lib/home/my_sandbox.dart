@@ -45,11 +45,13 @@ class MySandbox extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // MyTimeInputField(
-            //   initialValue: '',
-            //   onSubmit: (newValue) {},
-            //   label: 'My label2',
-            // ),
+            MyTimeInputField(
+              initialValue: DateTime.now(),
+              onSubmit: (newValue) {
+                MyLogger.debug('time newValue:$newValue');
+              },
+              label: 'My label2',
+            ),
             Gap(10),
             MyIntervalInputField(
               initialValue: const Duration(hours: 12, minutes: 45, seconds: 55),
