@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 ThemeData createAppTheme(BuildContext context) {
+  return ThemeData(colorSchemeSeed: const Color(0xff6750a4), useMaterial3: true);
   return FlexThemeData.light(
     scheme: FlexScheme.bahamaBlue,
     surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity.dart';
 import 'package:life_log_2/my_flutter_elements/my_input_widgets.dart';
+import 'package:life_log_2/my_flutter_elements/my_widgets.dart';
 import 'package:life_log_2/utils/log_utils.dart';
 
 class DailyActivityEditBottomSheet extends StatelessWidget {
@@ -49,6 +50,15 @@ class DailyActivityEditBottomSheet extends StatelessWidget {
               },
               label: 'Start time',
             ),
+          ),
+          Gap(20),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              MyIconButton(icon: Icons.delete_outline),
+            ],
           ),
           //adds padding if keyboard hiding focused node
           Gap(MediaQuery.of(context).viewInsets.bottom + 20),

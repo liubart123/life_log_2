@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:life_log_2/my_flutter_elements/my_input_widgets.dart';
 import 'package:life_log_2/my_flutter_elements/my_tab.dart';
+import 'package:life_log_2/my_flutter_elements/my_widgets.dart';
 import 'package:life_log_2/utils/log_utils.dart';
 
 class MySandboxTabControllerChild extends MyTabControllerChild {
@@ -36,6 +37,7 @@ class MySandbox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
+        color: Get.theme.colorScheme.surface,
         padding: EdgeInsets.symmetric(
           horizontal: 10,
           vertical: 30,
@@ -59,6 +61,20 @@ class MySandbox extends StatelessWidget {
                 MyLogger.debug('duration newValue:$newValue');
               },
               label: 'Duratio',
+            ),
+            Gap(10),
+            Row(
+              children: [
+                MyIconButton(icon: Icons.delete_outline),
+                Expanded(
+                  child: MyTextButton(
+                    child: Container(
+                      color: Colors.amber,
+                      child: Text('Text button'),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

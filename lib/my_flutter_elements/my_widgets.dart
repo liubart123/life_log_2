@@ -8,6 +8,75 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:life_log_2/my_flutter_elements/my_constants.dart';
 
+class MyIconButton extends StatelessWidget {
+  const MyIconButton({
+    required this.icon,
+    this.buttonColor,
+    this.iconColor,
+    this.callback,
+    super.key,
+  });
+
+  final IconData icon;
+  final Color? buttonColor;
+  final Color? iconColor;
+  final Function()? callback;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: Center(
+        child: Ink(
+          decoration: ShapeDecoration(
+            color: buttonColor ?? Get.theme.colorScheme.primaryContainer,
+            shape: const CircleBorder(),
+          ),
+          child: IconButton(
+            icon: Icon(
+              icon,
+              color: iconColor ?? Get.theme.colorScheme.onPrimaryContainer,
+            ),
+            onPressed: callback ?? () {},
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class MyTextButton extends StatelessWidget {
+  const MyTextButton({
+    required this.child,
+    this.buttonColor,
+    this.callback,
+    super.key,
+  });
+
+  final Widget child;
+  final Color? buttonColor;
+  final Function()? callback;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: Ink(
+        decoration: ShapeDecoration(
+          color: buttonColor ?? Get.theme.colorScheme.primaryContainer,
+          shape: ContinuousRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        child: TextButton(
+          onPressed: callback ?? () {},
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
 /// Creates AppBar that is intended to be used for screens in application
 PreferredSizeWidget myAppBarWithTitle(String titleInAppBar) {
   return AppBar(
