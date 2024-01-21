@@ -13,3 +13,5 @@ const double INNER_CARD_GAP_LARGE = 24;
 const double INNER_CARD_GAP_MEDIUM = 18;
 const double INNER_CARD_GAP_SMALL = 10;
 const double MEDIUM_ELEMENT_MARGIN = 3;
+
+const double CONTENT_PADDING = 16;

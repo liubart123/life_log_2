@@ -47,34 +47,64 @@ class MySandbox extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            MyTimeInputField(
-              initialValue: DateTime.now(),
-              onSubmit: (newValue) {
-                MyLogger.debug('time newValue:$newValue');
-              },
-              label: 'My label2',
-            ),
-            Gap(10),
-            MyIntervalInputField(
-              initialValue: const Duration(hours: 12, minutes: 45, seconds: 55),
-              onSubmit: (newValue) {
-                MyLogger.debug('duration newValue:$newValue');
-              },
-              label: 'Duratio',
-            ),
-            Gap(10),
-            Row(
-              children: [
-                MyIconButton(icon: Icons.delete_outline),
-                Expanded(
-                  child: MyTextButton(
-                    child: Container(
-                      color: Colors.amber,
-                      child: Text('Text button'),
+            Center(
+              child: Container(
+                color: Colors.amber,
+                child: Material(
+                  color: Color.fromARGB(255, 168, 20, 20),
+                  child: Ink(
+                    decoration: const ShapeDecoration(
+                      color: Colors.lightBlue,
+                      shape: CircleBorder(),
+                    ),
+                    child: IconButton(
+                      padding: EdgeInsets.all(0),
+                      icon: Icon(
+                        Icons.android,
+                        // size: 60,
+                      ),
+                      color: Colors.white,
+                      onPressed: () {},
                     ),
                   ),
                 ),
-              ],
+              ),
+            ),
+            Gap(20),
+            IconButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(Colors.red),
+                shape: MaterialStatePropertyAll(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              padding: EdgeInsets.all(0),
+              icon: Icon(
+                Icons.android,
+                // size: 60,
+              ),
+              color: Colors.white,
+              onPressed: () {},
+            ),
+            Gap(20),
+            Center(
+              child: Container(
+                // color: Colors.amber,
+                child: TextButton(
+                  child: Text('test'),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(Colors.red),
+                    shape: MaterialStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  onPressed: () {},
+                ),
+              ),
             ),
           ],
         ),

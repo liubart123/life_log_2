@@ -24,23 +24,20 @@ class MyIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: Center(
-        child: Ink(
-          decoration: ShapeDecoration(
-            color: buttonColor ?? Get.theme.colorScheme.primaryContainer,
-            shape: const CircleBorder(),
-          ),
-          child: IconButton(
-            icon: Icon(
-              icon,
-              color: iconColor ?? Get.theme.colorScheme.onPrimaryContainer,
-            ),
-            onPressed: callback ?? () {},
+    return IconButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStatePropertyAll(
+          buttonColor ?? Get.theme.colorScheme.primaryContainer,
+        ),
+        shape: MaterialStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
           ),
         ),
       ),
+      icon: Icon(icon),
+      color: iconColor ?? Get.theme.colorScheme.primary,
+      onPressed: callback ?? () {},
     );
   }
 }
@@ -59,20 +56,19 @@ class MyTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: Ink(
-        decoration: ShapeDecoration(
-          color: buttonColor ?? Get.theme.colorScheme.primaryContainer,
-          shape: ContinuousRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+    return TextButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStatePropertyAll(
+          buttonColor ?? Get.theme.colorScheme.primaryContainer,
+        ),
+        shape: MaterialStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
           ),
         ),
-        child: TextButton(
-          onPressed: callback ?? () {},
-          child: child,
-        ),
       ),
+      onPressed: callback ?? () {},
+      child: child,
     );
   }
 }

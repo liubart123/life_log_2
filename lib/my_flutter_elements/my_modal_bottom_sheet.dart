@@ -68,7 +68,7 @@ class _MyDraggableScrollableSheetState extends State<MyDraggableScrollableSheet>
       builder: (context, scrollController) => Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          color: Get.theme.colorScheme.surfaceVariant,
+          color: Get.theme.colorScheme.surface,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

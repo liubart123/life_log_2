@@ -35,6 +35,7 @@ class MyScaffoldWithTabController extends StatelessWidget {
   }
 
   PreferredSizeWidget _appBar(BuildContext context) {
+    //todo:see SliverAppBar
     return AppBar(
       elevation: 1,
       scrolledUnderElevation: 1,

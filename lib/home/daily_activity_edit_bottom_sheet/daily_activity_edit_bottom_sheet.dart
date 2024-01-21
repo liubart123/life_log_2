@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity.dart';
+import 'package:life_log_2/my_flutter_elements/my_constants.dart';
 import 'package:life_log_2/my_flutter_elements/my_input_widgets.dart';
 import 'package:life_log_2/my_flutter_elements/my_widgets.dart';
 import 'package:life_log_2/utils/log_utils.dart';
@@ -17,7 +19,7 @@ class DailyActivityEditBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     MyLogger.widget3('viewInsets for bottomSHeet`s content:${MediaQuery.of(context).viewInsets.bottom}');
     return Container(
-      padding: EdgeInsets.all(8),
+      padding: EdgeInsets.all(CONTENT_PADDING),
       child: Column(
         children: [
           Text('empty space'),
@@ -57,7 +59,24 @@ class DailyActivityEditBottomSheet extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             mainAxisSize: MainAxisSize.max,
             children: [
-              MyIconButton(icon: Icons.delete_outline),
+              // Gap(20),
+              Flexible(
+                flex: 0,
+                fit: FlexFit.loose,
+                child: MyIconButton(
+                  icon: Icons.delete_outline,
+                  iconColor: Get.theme.colorScheme.error,
+                  buttonColor: Get.theme.colorScheme.errorContainer,
+                ),
+              ),
+              Gap(CONTENT_PADDING),
+              Expanded(
+                child: MyTextButton(
+                  child: Text('Save'),
+                  buttonColor: Get.theme.colorScheme.primaryContainer,
+                ),
+              ),
+              // Gap(20),
             ],
           ),
           //adds padding if keyboard hiding focused node
