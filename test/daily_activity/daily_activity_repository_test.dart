@@ -63,7 +63,7 @@ Future<void> main() async {
     categoriesConfiguration,
   );
   test(
-    'repository basic testing',
+    'repository basic CRUD',
     () async {
       final createdDailyActivity = dailyActivityBuilder.buildInitialDailyActivity(category.name, subCategory.name);
       createdDailyActivity.notes = 'test notes';
@@ -73,10 +73,10 @@ Future<void> main() async {
         reason: 'id of newly created activity should be null',
       );
 
-      await repository.saveDailyActivity(createdDailyActivity);
+      final savedId = await repository.saveDailyActivity(createdDailyActivity);
 
       expect(
-        createdDailyActivity.id,
+        savedId,
         isNotNull,
         reason: 'Created activity should have not null id',
       );
@@ -86,12 +86,13 @@ Future<void> main() async {
         compareDailyActivities(
           latestDailyActivities[0],
           createdDailyActivity,
+          compareId: false,
         ),
         isTrue,
         reason: 'last activity should be same as previously created activity',
       );
 
-      var readDailyActivity = await repository.readDailyActivityById(createdDailyActivity.id!);
+      var readDailyActivity = await repository.readDailyActivityById(savedId);
       expect(
         readDailyActivity,
         isNotNull,
@@ -101,25 +102,93 @@ Future<void> main() async {
         compareDailyActivities(
           readDailyActivity!,
           createdDailyActivity,
+          compareId: false,
         ),
         isTrue,
         reason: 'the read result of created activity should be same as previously created activity',
       );
 
-      await repository.deleteDailyActivity(createdDailyActivity);
+      await repository.deleteDailyActivity(savedId);
 
       latestDailyActivities = await repository.readLatestDailyActivities();
       expect(
-        latestDailyActivities.any((element) => element.id == createdDailyActivity.id),
+        latestDailyActivities.any((element) => element.id == savedId),
         false,
         reason: 'list of last activities shoudn`t contain deleted activity',
       );
 
-      readDailyActivity = await repository.readDailyActivityById(createdDailyActivity.id!);
+      readDailyActivity = await repository.readDailyActivityById(savedId);
       expect(
         readDailyActivity,
         isNull,
         reason: 'the read result of deleted activity should be null',
+      );
+    },
+  );
+  test(
+    'saveAndReturn daily activity',
+    () async {
+      final createdDailyActivity = dailyActivityBuilder.buildInitialDailyActivity(category.name, subCategory.name);
+      createdDailyActivity.notes = 'test notes';
+      expect(
+        createdDailyActivity.id,
+        null,
+        reason: 'id of newly created activity should be null',
+      );
+
+      var savedDailyActivity = await repository.saveAndReadUpdatedDailyActivity(createdDailyActivity);
+
+      expect(
+        compareDailyActivities(
+          createdDailyActivity,
+          savedDailyActivity,
+          compareId: false,
+        ),
+        isTrue,
+        reason: 'Read saved activity should be same as source dailyActivity',
+      );
+
+      expect(
+        savedDailyActivity.id,
+        isNotNull,
+        reason: 'Created activity should have not null id',
+      );
+
+      final latestDailyActivities = await repository.readLatestDailyActivities();
+      expect(
+        compareDailyActivities(
+          latestDailyActivities[0],
+          savedDailyActivity,
+        ),
+        isTrue,
+        reason: 'last activity should be same as previously created activity',
+      );
+
+      final readDailyActivity = await repository.readDailyActivityById(savedDailyActivity.id!);
+      expect(
+        readDailyActivity,
+        isNotNull,
+        reason: 'the read result of created activity should not be null',
+      );
+      expect(
+        compareDailyActivities(
+          readDailyActivity!,
+          savedDailyActivity,
+        ),
+        isTrue,
+        reason: 'the read result of created activity should be same as previously created activity',
+      );
+
+      createdDailyActivity.notes = 'updated notes';
+      savedDailyActivity = await repository.saveAndReadUpdatedDailyActivity(createdDailyActivity);
+      expect(
+        compareDailyActivities(
+          createdDailyActivity,
+          savedDailyActivity,
+          compareId: false,
+        ),
+        isTrue,
+        reason: 'Read saved activity should be same as source dailyActivity',
       );
     },
   );

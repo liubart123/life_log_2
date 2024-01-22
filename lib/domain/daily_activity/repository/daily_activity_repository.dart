@@ -13,7 +13,7 @@ class DailyActivityRepository {
   DailyActivityCategoriesConfiguration categoriesConfiguration;
 
   /// Creates or updates activity in datasource.
-  Future<void> saveDailyActivity(DailyActivity source) async {
+  Future<int> saveDailyActivity(DailyActivity source) async {
     final result = await connection.callProcedure(
       'upsert_daily_activity',
       [
@@ -26,13 +26,20 @@ class DailyActivityRepository {
         source.notes,
       ],
     );
-    source.id ??= result.first.first! as int;
+    return result.first.first! as int;
   }
 
-  Future<void> deleteDailyActivity(DailyActivity source) async {
+  Future<DailyActivity> saveAndReadUpdatedDailyActivity(DailyActivity source) async {
+    final savedId = await saveDailyActivity(source);
+    final result = await readDailyActivityById(savedId);
+    if (result == null) throw UnimplementedError('read result for created dailyActivity shouldn`t be null');
+    return result;
+  }
+
+  Future<void> deleteDailyActivity(int id) async {
     await connection.callProcedure(
       'delete_daily_activity',
-      [source.id],
+      [id],
     );
   }
 
