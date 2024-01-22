@@ -43,20 +43,26 @@ class MySandbox extends StatelessWidget {
           vertical: 30,
         ),
         // width: 200,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
           children: [
             Flexible(
-              child: Container(
-                color: Colors.amber,
-                child: MyIconButton(
-                  icon: Icons.delete_outline,
-                  iconColor: Get.theme.colorScheme.error,
-                  buttonColor: Get.theme.colorScheme.errorContainer,
-                ),
+              flex: 1,
+              fit: FlexFit.loose,
+              child: MyTimeInputField(
+                initialValue: DateTime.now(),
+                label: 'field',
+                onSubmit: (newValue) {},
               ),
-            )
+            ),
+            Flexible(
+              flex: 2,
+              fit: FlexFit.loose,
+              child: MyTimeInputField(
+                initialValue: DateTime.now(),
+                label: 'field',
+                onSubmit: (newValue) {},
+              ),
+            ),
           ],
         ),
       ),

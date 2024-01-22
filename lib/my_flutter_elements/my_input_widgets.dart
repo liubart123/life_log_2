@@ -136,7 +136,6 @@ class _MyRawTextInputFieldState extends State<MyRawTextInputField> {
     super.initState();
     _controller = TextEditingController(text: widget.initialValue);
     _focusNode = FocusNode();
-    // previousSubmittedValue = widget.initialValue;
   }
 
   @override
@@ -156,73 +155,69 @@ class _MyRawTextInputFieldState extends State<MyRawTextInputField> {
 
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (context) {
-        return TextField(
-          focusNode: _focusNode,
-          controller: _controller,
-          textInputAction: TextInputAction.next,
-          keyboardType: widget.inputType,
-          scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 20),
-          style: Get.textTheme.bodyMedium!.copyWith(
-            color: Get.theme.colorScheme.onSurface,
-          ),
-          inputFormatters: [
-            if (widget.onChangeFormatter != null) widget.onChangeFormatter!,
-          ],
-          onTapOutside: (event) {
-            if (_focusNode.hasFocus) {
-              _focusNode.unfocus();
-              widget.onSubmit(_controller.text, _resetValue);
-              previousSubmittedValue = _controller.text;
-            }
-          },
-          onSubmitted: (value) {
-            widget.onSubmit(value, _resetValue);
-            previousSubmittedValue = _controller.text;
-          },
-          decoration: InputDecoration(
-            errorText: widget.errorMessage,
-            errorStyle: Get.textTheme.bodyMedium!.copyWith(
-              color: Get.theme.colorScheme.error,
-            ),
-            labelText: widget.label,
-            isDense: true,
-            contentPadding: const EdgeInsets.all(12),
-            labelStyle: Get.textTheme.bodyMedium!.copyWith(
-              color: Get.theme.colorScheme.outline,
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6),
-              borderSide: BorderSide(
-                width: 3,
-                color: Get.theme.colorScheme.surfaceVariant,
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                width: 1,
-                color: Get.theme.colorScheme.secondaryContainer,
-              ),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6),
-              borderSide: BorderSide(
-                width: 1,
-                color: Get.theme.colorScheme.error,
-              ),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                width: 2,
-                color: Get.theme.colorScheme.error,
-              ),
-            ),
-          ),
-        );
+    return TextField(
+      focusNode: _focusNode,
+      controller: _controller,
+      textInputAction: TextInputAction.next,
+      keyboardType: widget.inputType,
+      scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+      style: Get.textTheme.bodyMedium!.copyWith(
+        color: Get.theme.colorScheme.onSurface,
+      ),
+      inputFormatters: [
+        if (widget.onChangeFormatter != null) widget.onChangeFormatter!,
+      ],
+      onTapOutside: (event) {
+        if (_focusNode.hasFocus) {
+          _focusNode.unfocus();
+          widget.onSubmit(_controller.text, _resetValue);
+          previousSubmittedValue = _controller.text;
+        }
       },
+      onSubmitted: (value) {
+        widget.onSubmit(value, _resetValue);
+        previousSubmittedValue = _controller.text;
+      },
+      decoration: InputDecoration(
+        errorText: widget.errorMessage,
+        errorStyle: Get.textTheme.bodyMedium!.copyWith(
+          color: Get.theme.colorScheme.error,
+        ),
+        labelText: widget.label,
+        isDense: true,
+        contentPadding: const EdgeInsets.all(12),
+        labelStyle: Get.textTheme.bodyMedium!.copyWith(
+          color: Get.theme.colorScheme.outline,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(6),
+          borderSide: BorderSide(
+            width: 3,
+            color: Get.theme.colorScheme.surfaceVariant,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(
+            width: 1,
+            color: Get.theme.colorScheme.secondaryContainer,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(6),
+          borderSide: BorderSide(
+            width: 1,
+            color: Get.theme.colorScheme.error,
+          ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(
+            width: 2,
+            color: Get.theme.colorScheme.error,
+          ),
+        ),
+      ),
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:life_log_2/utils/log_utils.dart';
 
 Future<void> showMyModalBottomSheet(
   BuildContext context,
@@ -48,7 +47,6 @@ class _MyDraggableScrollableSheetState extends State<MyDraggableScrollableSheet>
   }
 
   void _scrollableControllerListener() {
-    MyLogger.input2('bottomSheet size:${_scrollableController.size}');
     if (_scrollableController.size < 0.01) {
       _scrollableController.jumpTo(0);
     }

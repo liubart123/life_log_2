@@ -56,7 +56,7 @@ class MyButton extends StatelessWidget {
         backgroundColor: buttonColor,
         foregroundColor: Color.lerp(buttonColor, Colors.black, 0.4),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        minimumSize: const Size(38, 38),
+        minimumSize: const Size(44, 44),
       ),
       onPressed: callback ?? () {},
       child: child,
@@ -81,10 +81,13 @@ class MyTextButton extends StatelessWidget {
     return MyButton(
       buttonColor: buttonColor ?? Get.theme.colorScheme.primaryContainer,
       callback: callback ?? () {},
-      child: Text(
-        text,
-        style: Get.textTheme.labelLarge!.copyWith(
-          color: Get.theme.colorScheme.primary,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Text(
+          text,
+          style: Get.textTheme.labelLarge!.copyWith(
+            color: Get.theme.colorScheme.primary,
+          ),
         ),
       ),
     );
