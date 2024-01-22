@@ -24,51 +24,69 @@ class MyIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      style: ButtonStyle(
-        backgroundColor: MaterialStatePropertyAll(
-          buttonColor ?? Get.theme.colorScheme.primaryContainer,
-        ),
-        shape: MaterialStatePropertyAll(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
+    return MyButton(
+      buttonColor: buttonColor ?? Get.theme.colorScheme.primaryContainer,
+      callback: callback ?? () {},
+      child: Icon(
+        icon,
+        color: iconColor ?? Get.theme.colorScheme.primary,
       ),
-      icon: Icon(icon),
-      color: iconColor ?? Get.theme.colorScheme.primary,
+    );
+  }
+}
+
+class MyButton extends StatelessWidget {
+  const MyButton({
+    required this.child,
+    required this.buttonColor,
+    this.callback,
+    super.key,
+  });
+
+  final Widget child;
+  final Color buttonColor;
+  final Function()? callback;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      style: TextButton.styleFrom(
+        padding: EdgeInsets.zero,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        backgroundColor: buttonColor,
+        foregroundColor: Color.lerp(buttonColor, Colors.black, 0.4),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        minimumSize: const Size(38, 38),
+      ),
       onPressed: callback ?? () {},
+      child: child,
     );
   }
 }
 
 class MyTextButton extends StatelessWidget {
   const MyTextButton({
-    required this.child,
+    required this.text,
     this.buttonColor,
     this.callback,
     super.key,
   });
 
-  final Widget child;
+  final String text;
   final Color? buttonColor;
   final Function()? callback;
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      style: ButtonStyle(
-        backgroundColor: MaterialStatePropertyAll(
-          buttonColor ?? Get.theme.colorScheme.primaryContainer,
-        ),
-        shape: MaterialStatePropertyAll(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+    return MyButton(
+      buttonColor: buttonColor ?? Get.theme.colorScheme.primaryContainer,
+      callback: callback ?? () {},
+      child: Text(
+        text,
+        style: Get.textTheme.labelLarge!.copyWith(
+          color: Get.theme.colorScheme.primary,
         ),
       ),
-      onPressed: callback ?? () {},
-      child: child,
     );
   }
 }

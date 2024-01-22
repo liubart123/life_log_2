@@ -47,65 +47,16 @@ class MySandbox extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
+            Flexible(
               child: Container(
                 color: Colors.amber,
-                child: Material(
-                  color: Color.fromARGB(255, 168, 20, 20),
-                  child: Ink(
-                    decoration: const ShapeDecoration(
-                      color: Colors.lightBlue,
-                      shape: CircleBorder(),
-                    ),
-                    child: IconButton(
-                      padding: EdgeInsets.all(0),
-                      icon: Icon(
-                        Icons.android,
-                        // size: 60,
-                      ),
-                      color: Colors.white,
-                      onPressed: () {},
-                    ),
-                  ),
+                child: MyIconButton(
+                  icon: Icons.delete_outline,
+                  iconColor: Get.theme.colorScheme.error,
+                  buttonColor: Get.theme.colorScheme.errorContainer,
                 ),
               ),
-            ),
-            Gap(20),
-            IconButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(Colors.red),
-                shape: MaterialStatePropertyAll(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              padding: EdgeInsets.all(0),
-              icon: Icon(
-                Icons.android,
-                // size: 60,
-              ),
-              color: Colors.white,
-              onPressed: () {},
-            ),
-            Gap(20),
-            Center(
-              child: Container(
-                // color: Colors.amber,
-                child: TextButton(
-                  child: Text('test'),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(Colors.red),
-                    shape: MaterialStatePropertyAll(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                  onPressed: () {},
-                ),
-              ),
-            ),
+            )
           ],
         ),
       ),
