@@ -7,6 +7,8 @@ import 'package:life_log_2/my_flutter_elements/my_constants.dart';
 import 'package:life_log_2/my_flutter_elements/my_input_widgets.dart';
 import 'package:life_log_2/my_flutter_elements/my_widgets.dart';
 import 'package:life_log_2/utils/datetime/datetime_extension.dart';
+import 'package:life_log_2/utils/duration/duration_extension.dart';
+import 'package:life_log_2/utils/log_utils.dart';
 
 class DailyActivityEditBottomSheet extends StatelessWidget {
   const DailyActivityEditBottomSheet(
@@ -24,6 +26,7 @@ class DailyActivityEditBottomSheet extends StatelessWidget {
         repository: Get.find(),
       ),
       builder: (controller) {
+        MyLogger.controller2('$runtimeType build');
         return Container(
           padding: const EdgeInsets.all(CONTENT_PADDING),
           child: Column(
@@ -47,63 +50,107 @@ class DailyActivityEditBottomSheet extends StatelessWidget {
     DailyActivityEditBottomSheetController controller,
   ) {
     return [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          // Expanded(
-          //   flex: 1,
-          //   child: MyTimeInputField(
-          //     initialValue: controller.dailyActivity.startTime,
-          //     label: 'Start time',
-          //     onSubmit: (newValue) {
-          //       if (newValue != null) {
-          //         controller.updateStartTime(newValue);
-          //       }
-          //     },
-          //   ),
-          // ),
-
-          Flexible(
-            flex: 1,
-            fit: FlexFit.tight,
-            child: MyTextButton(
-              buttonColor: Get.theme.colorScheme.primaryContainer,
-              text: controller.dailyActivity.startTime.toTimeString(),
-              callback: () async {
-                final time = await showTimePicker(
-                  context: context,
-                  initialTime: TimeOfDay.fromDateTime(controller.dailyActivity.startTime),
-                );
-                if (time != null) {
-                  controller.updateStartTime(time);
-                }
-              },
-            ),
-          ),
-          const Gap(CONTENT_PADDING),
-          Flexible(
-            flex: 1,
-            fit: FlexFit.tight,
-            child: MyTextButton(
-              buttonColor: Get.theme.colorScheme.primaryContainer,
-              text: controller.dailyActivity.startTime.toDateString(),
-              callback: () async {
-                final date = await showDatePicker(
-                  context: context,
-                  firstDate: DateTime(2022),
-                  lastDate: DateTime.now(),
-                  initialDate: controller.dailyActivity.startTime,
-                );
-                if (date != null) {
-                  controller.updateStartDate(date);
-                }
-              },
-            ),
-          ),
-        ],
-      ),
+      _startDateInputFields(controller, context),
+      const Gap(CONTENT_PADDING),
+      _activityDuration(controller),
     ];
+  }
+
+  Widget _activityDuration(DailyActivityEditBottomSheetController controller) {
+    return Row(
+      children: [
+        Flexible(
+          fit: FlexFit.loose,
+          flex: 2,
+          child: MyIntervalInputField(
+            initialValue: controller.dailyActivity.duration,
+            label: 'Duration',
+            onSubmit: (newValue) {
+              if (newValue != null) {
+                controller.updateDuration(newValue);
+              }
+            },
+          ),
+        ),
+        const Gap(CONTENT_PADDING),
+        Flexible(
+          fit: FlexFit.tight,
+          flex: 0,
+          child: MyTextButton(
+            text: '-1m',
+            horizontalPadding: 8,
+            callback: () {
+              controller.updateDuration(
+                addMinutesToDuration(controller.dailyActivity.duration, -1),
+              );
+            },
+          ),
+        ),
+        const Gap(CONTENT_PADDING),
+        Flexible(
+          fit: FlexFit.tight,
+          flex: 0,
+          child: MyTextButton(
+            text: '+5m',
+            horizontalPadding: 8,
+            callback: () {
+              controller.updateDuration(
+                addMinutesToDuration(controller.dailyActivity.duration, 5),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row _startDateInputFields(
+    DailyActivityEditBottomSheetController controller,
+    BuildContext context,
+  ) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Flexible(
+          flex: 1,
+          fit: FlexFit.tight,
+          child: MyTextButton(
+            buttonColor: Get.theme.colorScheme.primaryContainer,
+            text: controller.dailyActivity.startTime.toTimeString(),
+            callback: () async {
+              final time = await showTimePicker(
+                context: context,
+                initialTime: TimeOfDay.fromDateTime(controller.dailyActivity.startTime),
+              );
+              if (time != null) {
+                controller.updateStartTime(time);
+              }
+            },
+          ),
+        ),
+        const Gap(CONTENT_PADDING),
+        Flexible(
+          flex: 1,
+          fit: FlexFit.tight,
+          child: MyTextButton(
+            buttonColor: Get.theme.colorScheme.primaryContainer,
+            text: controller.dailyActivity.startTime.toDateString(),
+            callback: () async {
+              final date = await showDatePicker(
+                context: context,
+                firstDate: DateTime(2022),
+                lastDate: DateTime.now(),
+                initialDate: controller.dailyActivity.startTime,
+              );
+              if (date != null) {
+                controller.updateStartDate(date);
+              }
+            },
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _bottomButtons() {

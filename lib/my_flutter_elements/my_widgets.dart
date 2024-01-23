@@ -69,12 +69,14 @@ class MyTextButton extends StatelessWidget {
     required this.text,
     this.buttonColor,
     this.callback,
+    this.horizontalPadding = 16,
     super.key,
   });
 
   final String text;
   final Color? buttonColor;
   final Function()? callback;
+  final double horizontalPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +84,7 @@ class MyTextButton extends StatelessWidget {
       buttonColor: buttonColor ?? Get.theme.colorScheme.primaryContainer,
       callback: callback ?? () {},
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
         child: Text(
           text,
           style: Get.textTheme.labelLarge!.copyWith(

@@ -57,10 +57,10 @@ class _MyDraggableScrollableSheetState extends State<MyDraggableScrollableSheet>
     return DraggableScrollableSheet(
       maxChildSize: 0.8,
       minChildSize: 0,
-      initialChildSize: 0.4,
+      initialChildSize: 0.5,
       expand: false,
       snap: true,
-      snapSizes: const [0.4],
+      snapSizes: const [0.5],
       controller: _scrollableController,
       shouldCloseOnMinExtent: true,
       builder: (context, scrollController) => Container(

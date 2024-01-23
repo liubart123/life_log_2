@@ -25,3 +25,12 @@ Duration convertStringToDuration(String inputString) {
     seconds: timeParts.length >= 3 ? int.parse(timeParts[2]) : 0,
   );
 }
+
+Duration addMinutesToDuration(
+  Duration initialDuration,
+  int minutes,
+) {
+  return Duration(
+    seconds: initialDuration.inSeconds + 60 * minutes,
+  );
+}

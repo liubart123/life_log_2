@@ -18,6 +18,14 @@ class DailyActivitiesViewTabController extends GetxController {
   late List<DailyActivity> dailyActivityList = List.empty(growable: true);
   final _pageLoadingMutex = Mutex();
 
+  void replaceDailyActivityById(DailyActivity activity) {
+    if (activity.id != null) {
+      final foundIndex = dailyActivityList.indexWhere((element) => element.id == activity.id);
+      dailyActivityList[foundIndex] = activity;
+      update();
+    }
+  }
+
   Future<void> loadAndSetFirstDailyActivityListPage() async {
     MyLogger.controller2('$runtimeType loadAndSetFirstDailyActivityListPage');
 
