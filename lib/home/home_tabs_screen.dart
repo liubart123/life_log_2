@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:life_log_2/home/daily_activity_tab/daily_activities_view_tab.dart';
-import 'package:life_log_2/home/my_sandbox.dart';
+import 'package:life_log_2/home/sandbox/my_sandbox.dart';
 import 'package:life_log_2/my_flutter_elements/my_tab.dart';
 import 'package:life_log_2/utils/log_utils.dart';
 
