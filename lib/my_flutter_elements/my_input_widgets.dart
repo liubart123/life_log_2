@@ -330,7 +330,16 @@ class _MyRawTextInputFieldState extends State<MyRawTextInputField> {
   }
 
   @override
+  void didUpdateWidget(covariant MyRawTextInputField oldWidget) {
+    if (oldWidget.initialValue != _controller.text) {
+      _controller.text = widget.initialValue;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    MyLogger.controller2('$runtimeType build');
     return TextField(
       focusNode: _focusNode,
       controller: _controller,

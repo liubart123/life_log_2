@@ -62,6 +62,10 @@ class DailyActivityEditBottomSheet extends StatelessWidget {
         Flexible(
           fit: FlexFit.loose,
           flex: 2,
+          // child: MyDurationInputField(
+          //   label: 'Duration',
+          //   rxValue: controller.rxDailyActivity.value.duration,
+          // ),
           child: MyIntervalInputField(
             initialValue: controller.dailyActivity.duration,
             label: 'Duration',

@@ -12,16 +12,20 @@ class DailyActivityEditBottomSheetController extends GetxController {
     this.dailyActivity, {
     required this.repository,
     this.state = EControllerState.idle,
-  });
+  }) {
+    rxDailyActivity = dailyActivity.obs;
+  }
   EControllerState state;
   DailyActivity dailyActivity;
   DailyActivityRepository repository;
+  late Rx<DailyActivity> rxDailyActivity;
 
   Future<void> saveDailyActivity() async {
     MyLogger.controller2('saving dailyActivity...');
     MyLogger.controller2('startTime to save:${dailyActivity.startTime.toTimeString()}');
     _updateState(EControllerState.processing);
     dailyActivity = await repository.saveAndReadUpdatedDailyActivity(dailyActivity);
+    rxDailyActivity(dailyActivity);
     _updateState(EControllerState.idle);
     Get.find<DailyActivitiesViewTabController>().replaceDailyActivityById(dailyActivity);
   }
@@ -49,6 +53,9 @@ class DailyActivityEditBottomSheetController extends GetxController {
 
   void updateDuration(Duration newDuration) {
     dailyActivity.duration = newDuration;
+    rxDailyActivity.update((dailyActivityToUpdate) {
+      dailyActivityToUpdate!.duration = newDuration;
+    });
     update();
   }
 }

@@ -10,6 +10,7 @@ class MySandboxController extends GetxController {
 class SandboxCustomClass {
   String stringVar = 'initValue';
   String stringVar2 = 'initValue2';
+  Duration duration = Duration.zero;
   List<SandboxSmallCustomClass> list = List.empty(growable: true);
 }
 
