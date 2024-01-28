@@ -6,6 +6,7 @@ import 'package:life_log_2/my_flutter_elements/my_input_widgets.dart';
 import 'package:life_log_2/my_flutter_elements/my_tab.dart';
 import 'package:life_log_2/my_flutter_elements/my_widgets.dart';
 import 'package:life_log_2/utils/datetime/datetime_extension.dart';
+import 'package:life_log_2/utils/duration/duration_extension.dart';
 import 'package:life_log_2/utils/log_utils.dart';
 
 class MySandboxTabControllerChild extends MyTabControllerChild {
@@ -69,64 +70,27 @@ class MySandbox extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text('str: ${controller.customClass.value.stringVar}'),
-                  Text('str2: ${controller.customClass.value.stringVar2}'),
-                  Obx(() => Text('list: ${controller.customClass.value.list.length}')),
-                  Obx(() => Text('list2: ${controller.customClass.value.list.firstOrNull?.variable ?? 'null'}')),
-                ],
+              MyDurationInputField(
+                label: 'Duration',
+                rxValue: controller.durationRx,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Flexible(
-                    flex: 0,
-                    child: MyTextButton(
-                      text: 'str',
-                      callback: () {
-                        controller.customClass.value.stringVar = DateTime.now().second.toString();
-                        controller.customClass.value.stringVar2 = DateTime.now().second.toString();
-                      },
-                    ),
-                  ),
-                  Gap(10),
-                  Flexible(
-                    flex: 0,
-                    child: MyTextButton(
-                      text: 'list',
-                      callback: () {
-                        controller.customClass.update((val) {
-                          val!.list.add(SandboxSmallCustomClass());
-                        });
-                      },
-                    ),
-                  ),
-                  Gap(10),
-                  Flexible(
-                    flex: 0,
-                    child: MyTextButton(
-                      text: 'list2',
-                      callback: () {
-                        controller.customClass.update((val) {
-                          val!.list[0] = SandboxSmallCustomClass()..variable = DateTime.now().second.toString();
-                        });
-                      },
-                    ),
-                  ),
-                  Gap(10),
-                  Flexible(
-                    flex: 0,
-                    child: MyTextButton(
-                      text: 'upd',
-                      callback: () {
-                        controller.update();
-                      },
-                    ),
-                  ),
-                ],
+              MyTextButton(
+                text: 'Cur Value ${controller.durationRx.value.toFormattedString()}',
+                callback: () {
+                  controller.durationRx.value = Duration(minutes: controller.durationRx.value.inMinutes + 1);
+                },
+              ),
+              Obx(
+                () {
+                  MyLogger.controller2('Rx button build');
+                  return MyTextButton(
+                    text: 'Cur Value ${controller.durationRx.value.toFormattedString()}',
+                    callback: () async {
+                      await Future.delayed(Duration(milliseconds: 3000));
+                      controller.durationRx.value = Duration(minutes: controller.durationRx.value.inMinutes + 1);
+                    },
+                  );
+                },
               ),
             ],
           ),

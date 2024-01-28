@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:life_log_2/utils/datetime/datetime_extension.dart';
 import 'package:life_log_2/utils/duration/duration_extension.dart';
+import 'package:life_log_2/utils/log_utils.dart';
 
 TextInputFormatter _createTextInputFormatterForTimeFormat(RegExp regexpForInvalidFormat) {
   return TextInputFormatter.withFunction((oldValue, newValue) {
@@ -103,6 +104,181 @@ class MyIntervalInputField extends StatelessWidget {
       ),
     );
   }
+}
+
+class MyDurationInputField extends StatefulWidget {
+  const MyDurationInputField({
+    required this.rxValue,
+    required this.label,
+    super.key,
+  });
+  final Rx<Duration> rxValue;
+  final String label;
+
+  @override
+  State<MyDurationInputField> createState() => _MyDurationInputFieldState();
+}
+
+class _MyDurationInputFieldState extends State<MyDurationInputField> {
+  late TextEditingController _controller;
+  late String previousSubmittedTextValue;
+  late FocusNode _focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    MyLogger.controller1('$runtimeType initState');
+    final initialTextValue = widget.rxValue.value.toFormattedString();
+    _controller = TextEditingController(text: initialTextValue);
+    previousSubmittedTextValue = initialTextValue;
+    _focusNode = FocusNode();
+    ever(
+      widget.rxValue,
+      (_) {
+        _updateFieldTextOnRxUpdate();
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    MyLogger.controller1('$runtimeType dispose');
+    _controller.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  void _updateFieldTextOnRxUpdate() {
+    if (_controller.text != widget.rxValue.value.toFormattedString()) {
+      MyLogger.controller2('$runtimeType setting field`s value which was changed outside');
+      _controller.value = _controller.value.copyWith(
+        text: widget.rxValue.value.toFormattedString(),
+      );
+    }
+  }
+
+  /// Format text value in field so it corresponds with time format like hh:mm
+  TextInputFormatter _createInputFormatter() {
+    return TextInputFormatter.withFunction((oldValue, newValue) {
+      var resultedSelectionStart = newValue.selection.start;
+
+      var processedString = newValue.text.replaceAll(RegExp(r'\D'), '');
+      if (RegExp(r'^\d?\d?(?<=\d{2})[6-9]\d?$').hasMatch(processedString)) {
+        return oldValue;
+      }
+      if (processedString.length >= 2) {
+        if (processedString.length == 2 && oldValue.text.length == 3) {
+          processedString = processedString.substring(0, 1);
+        } else {
+          processedString = '${processedString.substring(0, 2)}:${processedString.substring(2)}';
+        }
+      }
+      if (processedString.length > 5) {
+        processedString = processedString.substring(0, 5);
+      }
+
+      if (processedString.length == 3 && (oldValue.text.length == 1) || oldValue.text.length == 2) {
+        resultedSelectionStart++;
+      }
+      return TextEditingValue(
+        selection: TextSelection.fromPosition(
+          TextPosition(
+            offset: min(resultedSelectionStart, processedString.length),
+          ),
+        ),
+        text: processedString,
+      );
+    });
+  }
+
+  void _trySubmitCurrentFieldValue() {
+    MyLogger.controller2('$runtimeType _trySubmitCurrentFieldValue');
+    final newString = _controller.value.text;
+    if (newString == '') {
+      _resetFieldValue();
+    } else if (!RegExp(r'^\d{2}:[0-5]\d$').hasMatch(newString)) {
+      _resetFieldValue();
+    } else {
+      MyLogger.controller2('$runtimeType submitting value');
+      widget.rxValue.value = convertStringToDuration(newString);
+      previousSubmittedTextValue = newString;
+    }
+  }
+
+  void _resetFieldValue() {
+    MyLogger.controller2('$runtimeType _resetValue');
+    _controller.value = _controller.value.copyWith(text: widget.rxValue.value.toFormattedString());
+    previousSubmittedTextValue = _controller.value.text;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      focusNode: _focusNode,
+      controller: _controller,
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.number,
+      scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+      style: Get.textTheme.bodyMedium!.copyWith(
+        color: Get.theme.colorScheme.onSurface,
+      ),
+      inputFormatters: [
+        _createInputFormatter(),
+      ],
+      onTapOutside: (event) {
+        if (_focusNode.hasFocus) {
+          _focusNode.unfocus();
+          _trySubmitCurrentFieldValue();
+        }
+      },
+      onSubmitted: (value) {
+        _trySubmitCurrentFieldValue();
+      },
+      decoration: createDecorationForField(label: widget.label),
+    );
+  }
+}
+
+InputDecoration createDecorationForField({required String label}) {
+  return InputDecoration(
+    errorStyle: Get.textTheme.bodyMedium!.copyWith(
+      color: Get.theme.colorScheme.error,
+    ),
+    labelText: label,
+    isDense: true,
+    contentPadding: const EdgeInsets.all(12),
+    labelStyle: Get.textTheme.bodyMedium!.copyWith(
+      color: Get.theme.colorScheme.outline,
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(6),
+      borderSide: BorderSide(
+        width: 3,
+        color: Get.theme.colorScheme.surfaceVariant,
+      ),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(
+        width: 1,
+        color: Get.theme.colorScheme.secondaryContainer,
+      ),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(6),
+      borderSide: BorderSide(
+        width: 1,
+        color: Get.theme.colorScheme.error,
+      ),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(
+        width: 2,
+        color: Get.theme.colorScheme.error,
+      ),
+    ),
+  );
 }
 
 class MyRawTextInputField extends StatefulWidget {

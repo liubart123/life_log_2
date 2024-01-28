@@ -4,6 +4,7 @@ class MySandboxController extends GetxController {
   String stringVar = 'initialValue';
   final rxStringVar = RxString('');
   final customClass = SandboxCustomClass().obs;
+  final durationRx = Duration.zero.obs;
 }
 
 class SandboxCustomClass {
