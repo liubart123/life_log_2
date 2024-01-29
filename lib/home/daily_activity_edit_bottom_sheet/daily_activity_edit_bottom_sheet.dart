@@ -66,7 +66,7 @@ class DailyActivityEditBottomSheet extends StatelessWidget {
           //   label: 'Duration',
           //   rxValue: controller.rxDailyActivity.value.duration,
           // ),
-          child: MyIntervalInputField(
+          child: MyIntervalInputField2(
             initialValue: controller.dailyActivity.duration,
             label: 'Duration',
             onSubmit: (newValue) {

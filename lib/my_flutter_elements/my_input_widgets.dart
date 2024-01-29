@@ -73,8 +73,8 @@ class MyTimeInputField extends StatelessWidget {
   }
 }
 
-class MyIntervalInputField extends StatelessWidget {
-  const MyIntervalInputField({
+class MyIntervalInputField2 extends StatelessWidget {
+  const MyIntervalInputField2({
     required this.initialValue,
     required this.label,
     required this.onSubmit,
@@ -106,8 +106,8 @@ class MyIntervalInputField extends StatelessWidget {
   }
 }
 
-class MyDurationInputField extends StatefulWidget {
-  const MyDurationInputField({
+class MyDurationInputField2 extends StatefulWidget {
+  const MyDurationInputField2({
     required this.rxValue,
     required this.label,
     super.key,
@@ -116,10 +116,10 @@ class MyDurationInputField extends StatefulWidget {
   final String label;
 
   @override
-  State<MyDurationInputField> createState() => _MyDurationInputFieldState();
+  State<MyDurationInputField2> createState() => _MyDurationInputField2State();
 }
 
-class _MyDurationInputFieldState extends State<MyDurationInputField> {
+class _MyDurationInputField2State extends State<MyDurationInputField2> {
   late TextEditingController _controller;
   late String previousSubmittedTextValue;
   late FocusNode _focusNode;
@@ -281,6 +281,180 @@ InputDecoration createDecorationForField({required String label}) {
   );
 }
 
+class MyDurationInputField extends StatefulWidget {
+  const MyDurationInputField({
+    required this.label,
+    required this.onInitState,
+    required this.onValueSubmitFromUserInput,
+    required this.initialValue,
+    this.alwaysSetFieldValueToInitialValue = false,
+    super.key,
+  });
+
+  MyDurationInputField.withRx(
+    Rx<Duration> rxDuration, {
+    required String label,
+    Key? key,
+  }) : this(
+          label: label,
+          onInitState: (onValueChangedFromOutside) {
+            ever(rxDuration, (_) {
+              MyLogger.debug('Rx for inputFIeld was changed');
+              onValueChangedFromOutside(rxDuration.value);
+            });
+          },
+          onValueSubmitFromUserInput: (newValue) {
+            rxDuration.value = newValue;
+          },
+          initialValue: rxDuration.value,
+          key: key,
+        );
+
+  MyDurationInputField.withCallback(
+    Duration newValue, {
+    required String label,
+    required Function(Duration newValue) onValueSubmitFromUserInput,
+    Key? key,
+  }) : this(
+          label: label,
+          onInitState: (_) {},
+          onValueSubmitFromUserInput: onValueSubmitFromUserInput,
+          initialValue: newValue,
+          alwaysSetFieldValueToInitialValue: true,
+          key: key,
+        );
+  final String label;
+  final Function(Function(Duration newValue) onValueChangedFromOutside) onInitState;
+  final Function(Duration newValue) onValueSubmitFromUserInput;
+  final bool alwaysSetFieldValueToInitialValue;
+  final Duration initialValue;
+
+  @override
+  State<MyDurationInputField> createState() => _MyDurationInputFieldState();
+}
+
+class _MyDurationInputFieldState extends State<MyDurationInputField> {
+  late TextEditingController _controller;
+  late String previousSubmittedTextValue;
+  late FocusNode _focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    MyLogger.controller1('$runtimeType initState');
+    final initialTextValue = widget.initialValue.toFormattedString();
+    _controller = TextEditingController(text: initialTextValue);
+    previousSubmittedTextValue = initialTextValue;
+    _focusNode = FocusNode();
+    widget.onInitState(_setFieldToNewValue);
+  }
+
+  @override
+  void dispose() {
+    MyLogger.controller1('$runtimeType dispose');
+    _controller.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant MyDurationInputField oldWidget) {
+    if (oldWidget.initialValue != widget.initialValue && widget.alwaysSetFieldValueToInitialValue) {
+      _setFieldToNewValue(widget.initialValue);
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  /// Formatter for TextField to keep text in format hh:mm
+  TextInputFormatter _createInputFormatter() {
+    return TextInputFormatter.withFunction((oldValue, newValue) {
+      var resultedSelectionStart = newValue.selection.start;
+
+      var processedString = newValue.text.replaceAll(RegExp(r'\D'), '');
+      if (RegExp(r'^\d?\d?(?<=\d{2})[6-9]\d?$').hasMatch(processedString)) {
+        return oldValue;
+      }
+      if (processedString.length >= 2) {
+        if (processedString.length == 2 && oldValue.text.length == 3) {
+          processedString = processedString.substring(0, 1);
+        } else {
+          processedString = '${processedString.substring(0, 2)}:${processedString.substring(2)}';
+        }
+      }
+      if (processedString.length > 5) {
+        processedString = processedString.substring(0, 5);
+      }
+
+      if (processedString.length == 3 && (oldValue.text.length == 1) || oldValue.text.length == 2) {
+        resultedSelectionStart++;
+      }
+      return TextEditingValue(
+        selection: TextSelection.fromPosition(
+          TextPosition(
+            offset: min(resultedSelectionStart, processedString.length),
+          ),
+        ),
+        text: processedString,
+      );
+    });
+  }
+
+  void _trySubmitCurrentFieldValue() {
+    MyLogger.input2('$runtimeType _trySubmitCurrentFieldValue');
+    if (!RegExp(r'^\d{2}:[0-5]\d$').hasMatch(_controller.value.text)) {
+      _resetFieldValue();
+    } else {
+      _submitNewValueFromFieldValue();
+    }
+  }
+
+  void _resetFieldValue() {
+    MyLogger.controller2('$runtimeType _resetValue');
+    _controller.text = previousSubmittedTextValue;
+  }
+
+  void _submitNewValueFromFieldValue() {
+    MyLogger.input1('$runtimeType submitting new value from field');
+    previousSubmittedTextValue = _controller.value.text;
+    final newDuration = convertStringToDuration(_controller.value.text);
+    widget.onValueSubmitFromUserInput(newDuration);
+  }
+
+  void _setFieldToNewValue(Duration newValue) {
+    MyLogger.input1('$runtimeType setting new field`s value ${newValue.toFormattedString()}');
+    _controller.text = newValue.toFormattedString();
+    previousSubmittedTextValue = _controller.value.text;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    MyLogger.controller2('$runtimeType build');
+    return TextField(
+      focusNode: _focusNode,
+      controller: _controller,
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.number,
+      scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+      style: Get.textTheme.bodyMedium!.copyWith(
+        color: Get.theme.colorScheme.onSurface,
+      ),
+      inputFormatters: [
+        _createInputFormatter(),
+      ],
+      onTapOutside: (event) {
+        if (_focusNode.hasFocus) {
+          _focusNode.unfocus();
+          _trySubmitCurrentFieldValue();
+        }
+      },
+      onSubmitted: (value) {
+        _trySubmitCurrentFieldValue();
+      },
+      decoration: createDecorationForField(label: widget.label),
+    );
+  }
+}
+
 class MyRawTextInputField extends StatefulWidget {
   const MyRawTextInputField({
     required this.initialValue,
@@ -331,7 +505,9 @@ class _MyRawTextInputFieldState extends State<MyRawTextInputField> {
 
   @override
   void didUpdateWidget(covariant MyRawTextInputField oldWidget) {
-    if (oldWidget.initialValue != _controller.text) {
+    MyLogger.controller2('$runtimeType didUpdateWidget');
+    if (oldWidget.initialValue != widget.initialValue) {
+      MyLogger.controller2('$runtimeType reset input value');
       _controller.text = widget.initialValue;
     }
     super.didUpdateWidget(oldWidget);

@@ -70,45 +70,34 @@ class MySandbox extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              MyDurationInputField(
-                label: 'Duration',
-                rxValue: Rx(controller.customClass.value.duration),
+              MyDurationInputField.withRx(
+                controller.durationRx,
+                label: 'Rx1',
               ),
               Obx(
                 () {
-                  MyLogger.controller2('build obx duration');
-                  return MyIntervalInputField(
-                    initialValue: controller.customClass.value.duration,
-                    label: 'Interval',
-                    onSubmit: (newValue) {},
+                  MyLogger.debug('Obx Callback1 build ${controller.durationRx.value}');
+                  return MyDurationInputField.withCallback(
+                    controller.durationRx.value,
+                    onValueSubmitFromUserInput: (newValue) => controller.durationRx.value = newValue,
+                    label: 'Callback1',
                   );
                 },
               ),
               Obx(
-                () {
-                  MyLogger.controller2('build obx stringVar');
-                  return Text(controller.customClass.value.stringVar);
-                },
-              ),
-              Obx(
                 () => MyTextButton(
-                  text: 'D:${controller.customClass.value.duration.toFormattedString()}',
+                  text: 'duration increment ${controller.durationRx.value.toFormattedString()}',
                   callback: () async {
-                    MyLogger.debug('button clicked');
-                    await Future.delayed(Duration(milliseconds: 1500));
-                    controller.customClass.update((val) {
-                      MyLogger.debug('updating value');
-                      val!.duration = Duration(minutes: val.duration.inMinutes);
-                    });
+                    await Future.delayed(const Duration(milliseconds: 1500));
+                    controller.durationRx.value = Duration(minutes: controller.durationRx.value.inMinutes + 1);
                   },
                 ),
               ),
               MyTextButton(
-                text: 'string update',
+                text: 'controller update',
                 callback: () async {
-                  controller.customClass.update((val) {
-                    val!.stringVar = DateTime.now().second.toString();
-                  });
+                  await Future.delayed(const Duration(milliseconds: 1500));
+                  controller.update();
                 },
               )
             ],
