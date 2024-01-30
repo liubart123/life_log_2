@@ -7,7 +7,7 @@ class DailyActivity {
     this.subCategory,
     this.startTime,
     this.duration,
-    this.attributes, {
+    this.attributeValues, {
     this.notes,
     this.id,
   });
@@ -16,6 +16,6 @@ class DailyActivity {
   DailyActivitySubCategory subCategory;
   DateTime startTime;
   Duration duration;
-  List<DailyActivityAttribute> attributes;
+  List<DailyActivityAttributeValue> attributeValues;
   String? notes;
 }

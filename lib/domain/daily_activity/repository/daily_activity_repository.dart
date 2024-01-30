@@ -8,9 +8,12 @@ class DailyActivityRepository {
   DailyActivityRepository(
     this.connection,
     this.categoriesConfiguration,
-  );
+  ) {
+    converter = DailyActivityRepositoryConverter(categoriesConfiguration: categoriesConfiguration);
+  }
   Connection connection;
   DailyActivityCategoriesConfiguration categoriesConfiguration;
+  late DailyActivityRepositoryConverter converter;
 
   /// Creates or updates activity in datasource.
   Future<int> saveDailyActivity(DailyActivity source) async {
@@ -18,11 +21,11 @@ class DailyActivityRepository {
       'upsert_daily_activity',
       [
         source.id,
-        source.category.name,
-        source.subCategory.name,
+        source.category.key,
+        source.subCategory.key,
         source.startTime,
         source.duration,
-        convertDailyActivityAttributesToJson(source.attributes),
+        converter.convertDailyActivityAttributeValuesToJson(source.attributeValues),
         source.notes,
       ],
     );
@@ -47,7 +50,7 @@ class DailyActivityRepository {
     final selectResult = await connection.selectFromFunction('select_daily_activity', []);
     final result = selectResult
         .map(
-          (x) => convertResultRowToDailyActivity(x, categoriesConfiguration),
+          (x) => converter.convertResultRowToDailyActivity(x, categoriesConfiguration),
         )
         .toList();
     return result;
@@ -62,7 +65,7 @@ class DailyActivityRepository {
     ]);
     final result = selectResult
         .map(
-          (x) => convertResultRowToDailyActivity(x, categoriesConfiguration),
+          (x) => converter.convertResultRowToDailyActivity(x, categoriesConfiguration),
         )
         .toList();
     return result;
@@ -71,7 +74,7 @@ class DailyActivityRepository {
   Future<DailyActivity?> readDailyActivityById(int id) async {
     final selectResult = await connection.selectFromFunction('select_daily_activity', [id]);
     if (selectResult.isEmpty) return null;
-    return convertResultRowToDailyActivity(
+    return converter.convertResultRowToDailyActivity(
       selectResult.first,
       categoriesConfiguration,
     );

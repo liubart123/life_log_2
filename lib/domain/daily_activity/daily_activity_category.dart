@@ -1,15 +1,14 @@
-import 'package:life_log_2/domain/daily_activity/daily_activity_attribute.dart';
-
 class DailyActivityCategory {
-  DailyActivityCategory(this.name, this.subCategories);
+  DailyActivityCategory(this.key, this.label);
+  DailyActivityCategory.key(String key) : this(key, key);
 
-  String name;
-  List<DailyActivitySubCategory> subCategories;
+  String key;
+  String label;
 }
 
 class DailyActivitySubCategory {
-  DailyActivitySubCategory(this.name, this.attributes, this.defaultDuration);
-  String name;
-  List<DailyActivityAttribute> attributes;
-  Duration defaultDuration;
+  DailyActivitySubCategory(this.key, this.label);
+  DailyActivitySubCategory.key(String key) : this(key, key);
+  String key;
+  String label;
 }

@@ -78,8 +78,8 @@ class DailyActivityListCard extends StatelessWidget {
   }
 
   Color _getColorForDailyActivityCard() {
-    final categoryHue = RandomUtils.getRandomWithStringSeed(dailyActivity.category.name).nextInt(360).toDouble();
-    final subcategoryHue = RandomUtils.getRandomWithStringSeed(dailyActivity.subCategory.name).nextInt(50).toDouble();
+    final categoryHue = RandomUtils.getRandomWithStringSeed(dailyActivity.category.key).nextInt(360).toDouble();
+    final subcategoryHue = RandomUtils.getRandomWithStringSeed(dailyActivity.subCategory.key).nextInt(50).toDouble();
     final resultedHue = (categoryHue + subcategoryHue) % 360;
     final cardColor = HSLColor.fromAHSL(1, resultedHue, 0.3, 0.8).toColor();
     return cardColor;
@@ -104,12 +104,12 @@ class DailyActivityListCard extends StatelessWidget {
     return Row(
       children: [
         Text(
-          dailyActivity.subCategory.name,
+          dailyActivity.subCategory.key,
           style: Get.textTheme.titleMedium,
         ),
         Expanded(
           child: Text(
-            ' ${dailyActivity.category.name}',
+            ' ${dailyActivity.category.key}',
             overflow: TextOverflow.ellipsis,
             style: Get.textTheme.titleMedium!.copyWith(
               // color: Get.theme.colorScheme.outline,

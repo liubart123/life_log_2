@@ -1,77 +1,97 @@
+import 'package:get/get.dart';
+import 'package:life_log_2/domain/daily_activity/daily_activity_attribute.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity_category.dart';
-import 'package:life_log_2/domain/daily_activity/daily_activity_specific_attributes.dart';
 
 class DailyActivityCategoriesConfiguration {
   DailyActivityCategoriesConfiguration({
-    List<DailyActivityCategory>? overridenCategories,
+    List<(DailyActivityCategory, List<(DailyActivitySubCategory, List<DailyActivityAttribute>)>)>? configuration,
   }) {
-    var categoriesList = [
-      DailyActivityCategory(
-        'sport',
+    final defaultConfiguraiton = [
+      (
+        DailyActivityCategory.key('TestCategory'),
         [
-          DailyActivitySubCategory(
-            'fitness',
+          (
+            DailyActivitySubCategory.key('FullSubCategory'),
             [
-              TagDailyActivityAttribute(
-                'high intensity',
-                'high intensity',
-                value: false,
-              ),
-              TagDailyActivityAttribute(
-                'to the limit',
-                'to the limit',
-                value: false,
-              ),
-            ],
-            const Duration(minutes: 20),
+              NumericDailyActivityAttribute.key('Numeric'),
+              StringDailyActivityAttribute.key('String'),
+              BoolDailyActivityAttribute.key('Bool'),
+              TimeDailyActivityAttribute.key('DateTime'),
+              DurationDailyActivityAttribute.key('Duration'),
+              EnumDailyActivityAttribute.key('Enum', ['opt1', 'opt2']),
+            ]
           ),
-          DailyActivitySubCategory(
-            'running',
+          (
+            DailyActivitySubCategory.key('EmptySubCategory'),
             [
-              DurationDailyActivityAttribute(
-                'run duration',
-                'run duration',
-                Duration.zero,
-              ),
-              DoubleDailyActivityAttribute(
-                'distance',
-                'distance',
-                6,
-              ),
-            ],
-            const Duration(minutes: 34),
+              BoolDailyActivityAttribute.key('LonelyBool'),
+            ]
           ),
-        ],
+        ]
       ),
     ];
-    if (overridenCategories != null) {
-      categoriesList = overridenCategories;
+
+    for (final categoryConfig in configuration ?? defaultConfiguraiton) {
+      _categoryKeyMap[categoryConfig.$1.key] = categoryConfig.$1;
+      _categorySubCategoriesMap[categoryConfig.$1] = [];
+      for (final subCategoryConfig in categoryConfig.$2) {
+        _subCategoryKeyMap[subCategoryConfig.$1.key] = subCategoryConfig.$1;
+        _subCategoryAttributesMap[subCategoryConfig.$1] = subCategoryConfig.$2;
+        for (final attributeConfig in subCategoryConfig.$2) {
+          _attributeKeyMap[attributeConfig.key] = attributeConfig;
+        }
+      }
     }
-    _categories = {
-      for (final category in categoriesList) category.name: category
-    };
   }
-  late Map<String, DailyActivityCategory> _categories;
+  final Map<String, DailyActivityCategory> _categoryKeyMap = {};
+  final Map<String, DailyActivitySubCategory> _subCategoryKeyMap = {};
+  final Map<String, DailyActivityAttribute> _attributeKeyMap = {};
+  final Map<DailyActivityCategory, List<DailyActivitySubCategory>> _categorySubCategoriesMap = {};
+  final Map<DailyActivitySubCategory, List<DailyActivityAttribute>> _subCategoryAttributesMap = {};
 
   List<DailyActivityCategory> getAllCategories() {
-    return _categories.values.toList();
+    return _categoryKeyMap.values.toList();
   }
 
-  (DailyActivityCategory, DailyActivitySubCategory)
-      getCategoryAndSubCategoryByNames(
-    String categoryName,
-    String subCategoryName,
-  ) {
-    if (!_categories.containsKey(categoryName)) {
+  List<DailyActivitySubCategory> getSubCategories(DailyActivityCategory category) {
+    if (!_categorySubCategoriesMap.containsKey(category)) {
       throw Exception(
-        'Requrested categoryName doesn`t exist in used configuration',
+        'Requrested category doesn`t exist in configuration',
       );
     }
-    return (
-      _categories[categoryName]!,
-      _categories[categoryName]!
-          .subCategories
-          .firstWhere((subCategory) => subCategory.name == subCategoryName)
-    );
+    return _categorySubCategoriesMap[category]!;
+  }
+
+  List<DailyActivityAttribute> getAttributes(DailyActivitySubCategory subCategory) {
+    if (!_subCategoryAttributesMap.containsKey(subCategory)) {
+      throw Exception(
+        'Requrested subCategory doesn`t exist in configuration',
+      );
+    }
+    return _subCategoryAttributesMap[subCategory]!;
+  }
+
+  (DailyActivityCategory, DailyActivitySubCategory) getCategoryAndSubCategoryByNames(
+    String categoryKey,
+    String subCategoryKey,
+  ) {
+    if (!_categoryKeyMap.containsKey(categoryKey)) {
+      throw Exception(
+        'Requrested categoryKey doesn`t exist in configuration',
+      );
+    }
+    if (!_subCategoryKeyMap.containsKey(subCategoryKey)) {
+      throw Exception(
+        'Requrested subCategoryKey doesn`t exist in configuration',
+      );
+    }
+    return (_categoryKeyMap[categoryKey]!, _subCategoryKeyMap[subCategoryKey]!);
+  }
+
+  DailyActivityAttribute getDailyActivityAttribute(String key) {
+    if (!_attributeKeyMap.containsKey(key)) {
+      throw Exception('Not found attribute with given key');
+    }
+    return _attributeKeyMap[key]!;
   }
 }

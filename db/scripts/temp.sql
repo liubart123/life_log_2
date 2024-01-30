@@ -20,6 +20,6 @@ select * from select_daily_activity('2023-12-20 13:34:58', 12);
 
 truncate daily_activity ;
 
-select * from daily_activity;
+select * from daily_activity order by id desc;
 
 
