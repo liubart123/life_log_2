@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity.dart';
+import 'package:life_log_2/home/daily_activity_edit_bottom_sheet/daily_activity_attribute_value_widgets.dart';
 import 'package:life_log_2/home/daily_activity_edit_bottom_sheet/daily_activity_edit_bottom_sheet_controller.dart';
 import 'package:life_log_2/my_flutter_elements/my_constants.dart';
 import 'package:life_log_2/my_flutter_elements/my_input_widgets.dart';
@@ -53,7 +54,29 @@ class DailyActivityEditBottomSheet extends StatelessWidget {
       _startDateInputFields(controller, context),
       const Gap(CONTENT_PADDING),
       _activityDuration(controller),
+      const Gap(CONTENT_PADDING),
+      _activityAttributeValues(controller, context),
     ];
+  }
+
+  Widget _activityAttributeValues(
+    DailyActivityEditBottomSheetController controller,
+    BuildContext context,
+  ) {
+    final attributeWidgets = controller.dailyActivity.attributeValues
+        .mapMany(
+          (x) => [
+            const Gap(CONTENT_PADDING),
+            createWidgetForAttributeValue(x),
+          ],
+        )
+        .skip(1)
+        .toList();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: attributeWidgets,
+    );
   }
 
   Widget _activityDuration(DailyActivityEditBottomSheetController controller) {

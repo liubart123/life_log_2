@@ -6,11 +6,12 @@ import 'package:get/get.dart';
 import 'package:life_log_2/utils/duration/duration_extension.dart';
 import 'package:life_log_2/utils/log_utils.dart';
 
-InputDecoration createDecorationForField({required String label}) {
+InputDecoration _createDecorationForField({required String label, String? errorMessage}) {
   return InputDecoration(
     errorStyle: Get.textTheme.bodyMedium!.copyWith(
       color: Get.theme.colorScheme.error,
     ),
+    errorText: errorMessage,
     labelText: label,
     isDense: true,
     contentPadding: const EdgeInsets.all(12),
@@ -48,6 +49,16 @@ InputDecoration createDecorationForField({required String label}) {
   );
 }
 
+EdgeInsets _createScrollPaddingForField(BuildContext context) {
+  return EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 20);
+}
+
+TextStyle _createStyleForField() {
+  return Get.textTheme.bodyMedium!.copyWith(
+    color: Get.theme.colorScheme.onSurface,
+  );
+}
+
 class MyDurationInputField extends StatefulWidget {
   const MyDurationInputField({
     required this.label,
@@ -78,7 +89,7 @@ class MyDurationInputField extends StatefulWidget {
         );
 
   MyDurationInputField.withCallback(
-    Duration newValue, {
+    Duration value, {
     required String label,
     required Function(Duration newValue) onValueSubmitFromUserInput,
     Key? key,
@@ -86,7 +97,7 @@ class MyDurationInputField extends StatefulWidget {
           label: label,
           onInitState: (_) {},
           onValueSubmitFromUserInput: onValueSubmitFromUserInput,
-          initialValue: newValue,
+          initialValue: value,
           alwaysSetFieldValueToInitialValue: true,
           key: key,
         );
@@ -195,16 +206,14 @@ class _MyDurationInputFieldState extends State<MyDurationInputField> {
 
   @override
   Widget build(BuildContext context) {
-    MyLogger.controller2('$runtimeType ${widget.label} build');
+    // MyLogger.controller2('$runtimeType ${widget.label} build');
     return TextField(
       focusNode: _focusNode,
       controller: _controller,
       textInputAction: TextInputAction.next,
       keyboardType: TextInputType.number,
-      scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 20),
-      style: Get.textTheme.bodyMedium!.copyWith(
-        color: Get.theme.colorScheme.onSurface,
-      ),
+      scrollPadding: _createScrollPaddingForField(context),
+      style: _createStyleForField(),
       inputFormatters: [
         _createInputFormatter(),
       ],
@@ -217,7 +226,174 @@ class _MyDurationInputFieldState extends State<MyDurationInputField> {
       onSubmitted: (value) {
         _trySubmitCurrentFieldValue();
       },
-      decoration: createDecorationForField(label: widget.label),
+      decoration: _createDecorationForField(label: widget.label),
+    );
+  }
+}
+
+class MyTextInputField extends StatefulWidget {
+  const MyTextInputField(
+    this.value, {
+    required this.label,
+    required this.onValueSubmitFromUserInput,
+    this.errorMessage,
+    super.key,
+  });
+
+  final String? errorMessage;
+  final String label;
+  final Function(String newValue) onValueSubmitFromUserInput;
+  final String value;
+
+  @override
+  State<MyTextInputField> createState() => _MyTextInputFieldState();
+}
+
+class _MyTextInputFieldState extends State<MyTextInputField> {
+  late TextEditingController _controller;
+  late FocusNode _focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    MyLogger.controller1('$runtimeType ${widget.label} initState');
+    _controller = TextEditingController(text: widget.value);
+    _focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    MyLogger.controller1('$runtimeType ${widget.label} dispose');
+    _controller.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant MyTextInputField oldWidget) {
+    if (oldWidget.value != widget.value) {
+      _setFieldToNewValue(widget.value);
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  void _submitNewValueFromFieldValue() {
+    MyLogger.input1('$runtimeType ${widget.label} submitting new value from field');
+    widget.onValueSubmitFromUserInput(_controller.value.text);
+  }
+
+  void _setFieldToNewValue(String newValue) {
+    MyLogger.input1('$runtimeType ${widget.label} setting new field`s value $newValue');
+    _controller.text = newValue;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // MyLogger.controller2('$runtimeType ${widget.label} build');
+    return TextField(
+      focusNode: _focusNode,
+      controller: _controller,
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.multiline,
+      maxLines: 5,
+      minLines: 1,
+      scrollPadding: _createScrollPaddingForField(context),
+      style: _createStyleForField(),
+      onTapOutside: (event) {
+        if (_focusNode.hasFocus) {
+          _focusNode.unfocus();
+          _submitNewValueFromFieldValue();
+        }
+      },
+      onSubmitted: (value) {
+        _submitNewValueFromFieldValue();
+      },
+      decoration: _createDecorationForField(label: widget.label, errorMessage: widget.errorMessage),
+    );
+  }
+}
+
+class MyNumericField extends StatefulWidget {
+  const MyNumericField(
+    this.value, {
+    required this.label,
+    required this.onValueSubmitFromUserInput,
+    this.errorMessage,
+    super.key,
+  });
+
+  final String? errorMessage;
+  final String label;
+  final Function(int newValue) onValueSubmitFromUserInput;
+  final int value;
+
+  @override
+  State<MyNumericField> createState() => _MyNumericFieldState();
+}
+
+class _MyNumericFieldState extends State<MyNumericField> {
+  late TextEditingController _controller;
+  late FocusNode _focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    MyLogger.controller1('$runtimeType ${widget.label} initState');
+    _controller = TextEditingController(text: widget.value.toString());
+    _focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    MyLogger.controller1('$runtimeType ${widget.label} dispose');
+    _controller.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant MyNumericField oldWidget) {
+    if (oldWidget.value != widget.value) {
+      _setFieldToNewValue(widget.value);
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  void _submitNewValueFromFieldValue() {
+    MyLogger.input1('$runtimeType ${widget.label} submitting new value from field');
+    if (_controller.value.text.isEmpty) {
+      _controller.text = '0';
+    }
+    final newValue = int.parse(_controller.value.text);
+    widget.onValueSubmitFromUserInput(newValue);
+  }
+
+  void _setFieldToNewValue(int newValue) {
+    MyLogger.input1('$runtimeType ${widget.label} setting new field`s value $newValue');
+    _controller.text = newValue.toString();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // MyLogger.controller2('$runtimeType ${widget.label} build');
+    return TextField(
+      focusNode: _focusNode,
+      controller: _controller,
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.number,
+      scrollPadding: _createScrollPaddingForField(context),
+      style: _createStyleForField(),
+      inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+      onTapOutside: (event) {
+        if (_focusNode.hasFocus) {
+          _focusNode.unfocus();
+          _submitNewValueFromFieldValue();
+        }
+      },
+      onSubmitted: (value) {
+        _submitNewValueFromFieldValue();
+      },
+      decoration: _createDecorationForField(label: widget.label, errorMessage: widget.errorMessage),
     );
   }
 }

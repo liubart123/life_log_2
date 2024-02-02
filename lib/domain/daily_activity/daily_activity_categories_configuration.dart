@@ -1,4 +1,3 @@
-import 'package:get/get.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity_attribute.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity_category.dart';
 

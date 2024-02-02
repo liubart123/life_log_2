@@ -18,8 +18,7 @@ class DailyActivityEditBottomSheetController extends GetxController {
   DailyActivityRepository repository;
 
   Future<void> saveDailyActivity() async {
-    MyLogger.controller2('saving dailyActivity...');
-    MyLogger.controller2('startTime to save:${dailyActivity.startTime.toTimeString()}');
+    MyLogger.controller2('$runtimeType saving dailyActivity...');
     _updateState(EControllerState.processing);
     dailyActivity = await repository.saveAndReadUpdatedDailyActivity(dailyActivity);
     _updateState(EControllerState.idle);

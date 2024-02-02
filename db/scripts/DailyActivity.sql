@@ -6,7 +6,8 @@ create table daily_activity(
 	subcategory varchar(255) not null,
 	start_time timestamptz not null,
 	duration interval not null,
-	attrs jsonb not null
+	attrs jsonb not NULL,
+	notes varchar(5000)
 );
 
 CREATE OR REPLACE procedure upsert_daily_activity(
@@ -15,25 +16,27 @@ CREATE OR REPLACE procedure upsert_daily_activity(
     p_subcategory VARCHAR(255),
     p_start_time TIMESTAMPTZ,
     p_duration INTERVAL,
-    p_attrs JSONB
+    p_attrs JSONB,
+	p_notes varchar(5000)
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
 	IF p_id IS NULL THEN
-	    INSERT INTO daily_activity(category, subcategory, start_time, duration, attrs)
-	    VALUES (p_category, p_subcategory, p_start_time, p_duration, p_attrs)
+	    INSERT INTO daily_activity(category, subcategory, start_time, duration, attrs, notes)
+	    VALUES (p_category, p_subcategory, p_start_time, p_duration, p_attrs, p_notes)
 		RETURNING id INTO p_id;
 	ELSE
-	    INSERT INTO daily_activity(id, category, subcategory, start_time, duration, attrs)
-	    VALUES (p_id, p_category, p_subcategory, p_start_time, p_duration, p_attrs)
+	    INSERT INTO daily_activity(id, category, subcategory, start_time, duration, attrs, notes)
+	    VALUES (p_id, p_category, p_subcategory, p_start_time, p_duration, p_attrs, p_notes)
 	    ON CONFLICT (id)
 	    DO UPDATE set
 	    	category = excluded.category,
 	    	subcategory = excluded.subcategory,
 	    	start_time = excluded.start_time,
 	        duration = EXCLUDED.duration,
-	        attrs = EXCLUDED.attrs;
+	        attrs = EXCLUDED.attrs,
+	        notes = EXCLUDED.notes;
 	end if;
 end;
 $$;
@@ -88,9 +91,9 @@ BEGIN
 	   		cur_time := cur_time + random() * interval '30 minutes';
 	        random_interval := random() * interval '30 minutes'; -- Random interval within a day
 	        
-			call upsert_daily_activity(temp_id, 'sport', 'fitness', cur_time, random_interval, '{"high intensity": true, "to the limit": false}');
-		    temp_id := null;
-			call upsert_daily_activity(temp_id, 'sport', 'running', cur_time + interval '1 hour', random_interval + interval '1 hour', '{"run duration": "01:18:12", "distance": 6.0}');
+			call upsert_daily_activity(temp_id, 'TestCategory', 'FullSubCategory', cur_time, random_interval, '{"Bool": true, "Enum": "opt2", "String": "updated", "Numeric": 1, "DateTime": "2001-01-01 00:00:00", "Duration": "00:12:00"}');
+--		    temp_id := null;
+--			call upsert_daily_activity(temp_id, 'sport', 'running', cur_time + interval '1 hour', random_interval + interval '1 hour', '{"run duration": "01:18:12", "distance": 6.0}');
 	   	end loop;
 	   	
     END LOOP;
