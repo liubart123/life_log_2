@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity.dart';
+import 'package:life_log_2/domain/daily_activity/daily_activity_attribute.dart';
 import 'package:life_log_2/home/daily_activity_edit_bottom_sheet/daily_activity_attribute_value_widgets.dart';
 import 'package:life_log_2/home/daily_activity_edit_bottom_sheet/daily_activity_edit_bottom_sheet_controller.dart';
 import 'package:life_log_2/my_flutter_elements/my_constants.dart';
@@ -64,6 +65,7 @@ class DailyActivityEditBottomSheet extends StatelessWidget {
     BuildContext context,
   ) {
     final attributeWidgets = controller.dailyActivity.attributeValues
+        .where((element) => element.attribute is BoolDailyActivityAttribute == false)
         .mapMany(
           (x) => [
             const Gap(CONTENT_PADDING),
@@ -75,7 +77,13 @@ class DailyActivityEditBottomSheet extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.start,
-      children: attributeWidgets,
+      children: [
+        ...attributeWidgets,
+        const Gap(CONTENT_PADDING),
+        createTagsForBoolAttributeValues(
+          controller.dailyActivity.attributeValues.where((x) => x.attribute is BoolDailyActivityAttribute).toList(),
+        ),
+      ],
     );
   }
 

@@ -8,6 +8,106 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:life_log_2/my_flutter_elements/my_constants.dart';
 
+class MyRadioButton extends StatelessWidget {
+  const MyRadioButton({
+    required this.label,
+    required this.buttonColor,
+    required this.checked,
+    this.callback,
+    super.key,
+  });
+
+  final String label;
+  final bool checked;
+  final Color buttonColor;
+  final Function()? callback;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      style: TextButton.styleFrom(
+        padding: EdgeInsets.zero,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        backgroundColor: buttonColor,
+        foregroundColor: Color.lerp(buttonColor, Colors.black, 0.4),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(checked ? 6 : 20)),
+        minimumSize: const Size(0, 0),
+      ),
+      onPressed: callback ?? () {},
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(6, 4, 10, 4),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              checked ? Icons.radio_button_checked : Icons.radio_button_off,
+              size: 18,
+            ),
+            Gap(2),
+            Text(
+              label,
+              style: Get.textTheme.labelLarge!.copyWith(
+                color: Get.theme.colorScheme.outline,
+                // fontWeight: FontWeight.w300,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class MyTagButton extends StatelessWidget {
+  const MyTagButton({
+    required this.label,
+    required this.buttonColor,
+    required this.checked,
+    this.callback,
+    super.key,
+  });
+
+  final String label;
+  final bool checked;
+  final Color buttonColor;
+  final Function()? callback;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      style: TextButton.styleFrom(
+        padding: EdgeInsets.zero,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        backgroundColor: buttonColor,
+        foregroundColor: Color.lerp(buttonColor, Colors.black, 0.4),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+        minimumSize: const Size(0, 0),
+      ),
+      onPressed: callback ?? () {},
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(10, 4, 10, 4),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Icon(
+            //   checked ? Icons.radio_button_checked : Icons.radio_button_off,
+            //   size: 18,
+            // ),
+            // Gap(2),
+            Text(
+              label,
+              style: Get.textTheme.labelLarge!.copyWith(
+                color: Get.theme.colorScheme.outline,
+                // fontWeight: FontWeight.w300,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class MyIconButton extends StatelessWidget {
   const MyIconButton({
     required this.icon,

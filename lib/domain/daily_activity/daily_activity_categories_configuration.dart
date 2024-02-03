@@ -16,8 +16,15 @@ class DailyActivityCategoriesConfiguration {
               StringDailyActivityAttribute.key('String'),
               BoolDailyActivityAttribute.key('Bool'),
               TimeDailyActivityAttribute.key('DateTime'),
+              BoolDailyActivityAttribute.key('Bool1'),
+              BoolDailyActivityAttribute.key('Bool2'),
+              BoolDailyActivityAttribute.key('Bool3 long'),
+              BoolDailyActivityAttribute.key('Bool4'),
+              BoolDailyActivityAttribute.key('Bool5 super long'),
+              BoolDailyActivityAttribute.key('Bool6'),
+              BoolDailyActivityAttribute.key('Bool7'),
               DurationDailyActivityAttribute.key('Duration'),
-              EnumDailyActivityAttribute.key('Enum', ['opt1', 'opt2']),
+              EnumDailyActivityAttribute.key('Enum', [...List.generate(10, (index) => 'opt$index ${index % 4 == 0 ? 'long opticus' : ''}')]),
             ]
           ),
           (
