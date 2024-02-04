@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:life_log_2/domain/daily_activity/daily_activity.dart';
+import 'package:life_log_2/home/daily_activity_edit_bottom_sheet/daily_activity_edit_bottom_sheet.dart';
 import 'package:life_log_2/my_flutter_elements/my_constants.dart';
+import 'package:life_log_2/my_flutter_elements/my_modal_bottom_sheet.dart';
 import 'package:life_log_2/my_flutter_elements/my_widgets.dart';
 import 'package:life_log_2/utils/datetime/datetime_extension.dart';
 import 'package:life_log_2/utils/duration/duration_extension.dart';
@@ -41,6 +43,10 @@ class DailyActivityListCard extends StatelessWidget {
                 widthFactor: cardWidthRatio,
                 child: MySmallCard(
                   color: cardColor,
+                  onTap: () => showMyModalBottomSheet(
+                    context,
+                    DailyActivityEditBottomSheet(dailyActivity),
+                  ),
                   child: Row(
                     children: [
                       const Gap(SMALL_CARD_ADDITIONAL_HORIZONTAL_PADDING),
