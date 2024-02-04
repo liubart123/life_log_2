@@ -48,9 +48,19 @@ class MySandbox extends StatelessWidget {
         // width: 200,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _sandboxGetBuilder(),
+            MyDropDownField(
+              dropdownOptions: List.generate(10, (index) => 'Option$index')
+                  .map(
+                    (e) => DropdownMenuEntry<String>(value: e, label: e),
+                  )
+                  .toList(),
+              label: 'dropdown',
+            ),
+            Gap(20),
+            MyTextInputField('String value', label: 'label', onValueSubmitFromUserInput: (_) {}),
+            // _sandboxGetBuilder(),
             // _sandboxGetBuilder(),
           ],
         ),

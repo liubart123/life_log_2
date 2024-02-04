@@ -9,18 +9,49 @@ import 'package:life_log_2/utils/datetime/datetime_extension.dart';
 import 'package:life_log_2/utils/duration/duration_extension.dart';
 import 'package:life_log_2/utils/log_utils.dart';
 
+class MyDropDownField extends StatelessWidget {
+  const MyDropDownField({
+    required this.dropdownOptions,
+    required this.label,
+    super.key,
+  });
+  final List<DropdownMenuEntry<String>> dropdownOptions;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownMenu<String>(
+      label: Text(label),
+      dropdownMenuEntries: dropdownOptions,
+      menuHeight: 300,
+      expandedInsets: EdgeInsets.all(0),
+      textStyle: _createStyleForField(),
+      inputDecorationTheme: InputDecorationTheme(
+        constraints: BoxConstraints(maxHeight: 46),
+        labelStyle: _createStyleForFieldLabel(),
+        contentPadding: EdgeInsets.all(12),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(6),
+          borderSide: BorderSide(
+            width: 3,
+            color: Get.theme.colorScheme.surfaceVariant,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 InputDecoration _createDecorationForField({required String label, String? errorMessage}) {
   return InputDecoration(
-    errorStyle: Get.textTheme.bodyMedium!.copyWith(
+    errorStyle: _createStyleForFieldLabel().copyWith(
       color: Get.theme.colorScheme.error,
     ),
     errorText: errorMessage,
     labelText: label,
     isDense: true,
     contentPadding: const EdgeInsets.all(12),
-    labelStyle: Get.textTheme.bodyMedium!.copyWith(
-      color: Get.theme.colorScheme.outline,
-    ),
+    labelStyle: _createStyleForFieldLabel(),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(6),
       borderSide: BorderSide(
@@ -57,6 +88,12 @@ EdgeInsets _createScrollPaddingForField(BuildContext context) {
 }
 
 TextStyle _createStyleForField() {
+  return Get.textTheme.bodyMedium!.copyWith(
+    color: Get.theme.colorScheme.onSurface,
+  );
+}
+
+TextStyle _createStyleForFieldLabel() {
   return Get.textTheme.bodyMedium!.copyWith(
     color: Get.theme.colorScheme.onSurface,
   );
